@@ -14,34 +14,34 @@
 
     <!--
         1. CONTENT SECURITY POLICY (CSP)
-        ─────────────────────────────────
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Tells the browser exactly which sources are allowed to load
         scripts, styles, fonts, and images. Blocks injected scripts
         (XSS attacks) from running even if they get into the page.
 
         Breakdown of each directive:
-        • default-src 'self'          → Only load resources from this
+        â€¢ default-src 'self'          â†’ Only load resources from this
                                         domain by default
-        • script-src 'self' unpkg.com → Only allow scripts from this
+        â€¢ script-src 'self' unpkg.com â†’ Only allow scripts from this
                                         site or unpkg CDN (Phosphor Icons)
-        • style-src 'self' 'unsafe-inline' fonts.googleapis.com
-                                      → Allow inline styles (needed for
+        â€¢ style-src 'self' 'unsafe-inline' fonts.googleapis.com
+                                      â†’ Allow inline styles (needed for
                                         our CSS variables) + Google Fonts
-        • font-src 'self' fonts.gstatic.com
-                                      → Allow fonts only from Google's
+        â€¢ font-src 'self' fonts.gstatic.com
+                                      â†’ Allow fonts only from Google's
                                         font hosting server
-        • img-src 'self' data:        → Allow images from this site and
+        â€¢ img-src 'self' data:        â†’ Allow images from this site and
                                         inline data: URIs (used in SVG)
-        • connect-src 'none'          → Block all fetch/XHR requests
+        â€¢ connect-src 'none'          â†’ Block all fetch/XHR requests
                                         (site makes none)
-        • object-src 'none'           → Block Flash/plugins entirely
-        • base-uri 'self'             → Prevent <base> tag injection
+        â€¢ object-src 'none'           â†’ Block Flash/plugins entirely
+        â€¢ base-uri 'self'             â†’ Prevent <base> tag injection
                                         which can redirect all links
-        • form-action 'self'          → Block forms submitting to
+        â€¢ form-action 'self'          â†’ Block forms submitting to
                                         external domains
-        • frame-ancestors 'none'      → Prevent embedding in iframes
+        â€¢ frame-ancestors 'none'      â†’ Prevent embedding in iframes
                                         (same as X-Frame-Options below)
-        • upgrade-insecure-requests   → Auto-upgrade HTTP links to HTTPS
+        â€¢ upgrade-insecure-requests   â†’ Auto-upgrade HTTP links to HTTPS
     -->
     <meta http-equiv="Content-Security-Policy"
           content="
@@ -60,19 +60,19 @@
 
     <!--
         2. X-FRAME-OPTIONS
-        ───────────────────
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Prevents this page from being loaded inside an <iframe> on
         another website. Stops clickjacking attacks where attackers
         overlay your page invisibly to trick users into clicking things.
-        "DENY" means no site — including this one — can iframe it.
+        "DENY" means no site â€” including this one â€” can iframe it.
         (Also enforced above via CSP frame-ancestors 'none')
     -->
     <meta http-equiv="X-Frame-Options" content="DENY">
 
     <!--
         3. X-CONTENT-TYPE-OPTIONS
-        ──────────────────────────
-        Tells the browser: "Do NOT guess the file type — trust the
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        Tells the browser: "Do NOT guess the file type â€” trust the
         Content-Type header exactly." Prevents MIME-sniffing attacks
         where a file uploaded as an image might actually contain
         executable script that a browser could mistakenly run.
@@ -82,12 +82,12 @@
 
     <!--
         4. REFERRER POLICY
-        ───────────────────
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Controls what URL information is sent to other sites when a
         user clicks a link and leaves your page. "strict-origin-when-
         cross-origin" means:
-        • Same-site links → full URL is shared (normal behaviour)
-        • Cross-site links → only your domain name is shared, NOT
+        â€¢ Same-site links â†’ full URL is shared (normal behaviour)
+        â€¢ Cross-site links â†’ only your domain name is shared, NOT
           the full path (e.g., not "yoursite.com/quiz?user=samad")
         This protects user privacy and prevents leaking page structure.
     -->
@@ -95,11 +95,11 @@
 
     <!--
         5. PERMISSIONS POLICY
-        ──────────────────────
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Explicitly disables browser features your site doesn't need.
         Even if an attacker injected a script, it could NOT access
         the user's camera, microphone, or location. Principle of
-        least privilege — only enable what you actually use.
+        least privilege â€” only enable what you actually use.
         This site needs none of these features, so all are blocked.
     -->
     <meta http-equiv="Permissions-Policy"
@@ -115,11 +115,11 @@
 
     <!--
         6. SUBRESOURCE INTEGRITY (SRI)
-        ────────────────────────────────
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         SRI hashes are added directly on the <link> and <script> tags
         below. Each external file gets a sha384 cryptographic hash.
         When the browser downloads the file, it recomputes the hash
-        and compares — if it doesn't match (e.g., CDN was compromised
+        and compares â€” if it doesn't match (e.g., CDN was compromised
         or file was tampered with), the browser REFUSES to load it.
 
         HOW TO GENERATE YOUR OWN HASH (run in terminal):
@@ -127,11 +127,11 @@
         Then prefix with "sha384-"
 
         crossorigin="anonymous" is required for SRI to work on
-        cross-origin resources — it tells the browser to fetch without
+        cross-origin resources â€” it tells the browser to fetch without
         sending cookies, and to enforce the integrity check.
 
-        ⚠️  IMPORTANT: Google Fonts generates dynamic CSS based on the
-        user's browser, so its hash changes per request — SRI cannot
+        âš ï¸  IMPORTANT: Google Fonts generates dynamic CSS based on the
+        user's browser, so its hash changes per request â€” SRI cannot
         be used on the Fonts CSS link itself. Instead we use a
         preconnect and trust the HTTPS connection for fonts.
         Phosphor Icons from unpkg is stable and SRI-compatible.
@@ -147,20 +147,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
 
-    <!-- Google Fonts — SRI not applicable (dynamic CSS); HTTPS is the protection here -->
+    <!-- Google Fonts â€” SRI not applicable (dynamic CSS); HTTPS is the protection here -->
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
           rel="stylesheet"
           crossorigin="anonymous">
 
     <!--
-        Phosphor Icons — pinned to a specific version for SRI stability.
+        Phosphor Icons â€” pinned to a specific version for SRI stability.
         Replace "GENERATE-THIS-HASH" with the real hash using:
         curl -sL https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js \
           | openssl dgst -sha384 -binary | openssl base64 -A
     -->
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"
             crossorigin="anonymous"></script>
-            <!-- integrity="sha384-GENERATE-THIS-HASH" — add after computing locally -->
+            <!-- integrity="sha384-GENERATE-THIS-HASH" â€” add after computing locally -->
     <style>
         :root {
             --navy: #0f1e3d;
@@ -192,7 +192,7 @@
             min-height: 100vh;
         }
 
-        /* ── NAV ── */
+        /* â”€â”€ NAV â”€â”€ */
         nav {
             position: sticky;
             top: 0;
@@ -244,11 +244,11 @@
         .nav-tab:hover { background: rgba(255,255,255,0.1); color: var(--white); }
         .nav-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); font-weight: 600; }
 
-        /* ── PAGES ── */
+        /* â”€â”€ PAGES â”€â”€ */
         .page { display: none; }
         .page.active { display: block; }
 
-        /* ── HERO ── */
+        /* â”€â”€ HERO â”€â”€ */
         .hero {
             background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #1e3a8a 100%);
             color: var(--white);
@@ -382,7 +382,7 @@
             gap: 0.15rem;
         }
 
-        /* ── MAIN CONTENT ── */
+        /* â”€â”€ MAIN CONTENT â”€â”€ */
         .content {
             max-width: 900px;
             margin: 0 auto;
@@ -405,7 +405,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* ── CARDS ── */
+        /* â”€â”€ CARDS â”€â”€ */
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -438,7 +438,7 @@
             font-weight: 600;
         }
 
-        /* ── ADDIE ── */
+        /* â”€â”€ ADDIE â”€â”€ */
         .addie-row {
             display: flex;
             align-items: center;
@@ -471,7 +471,7 @@
         }
 
         .addie-item.highlight::after {
-            content: '★ TNA';
+            content: 'â˜… TNA';
             position: absolute;
             top: -10px;
             right: -8px;
@@ -485,7 +485,7 @@
 
         .addie-arrow { color: var(--border); font-size: 1.2rem; }
 
-        /* ── 3 LEVELS ── */
+        /* â”€â”€ 3 LEVELS â”€â”€ */
         .level-card {
             border-radius: var(--radius);
             padding: 1.25rem;
@@ -504,7 +504,7 @@
             margin-bottom: 0.75rem;
         }
 
-        /* ── METHODS ── */
+        /* â”€â”€ METHODS â”€â”€ */
         .method-card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -569,13 +569,13 @@
         }
 
         .pros-cons-box li::before {
-            content: '•';
+            content: 'â€¢';
             position: absolute;
             left: 0;
             color: var(--slate);
         }
 
-        /* ── TIMELINE ── */
+        /* â”€â”€ TIMELINE â”€â”€ */
         .timeline { display: flex; flex-direction: column; gap: 0; }
 
         .timeline-item {
@@ -622,7 +622,7 @@
 
         .timeline-text p { font-size: 0.78rem; color: var(--slate); }
 
-        /* ── GILBERT ── */
+        /* â”€â”€ GILBERT â”€â”€ */
         .gilbert-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -662,7 +662,7 @@
             letter-spacing: 0.04em;
         }
 
-        /* ── SOLUTIONS ── */
+        /* â”€â”€ SOLUTIONS â”€â”€ */
         .solutions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -695,7 +695,7 @@
             flex-shrink: 0;
         }
 
-        /* ── TNA REPORT ── */
+        /* â”€â”€ TNA REPORT â”€â”€ */
         .report-steps {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -724,12 +724,12 @@
         .report-step-title { font-size: 0.78rem; font-weight: 700; margin-bottom: 0.2rem; }
         .report-step-desc { font-size: 0.65rem; color: rgba(255,255,255,0.6); }
 
-        /* ── SECTION SPACING ── */
+        /* â”€â”€ SECTION SPACING â”€â”€ */
         .section { margin-bottom: 3rem; }
 
-        /* ════════════════════════════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            QUIZ PAGE
-        ════════════════════════════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .quiz-hero {
             background: linear-gradient(135deg, #1a0533 0%, #2d1b69 60%, #1e3a8a 100%);
             color: var(--white);
@@ -1068,7 +1068,7 @@
             margin: 2rem 0;
         }
 
-        /* ── Cheat sheet ── */
+        /* â”€â”€ Cheat sheet â”€â”€ */
         .cheat-section {
             background: var(--navy);
             color: var(--white);
@@ -1110,7 +1110,7 @@
 </head>
 <body>
 
-    <!-- ══ NAVIGATION ══ -->
+    <!-- â•â• NAVIGATION â•â• -->
     <nav>
         <div class="nav-brand"><i class="ph-fill ph-graduation-cap"></i> TNA <span>Study Guide</span></div>
         <div class="nav-tabs">
@@ -1119,19 +1119,19 @@
             <button class="nav-tab" onclick="showPage('methods')">Data Methods</button>
             <button class="nav-tab" onclick="showPage('models')">Models</button>
             <button class="nav-tab" onclick="showPage('outcomes')">Outcomes</button>
-            <button class="nav-tab quiz-live" onclick="showPage('quiz')">🎯 Quiz</button>
+            <button class="nav-tab quiz-live" onclick="showPage('quiz')">ðŸŽ¯ Quiz</button>
         </div>
     </nav>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: OVERVIEW
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page active" id="page-overview">
         <div class="hero">
             <div class="hero-inner">
                 <div>
                     <h1>Training Needs<br><em>Analysis (TNA)</em></h1>
-                    <p>A systematic investigation into whether training — or another organisational intervention — can solve a performance problem.</p>
+                    <p>A systematic investigation into whether training â€” or another organisational intervention â€” can solve a performance problem.</p>
                     <div class="hero-badge"><i class="ph-fill ph-lightbulb"></i> First phase of the ADDIE model</div>
                 </div>
                 <div class="gap-chart">
@@ -1177,21 +1177,21 @@
             <!-- ADDIE -->
             <div class="section">
                 <div class="section-title"><i class="ph-fill ph-arrows-clockwise" style="color:var(--blue)"></i> The ADDIE Model</div>
-                <div class="section-subtitle">TNA is the very first step — it determines whether training is even needed</div>
+                <div class="section-subtitle">TNA is the very first step â€” it determines whether training is even needed</div>
                 <div class="card" style="padding: 1.5rem">
                     <div class="addie-row">
                         <div class="addie-item highlight"><i class="ph-fill ph-magnifying-glass" style="font-size:1.4rem"></i>Analyse</div>
-                        <div class="addie-arrow">→</div>
+                        <div class="addie-arrow">â†’</div>
                         <div class="addie-item"><i class="ph-fill ph-pencil-circle" style="font-size:1.4rem"></i>Design</div>
-                        <div class="addie-arrow">→</div>
+                        <div class="addie-arrow">â†’</div>
                         <div class="addie-item"><i class="ph-fill ph-wrench" style="font-size:1.4rem"></i>Develop</div>
-                        <div class="addie-arrow">→</div>
+                        <div class="addie-arrow">â†’</div>
                         <div class="addie-item"><i class="ph-fill ph-rocket-launch" style="font-size:1.4rem"></i>Implement</div>
-                        <div class="addie-arrow">→</div>
+                        <div class="addie-arrow">â†’</div>
                         <div class="addie-item"><i class="ph-fill ph-check-circle" style="font-size:1.4rem"></i>Evaluate</div>
                     </div>
                     <div style="margin-top:1.25rem;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:0.75rem 1rem;font-size:0.8rem;color:#92400e">
-                        <strong>💡 Core Results targeted:</strong> Learning · Performance · Financial · Strategy
+                        <strong>ðŸ’¡ Core Results targeted:</strong> Learning Â· Performance Â· Financial Â· Strategy
                     </div>
                 </div>
             </div>
@@ -1203,18 +1203,18 @@
                 <div class="grid-2">
                     <div class="card" style="padding:1rem">
                         <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">①</span><div><strong>Aligns training with business goals</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">②</span><div><strong>Identifies performance gaps</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">③</span><div><strong>Designs relevant training programs</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">④</span><div><strong>Efficient use of resources</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">â‘ </span><div><strong>Aligns training with business goals</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">â‘¡</span><div><strong>Identifies performance gaps</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">â‘¢</span><div><strong>Designs relevant training programs</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">â‘£</span><div><strong>Efficient use of resources</strong></div></li>
                         </ul>
                     </div>
                     <div class="card" style="padding:1rem">
                         <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑤</span><div><strong>Supports employee development</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑥</span><div><strong>Change management & adaptation</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑦</span><div><strong>Compliance & risk management</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑧</span><div><strong>Improves engagement & retention</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">â‘¤</span><div><strong>Supports employee development</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">â‘¥</span><div><strong>Change management & adaptation</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">â‘¦</span><div><strong>Compliance & risk management</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">â‘§</span><div><strong>Improves engagement & retention</strong></div></li>
                         </ul>
                     </div>
                 </div>
@@ -1222,14 +1222,14 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: 3 LEVELS
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page" id="page-levels">
         <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
             <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
                 <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">3 Levels of <em style="color:var(--accent)">Data Analysis</em></h1>
-                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">TNA should be conducted at all 3 levels simultaneously — they are interlinked for a balanced analysis.</p>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">TNA should be conducted at all 3 levels simultaneously â€” they are interlinked for a balanced analysis.</p>
             </div>
         </div>
 
@@ -1239,14 +1239,14 @@
                 <div class="level-card" style="border-top: 4px solid #6366f1">
                     <div class="level-icon" style="background:#eef2ff;color:#6366f1"><i class="ph-fill ph-buildings"></i></div>
                     <h3 style="font-weight:700;margin-bottom:0.4rem">1. Organisational</h3>
-                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Big picture — does training align with company strategy?</p>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Big picture â€” does training align with company strategy?</p>
                     <div class="chip" style="background:#eef2ff;color:#6366f1;margin-bottom:0.75rem">Where is training needed?</div>
                     <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
                     <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
-                        <li>→ Mission, vision & long-term plans</li>
-                        <li>→ External/internal factors (tech, regulations)</li>
-                        <li>→ Short & long-term business objectives</li>
-                        <li>→ Organisational culture, structure & system</li>
+                        <li>â†’ Mission, vision & long-term plans</li>
+                        <li>â†’ External/internal factors (tech, regulations)</li>
+                        <li>â†’ Short & long-term business objectives</li>
+                        <li>â†’ Organisational culture, structure & system</li>
                     </ul>
                     <hr style="margin:0.75rem 0;border-color:var(--border)">
                     <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
@@ -1257,14 +1257,14 @@
                 <div class="level-card" style="border-top: 4px solid var(--teal)">
                     <div class="level-icon" style="background:#f0fdfa;color:var(--teal)"><i class="ph-fill ph-users-three"></i></div>
                     <h3 style="font-weight:700;margin-bottom:0.4rem">2. Departmental</h3>
-                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Task/operational level — what does the job require?</p>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Task/operational level â€” what does the job require?</p>
                     <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-bottom:0.75rem">What must employees do?</div>
                     <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
                     <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
-                        <li>→ Expected vs actual performance</li>
-                        <li>→ KSAs needed for the job</li>
-                        <li>→ Tools, processes, technology required</li>
-                        <li>→ Right people in right roles</li>
+                        <li>â†’ Expected vs actual performance</li>
+                        <li>â†’ KSAs needed for the job</li>
+                        <li>â†’ Tools, processes, technology required</li>
+                        <li>â†’ Right people in right roles</li>
                     </ul>
                     <hr style="margin:0.75rem 0;border-color:var(--border)">
                     <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
@@ -1275,53 +1275,53 @@
                 <div class="level-card" style="border-top: 4px solid var(--rose)">
                     <div class="level-icon" style="background:#fff1f2;color:var(--rose)"><i class="ph-fill ph-user-focus"></i></div>
                     <h3 style="font-weight:700;margin-bottom:0.4rem">3. Individual</h3>
-                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Person-level — who needs what specific training?</p>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Person-level â€” who needs what specific training?</p>
                     <div class="chip" style="background:#fff1f2;color:var(--rose);margin-bottom:0.75rem">Who needs training?</div>
                     <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
                     <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
-                        <li>→ Employee strengths & weaknesses</li>
-                        <li>→ Career goals & learning styles</li>
-                        <li>→ Current job performance</li>
-                        <li>→ Future role changes</li>
+                        <li>â†’ Employee strengths & weaknesses</li>
+                        <li>â†’ Career goals & learning styles</li>
+                        <li>â†’ Current job performance</li>
+                        <li>â†’ Future role changes</li>
                     </ul>
                     <hr style="margin:0.75rem 0;border-color:var(--border)">
                     <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
-                    <p style="font-size:0.72rem;color:var(--slate)">Performance appraisals, skills tests, 360° feedback, coaching discussions</p>
+                    <p style="font-size:0.72rem;color:var(--slate)">Performance appraisals, skills tests, 360Â° feedback, coaching discussions</p>
                 </div>
             </div>
 
             <!-- Org factors -->
             <div class="card">
-                <h3 style="font-weight:700;margin-bottom:0.5rem;font-size:0.95rem">⚡ Organisational Performance is Affected By 3 Factors</h3>
+                <h3 style="font-weight:700;margin-bottom:0.5rem;font-size:0.95rem">âš¡ Organisational Performance is Affected By 3 Factors</h3>
                 <div class="grid-3">
                     <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
-                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">🎭 Culture</div>
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">ðŸŽ­ Culture</div>
                         <p style="font-size:0.75rem;color:var(--slate)">Values, beliefs, rituals and symbols that define how employees work & interact.</p>
                     </div>
                     <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
-                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">🏗️ Structure</div>
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">ðŸ—ï¸ Structure</div>
                         <p style="font-size:0.75rem;color:var(--slate)">Hierarchical arrangement of authority, communications, rights and duties.</p>
                     </div>
                     <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
-                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">⚙️ System</div>
-                        <p style="font-size:0.75rem;color:var(--slate)">Rules, policies and procedures — e.g. inventory, hiring, accounting systems.</p>
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">âš™ï¸ System</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Rules, policies and procedures â€” e.g. inventory, hiring, accounting systems.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: DATA METHODS
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page" id="page-methods">
         <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
             <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
                 <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">Data Gathering <em style="color:var(--accent)">Methods</em></h1>
-                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">Use at least 2–3 methods together for a complete, well-rounded picture.</p>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">Use at least 2â€“3 methods together for a complete, well-rounded picture.</p>
                 <div style="display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap">
-                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">💬 Qualitative = Soft data (feelings, opinions)</div>
-                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">📊 Quantitative = Hard data (numbers, %)</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">ðŸ’¬ Qualitative = Soft data (feelings, opinions)</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">ðŸ“Š Quantitative = Hard data (numbers, %)</div>
                 </div>
             </div>
         </div>
@@ -1340,11 +1340,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166534">âœ… Advantages</div>
                             <ul><li>Rich, descriptive detail</li><li>Consistent data to identify patterns</li><li>Fleshes out quantitative survey data</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Very time-consuming</li><li>Skewed if interviewees not representative</li><li>Risk of interpreting responses</li></ul>
                         </div>
                     </div>
@@ -1362,11 +1362,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166534">âœ… Advantages</div>
                             <ul><li>Develops testable hypotheses</li><li>Facilitator notes nonverbal behaviors</li><li>All members heard, not just vocal ones</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Time- and resource-intensive</li><li>Dominant members may skew results</li><li>Hard for 1 facilitator to run + note-take</li></ul>
                         </div>
                     </div>
@@ -1384,11 +1384,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166634">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166634">âœ… Advantages</div>
                             <ul><li>Excellent for psychomotor skills</li><li>Creates step-by-step standard procedures</li><li>Identifies environment conditions</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Hard to identify task start/end</li><li>Misses mental processes</li><li>Hawthorne effect (act differently when watched)</li></ul>
                         </div>
                     </div>
@@ -1406,11 +1406,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166534">âœ… Advantages</div>
                             <ul><li>Hard, objective data</li><li>Trends & patterns over time</li><li>No confidentiality issues (aggregate)</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Collected for other purposes</li><li>No control over collection method</li><li>Data requires "sifting"</li></ul>
                         </div>
                     </div>
@@ -1428,11 +1428,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166534">âœ… Advantages</div>
                             <ul><li>Inexpensive and fast</li><li>Easy for respondents</li><li>Provides both qual & quant data</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Hard to write clear, unambiguous questions</li><li>Respondents may answer blindly</li><li>Large sample needed for reliability</li></ul>
                         </div>
                     </div>
@@ -1450,11 +1450,11 @@
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
-                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <div class="pros-cons-label" style="color:#166534">âœ… Advantages</div>
                             <ul><li>Highly objective and consistent</li><li>Pinpoints specific K/S gaps</li><li>Focuses design on exact gap</li></ul>
                         </div>
                         <div class="pros-cons-box cons-box">
-                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <div class="pros-cons-label" style="color:#9f1239">âŒ Disadvantages</div>
                             <ul><li>Doesn't reveal thought processes</li><li>Test anxiety may affect results</li><li>Hard to cover K & S both in limited time</li></ul>
                         </div>
                     </div>
@@ -1463,9 +1463,9 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: MODELS
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page" id="page-models">
         <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
             <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
@@ -1479,7 +1479,7 @@
                 <!-- 7 step -->
                 <div class="card">
                     <h2 style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:0.25rem">McGoldrick & Tobey</h2>
-                    <p style="font-size:0.78rem;color:var(--slate);margin-bottom:1.25rem">7-Step TNA Model — training must be <em>needs-driven, not assumption-driven</em></p>
+                    <p style="font-size:0.78rem;color:var(--slate);margin-bottom:1.25rem">7-Step TNA Model â€” training must be <em>needs-driven, not assumption-driven</em></p>
                     <div class="timeline">
                         <div class="timeline-item"><div class="step-num">1</div><div class="timeline-text"><h4>Define Purpose & Scope</h4><p>Clarify why TNA is needed, what's in/out of scope.</p></div></div>
                         <div class="timeline-item"><div class="step-num">2</div><div class="timeline-text"><h4>Gather Background Information</h4><p>Review existing records, reports, past training data.</p></div></div>
@@ -1500,7 +1500,7 @@
                     <p style="font-size:0.78rem;color:var(--slate);margin-bottom:1.25rem">6 factors that cause performance gaps. <strong style="color:var(--rose)">Only Knowledge = Training Solution!</strong></p>
                     
                     <div class="gilbert-grid">
-                        <div class="gilbert-header" style="background:var(--navy);color:var(--white)">🏢 Organisational Factors (Environment)</div>
+                        <div class="gilbert-header" style="background:var(--navy);color:var(--white)">ðŸ¢ Organisational Factors (Environment)</div>
                         <div class="gilbert-box">
                             <h5>Physical</h5>
                             <p>Tools, equipment, facilities, budget, supplies, manpower</p>
@@ -1514,10 +1514,10 @@
                             <p>Feedback, clear standards, reliable data, job instructions</p>
                         </div>
 
-                        <div class="gilbert-header" style="background:#6366f1;color:#fff;margin-top:0.5rem">👤 Individual Factors (Employee)</div>
+                        <div class="gilbert-header" style="background:#6366f1;color:#fff;margin-top:0.5rem">ðŸ‘¤ Individual Factors (Employee)</div>
                         <div class="gilbert-box highlight-box" style="border-color:var(--blue);background:#eff6ff;grid-column:1">
-                            <h5 style="color:var(--blue)">💡 Knowledge ⭐</h5>
-                            <p style="color:var(--blue);font-weight:600">Training, coaching, mentoring — ONLY this can be fixed by training!</p>
+                            <h5 style="color:var(--blue)">ðŸ’¡ Knowledge â­</h5>
+                            <p style="color:var(--blue);font-weight:600">Training, coaching, mentoring â€” ONLY this can be fixed by training!</p>
                         </div>
                         <div class="gilbert-box">
                             <h5>Motivation</h5>
@@ -1530,22 +1530,22 @@
                     </div>
 
                     <div style="margin-top:1.25rem;background:#fff1f2;border:1.5px solid #fecdd3;border-radius:10px;padding:0.85rem;font-size:0.82rem;color:#9f1239">
-                        <strong>🚨 The Golden Rule:</strong> "If the employee had the right skills, could they do the job?" 
-                        <br>→ <strong>YES</strong> = Training helps &nbsp;|&nbsp; <strong>NO</strong> = Fix the non-training issue first
+                        <strong>ðŸš¨ The Golden Rule:</strong> "If the employee had the right skills, could they do the job?" 
+                        <br>â†’ <strong>YES</strong> = Training helps &nbsp;|&nbsp; <strong>NO</strong> = Fix the non-training issue first
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: OUTCOMES
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page" id="page-outcomes">
         <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
             <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
                 <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">TNA <em style="color:var(--accent)">Outcomes</em></h1>
-                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">From findings to report to Annual Training Plan — closing the performance gap.</p>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">From findings to report to Annual Training Plan â€” closing the performance gap.</p>
             </div>
         </div>
 
@@ -1556,7 +1556,7 @@
                 <div class="section-subtitle">Always ask: is this a training problem or a non-training problem?</div>
                 <div class="solutions-grid">
                     <div class="card" style="border-top: 4px solid var(--blue)">
-                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--blue)">🎓 Training Solutions</h3>
+                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--blue)">ðŸŽ“ Training Solutions</h3>
                         <p style="font-size:0.75rem;color:var(--slate);margin-bottom:0.75rem">When the gap is due to <strong>lack of Knowledge/Skill</strong></p>
                         <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Classroom or Online Training</div>
                         <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Workshops & Seminars</div>
@@ -1566,7 +1566,7 @@
                         <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Simulations / Role Plays</div>
                     </div>
                     <div class="card" style="border-top: 4px solid var(--teal)">
-                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--teal)">🔧 Non-Training Solutions</h3>
+                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--teal)">ðŸ”§ Non-Training Solutions</h3>
                         <p style="font-size:0.75rem;color:var(--slate);margin-bottom:0.75rem">When the gap is due to <strong>motivation, resources, policies, or environment</strong></p>
                         <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Process Improvement (streamline SOPs)</div>
                         <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Job Redesign</div>
@@ -1589,28 +1589,28 @@
                     <div class="report-step"><div class="report-step-num">4</div><div class="report-step-title">Results</div><div class="report-step-desc">Tables & charts of findings</div></div>
                     <div class="report-step"><div class="report-step-num">5</div><div class="report-step-title">Interventions</div><div class="report-step-desc">Training + Non-training actions</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.8rem;color:var(--slate);margin-top:1rem">→ Leads to the <strong>Annual Training Plan (ATP)</strong> — a calendar of all scheduled training programs</p>
+                <p style="text-align:center;font-size:0.8rem;color:var(--slate);margin-top:1rem">â†’ Leads to the <strong>Annual Training Plan (ATP)</strong> â€” a calendar of all scheduled training programs</p>
             </div>
 
             <!-- Quick cheat sheet -->
             <div class="cheat-section">
-                <div class="cheat-title">⚡ Exam Cheat Sheet</div>
-                <div class="cheat-row"><span class="cheat-q">3 TNA levels?</span><span class="cheat-a">Organisational · Departmental · Individual</span></div>
-                <div class="cheat-row"><span class="cheat-q">Performance gap =</span><span class="cheat-a">Desired − Actual Performance</span></div>
-                <div class="cheat-row"><span class="cheat-q">Qualitative methods?</span><span class="cheat-a">Interview · Focus Group · Observation</span></div>
-                <div class="cheat-row"><span class="cheat-q">Quantitative methods?</span><span class="cheat-a">Extant Data · Surveys · Tests</span></div>
-                <div class="cheat-row"><span class="cheat-q">Gilbert's 6 factors?</span><span class="cheat-a">Physical · Structure · Information · Knowledge · Motivation · Wellness</span></div>
+                <div class="cheat-title">âš¡ Exam Cheat Sheet</div>
+                <div class="cheat-row"><span class="cheat-q">3 TNA levels?</span><span class="cheat-a">Organisational Â· Departmental Â· Individual</span></div>
+                <div class="cheat-row"><span class="cheat-q">Performance gap =</span><span class="cheat-a">Desired âˆ’ Actual Performance</span></div>
+                <div class="cheat-row"><span class="cheat-q">Qualitative methods?</span><span class="cheat-a">Interview Â· Focus Group Â· Observation</span></div>
+                <div class="cheat-row"><span class="cheat-q">Quantitative methods?</span><span class="cheat-a">Extant Data Â· Surveys Â· Tests</span></div>
+                <div class="cheat-row"><span class="cheat-q">Gilbert's 6 factors?</span><span class="cheat-a">Physical Â· Structure Â· Information Â· Knowledge Â· Motivation Â· Wellness</span></div>
                 <div class="cheat-row"><span class="cheat-q">Only training can fix?</span><span class="cheat-a">Knowledge / Skill gaps only</span></div>
-                <div class="cheat-row"><span class="cheat-q">McGoldrick steps?</span><span class="cheat-a">7 steps (Define → Gather → Identify → Plan → Collect → Analyse → Report)</span></div>
-                <div class="cheat-row"><span class="cheat-q">TNA report elements?</span><span class="cheat-a">Background · Objective · Methods · Results · Interventions</span></div>
-                <div class="cheat-row"><span class="cheat-q">2 key TNA outcomes?</span><span class="cheat-a">Close performance gaps · Meet future performance needs</span></div>
+                <div class="cheat-row"><span class="cheat-q">McGoldrick steps?</span><span class="cheat-a">7 steps (Define â†’ Gather â†’ Identify â†’ Plan â†’ Collect â†’ Analyse â†’ Report)</span></div>
+                <div class="cheat-row"><span class="cheat-q">TNA report elements?</span><span class="cheat-a">Background Â· Objective Â· Methods Â· Results Â· Interventions</span></div>
+                <div class="cheat-row"><span class="cheat-q">2 key TNA outcomes?</span><span class="cheat-a">Close performance gaps Â· Meet future performance needs</span></div>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          PAGE: QUIZ
-    ══════════════════════════════════════ -->
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="page" id="page-quiz">
         <div class="quiz-hero">
             <h1>TNA <em>Revision Quiz</em></h1>
@@ -1667,8 +1667,8 @@
                 <div class="score-message" id="score-message">Well done!</div>
                 <div class="score-sub" id="score-sub">You answered X out of Y correctly.</div>
                 <div class="score-breakdown">
-                    <div class="score-breakdown-item score-correct-item">✅ Correct: <span id="bd-correct">0</span></div>
-                    <div class="score-breakdown-item score-wrong-item">❌ Wrong: <span id="bd-wrong">0</span></div>
+                    <div class="score-breakdown-item score-correct-item">âœ… Correct: <span id="bd-correct">0</span></div>
+                    <div class="score-breakdown-item score-wrong-item">âŒ Wrong: <span id="bd-wrong">0</span></div>
                 </div>
                 <button class="btn-primary" onclick="restartQuiz()" style="margin:0 auto">
                     <i class="ph-bold ph-arrow-counter-clockwise"></i> Try Again
@@ -1678,9 +1678,9 @@
     </div>
 
     <script>
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // NAVIGATION
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1692,9 +1692,9 @@
         if (id === 'quiz') initQuiz();
     }
 
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // QUIZ DATA
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     const allQuestions = [
         // FUNDAMENTALS
         {
@@ -1702,10 +1702,10 @@
             catLabel: 'Fundamentals',
             q: 'What does TNA stand for and what is its main purpose?',
             opts: [
-                'Training Needs Assessment — to train all employees',
-                'Training Needs Analysis — to investigate whether training or another intervention can solve a performance problem',
-                'Technical Needs Analysis — to assess technical equipment requirements',
-                'Training Needs Appraisal — to evaluate trainer performance'
+                'Training Needs Assessment â€” to train all employees',
+                'Training Needs Analysis â€” to investigate whether training or another intervention can solve a performance problem',
+                'Technical Needs Analysis â€” to assess technical equipment requirements',
+                'Training Needs Appraisal â€” to evaluate trainer performance'
             ],
             ans: 1,
             exp: 'TNA = Training Needs Analysis. Its main purpose is to investigate whether training (or some other organisational intervention) can solve a performance problem or enable new performance. It is NOT automatically assumed that training is always the solution.'
@@ -1730,11 +1730,11 @@
             opts: [
                 'It is the final Evaluate phase',
                 'It is in the Design phase',
-                'It is the first phase — Analyse',
+                'It is the first phase â€” Analyse',
                 'It spans the entire ADDIE process'
             ],
             ans: 2,
-            exp: 'TNA is the first phase (A = Analyse) of ADDIE. The sequence is: Analyse → Design → Develop → Implement → Evaluate. TNA happens before any training is designed or developed.'
+            exp: 'TNA is the first phase (A = Analyse) of ADDIE. The sequence is: Analyse â†’ Design â†’ Develop â†’ Implement â†’ Evaluate. TNA happens before any training is designed or developed.'
         },
         {
             cat: 'fundamentals',
@@ -1747,7 +1747,7 @@
                 'The difference between two employees performing the same job'
             ],
             ans: 2,
-            exp: 'Performance Gap = Desired Performance − Actual Performance. This is the core concept of TNA. You measure both desired (what should happen) and actual (what is currently happening) to find the gap.'
+            exp: 'Performance Gap = Desired Performance âˆ’ Actual Performance. This is the core concept of TNA. You measure both desired (what should happen) and actual (what is currently happening) to find the gap.'
         },
         {
             cat: 'fundamentals',
@@ -1755,7 +1755,7 @@
             q: 'Which of the following is NOT one of the core results that TNA feeds into?',
             opts: ['Learning outcomes', 'Performance improvement', 'Equipment procurement', 'Financial results'],
             ans: 2,
-            exp: 'TNA targets four core results: Learning, Performance, Financial, and Strategy. Equipment procurement is not one of them — that is an operational/procurement function.'
+            exp: 'TNA targets four core results: Learning, Performance, Financial, and Strategy. Equipment procurement is not one of them â€” that is an operational/procurement function.'
         },
         // LEVELS
         {
@@ -1764,7 +1764,7 @@
             q: 'At which TNA level would a trainer examine the company\'s mission, vision, and strategic goals?',
             opts: ['Individual Level', 'Departmental Level', 'Organisational Level', 'Operational Level'],
             ans: 2,
-            exp: 'Organisational Level TNA focuses on the big picture — aligning training with the company\'s mission, vision, and long-term strategic plans. It answers: "WHERE in the organisation is training needed?"'
+            exp: 'Organisational Level TNA focuses on the big picture â€” aligning training with the company\'s mission, vision, and long-term strategic plans. It answers: "WHERE in the organisation is training needed?"'
         },
         {
             cat: 'levels',
@@ -1781,11 +1781,11 @@
             opts: [
                 'Company strategy documents and market trend reports',
                 'Standard Operating Procedures and job descriptions',
-                'Performance appraisals, 360° feedback, and skills tests',
+                'Performance appraisals, 360Â° feedback, and skills tests',
                 'KPIs and business plans'
             ],
             ans: 2,
-            exp: 'Individual Level TNA focuses on specific employees. Best data sources are: performance appraisals, skills assessments and tests, 360° feedback, and one-on-one coaching discussions. These directly measure the individual\'s gap.'
+            exp: 'Individual Level TNA focuses on specific employees. Best data sources are: performance appraisals, skills assessments and tests, 360Â° feedback, and one-on-one coaching discussions. These directly measure the individual\'s gap.'
         },
         {
             cat: 'levels',
@@ -1804,7 +1804,7 @@
             cat: 'levels',
             catLabel: '3 Levels of TNA',
             q: 'A trainer notices a performance gap in a call centre. Staff know how to handle calls, but customer wait times are too long because the call system is outdated. This problem is BEST addressed at which level?',
-            opts: ['Individual Level — train the staff', 'Departmental Level — revise SOPs', 'Organisational Level — fix the system', 'No TNA needed'],
+            opts: ['Individual Level â€” train the staff', 'Departmental Level â€” revise SOPs', 'Organisational Level â€” fix the system', 'No TNA needed'],
             ans: 2,
             exp: 'This is an Organisational Level issue. The problem is a SYSTEM issue (outdated equipment), not a knowledge/skill gap. Fixing the system is an organisational-level, non-training solution. This also demonstrates why TNA must distinguish training from non-training problems.'
         },
@@ -1815,7 +1815,7 @@
             q: 'Which data collection method is classified as QUALITATIVE?',
             opts: ['Extant Data', 'Surveys & Questionnaires', 'Tests & Assessments', 'Focus Groups'],
             ans: 3,
-            exp: 'The three QUALITATIVE methods are: Interview, Focus Groups, and Observation. They yield "soft data" — subjective, descriptive, personal. The three QUANTITATIVE methods are: Extant Data, Surveys & Questionnaires, and Tests & Assessments.'
+            exp: 'The three QUALITATIVE methods are: Interview, Focus Groups, and Observation. They yield "soft data" â€” subjective, descriptive, personal. The three QUANTITATIVE methods are: Extant Data, Surveys & Questionnaires, and Tests & Assessments.'
         },
         {
             cat: 'methods',
@@ -1841,7 +1841,7 @@
                 'Staff turnover rates'
             ],
             ans: 2,
-            exp: 'Extant data is EXISTING records and documents — reports, financial statements, turnover rates, complaints, audit results, etc. An interview is a QUALITATIVE data collection method (primary data), not extant (existing) data.'
+            exp: 'Extant data is EXISTING records and documents â€” reports, financial statements, turnover rates, complaints, audit results, etc. An interview is a QUALITATIVE data collection method (primary data), not extant (existing) data.'
         },
         {
             cat: 'methods',
@@ -1871,7 +1871,7 @@
             q: 'According to Gilbert\'s 6-Box Model, which factor is the ONLY one that can be directly addressed by training?',
             opts: ['Motivation', 'Physical (tools & equipment)', 'Knowledge', 'Wellness'],
             ans: 2,
-            exp: 'In Gilbert\'s 6-Box Model, ONLY the Knowledge box can be directly solved by training (training, coaching, mentoring, education). The other 5 factors — Physical, Structure/Process, Information, Motivation, and Wellness — require non-training solutions.'
+            exp: 'In Gilbert\'s 6-Box Model, ONLY the Knowledge box can be directly solved by training (training, coaching, mentoring, education). The other 5 factors â€” Physical, Structure/Process, Information, Motivation, and Wellness â€” require non-training solutions.'
         },
         {
             cat: 'models',
@@ -1884,20 +1884,20 @@
                 'Report findings to management'
             ],
             ans: 2,
-            exp: 'Step 4 is "Plan the Needs Assessment." This is where you decide HOW you will conduct the TNA — selecting data collection methods (surveys, interviews, etc.), choosing who will do it, setting the timeline, and establishing a budget.'
+            exp: 'Step 4 is "Plan the Needs Assessment." This is where you decide HOW you will conduct the TNA â€” selecting data collection methods (surveys, interviews, etc.), choosing who will do it, setting the timeline, and establishing a budget.'
         },
         {
             cat: 'models',
             catLabel: 'Models',
             q: 'An employee is missing sales targets. Investigation shows they meet clients regularly but are not confident in handling objections. What does this suggest?',
             opts: [
-                'This is a non-training issue — revise the commission scheme',
-                'This is a training issue — the employee lacks the skill to handle objections',
-                'This is an equipment issue — provide better sales tools',
+                'This is a non-training issue â€” revise the commission scheme',
+                'This is a training issue â€” the employee lacks the skill to handle objections',
+                'This is an equipment issue â€” provide better sales tools',
                 'No intervention is needed'
             ],
             ans: 1,
-            exp: 'Lack of confidence in handling objections = a SKILL GAP. The employee does not have the skill/knowledge to handle objections effectively. This is a TRAINING solution — e.g., an objection-handling workshop. (Note: if it was the commission scheme causing demotivation, that would be a non-training solution.)'
+            exp: 'Lack of confidence in handling objections = a SKILL GAP. The employee does not have the skill/knowledge to handle objections effectively. This is a TRAINING solution â€” e.g., an objection-handling workshop. (Note: if it was the commission scheme causing demotivation, that would be a non-training solution.)'
         },
         // OUTCOMES
         {
@@ -1924,13 +1924,13 @@
                 'Mission, Vision, Goals, KPIs, Action Plan'
             ],
             ans: 1,
-            exp: 'A TNA Report must contain: (1) Background — context/triggers, (2) Objective/Purpose, (3) Analysis Methods — data collection tools used, (4) Results of Analysis — tables and charts, (5) Recommended Interventions — training and non-training actions.'
+            exp: 'A TNA Report must contain: (1) Background â€” context/triggers, (2) Objective/Purpose, (3) Analysis Methods â€” data collection tools used, (4) Results of Analysis â€” tables and charts, (5) Recommended Interventions â€” training and non-training actions.'
         }
     ];
 
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // QUIZ STATE
-    // ══════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     let currentCategory = 'all';
     let filteredQuestions = [];
     let shuffledQuestions = [];
@@ -2040,10 +2040,10 @@
         if (selected === correct) {
             correctCount++;
             fb.className = 'feedback-box correct-fb show';
-            fb.innerHTML = `<strong>✅ Correct!</strong> ${explanation}`;
+            fb.innerHTML = `<strong>âœ… Correct!</strong> ${explanation}`;
         } else {
             fb.className = 'feedback-box wrong-fb show';
-            fb.innerHTML = `<strong>❌ Not quite.</strong> ${explanation}`;
+            fb.innerHTML = `<strong>âŒ Not quite.</strong> ${explanation}`;
         }
 
         document.getElementById('stat-score').textContent = correctCount;
@@ -2082,18 +2082,83 @@
 
         if (pct >= 80) {
             circle.classList.add('score-pass');
-            msg.textContent = '🎉 Excellent! Ready for the exam!';
+            msg.textContent = 'ðŸŽ‰ Excellent! Ready for the exam!';
         } else if (pct >= 60) {
             circle.classList.add('score-mid');
-            msg.textContent = '💪 Good effort! Review the weak areas.';
+            msg.textContent = 'ðŸ’ª Good effort! Review the weak areas.';
         } else {
             circle.classList.add('score-fail');
-            msg.textContent = '📚 Keep studying — you\'ll get there!';
+            msg.textContent = 'ðŸ“š Keep studying â€” you\'ll get there!';
         }
 
         document.getElementById('progress-bar').style.width = '100%';
         document.getElementById('score-card').classList.add('show');
     }
+    </script>
+
+    <!-- â”€â”€ FOOTER â”€â”€ -->
+    <footer style="
+        background: var(--navy);
+        border-top: 2px solid #1e3a8a;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-family: 'Sora', sans-serif;
+    ">
+        <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;">
+
+            <!-- Logo mark -->
+            <div style="
+                width: 40px; height: 40px;
+                background: linear-gradient(135deg, #2563eb, #6366f1);
+                border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 1.1rem;
+                margin-bottom: 0.25rem;
+                box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+            ">ðŸŽ“</div>
+
+            <!-- Made by -->
+            <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500;">
+                Made by
+            </div>
+            <a href="https://www.tiktok.com/@samadsaidwhaaat"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="
+                   color: #f59e0b;
+                   font-size: 1rem;
+                   font-weight: 700;
+                   text-decoration: none;
+                   letter-spacing: -0.01em;
+                   display: flex;
+                   align-items: center;
+                   gap: 0.4rem;
+                   transition: opacity 0.2s;
+               "
+               onmouseover="this.style.opacity='0.8'"
+               onmouseout="this.style.opacity='1'"
+            >
+                <i class="ph-fill ph-at" style="font-size:1rem"></i>samadsaidwhaaat
+            </a>
+
+            <!-- Divider -->
+            <div style="width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 0.25rem 0;"></div>
+
+            <!-- Description -->
+            <p style="color: rgba(255,255,255,0.35); font-size: 0.72rem; max-width: 380px; line-height: 1.6;">
+                TNA Study Guide â€” built for the HRD Corp Train The Trainer (TTT) assessment. Based on CT2: Conduct Training Needs Analysis.
+            </p>
+
+            <!-- Year -->
+            <div style="color: rgba(255,255,255,0.2); font-size: 0.68rem; margin-top: 0.25rem;">
+                Â© <span id="footer-year"></span> Â· All rights reserved
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
