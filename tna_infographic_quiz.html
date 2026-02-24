@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNA Study Guide & Quiz</title>
+
+    <!-- ============================================================
+         SECURITY HEADERS (via <meta> tags)
+         NOTE: For full protection, mirror these as HTTP response
+         headers in your hosting config (Netlify/Vercel/_headers file).
+         Meta tags are a solid fallback but HTTP headers are stronger.
+    ============================================================ -->
+
+    <!--
+        1. CONTENT SECURITY POLICY (CSP)
+        ─────────────────────────────────
+        Tells the browser exactly which sources are allowed to load
+        scripts, styles, fonts, and images. Blocks injected scripts
+        (XSS attacks) from running even if they get into the page.
+
+        Breakdown of each directive:
+        • default-src 'self'          → Only load resources from this
+                                        domain by default
+        • script-src 'self' unpkg.com → Only allow scripts from this
+                                        site or unpkg CDN (Phosphor Icons)
+        • style-src 'self' 'unsafe-inline' fonts.googleapis.com
+                                      → Allow inline styles (needed for
+                                        our CSS variables) + Google Fonts
+        • font-src 'self' fonts.gstatic.com
+                                      → Allow fonts only from Google's
+                                        font hosting server
+        • img-src 'self' data:        → Allow images from this site and
+                                        inline data: URIs (used in SVG)
+        • connect-src 'none'          → Block all fetch/XHR requests
+                                        (site makes none)
+        • object-src 'none'           → Block Flash/plugins entirely
+        • base-uri 'self'             → Prevent <base> tag injection
+                                        which can redirect all links
+        • form-action 'self'          → Block forms submitting to
+                                        external domains
+        • frame-ancestors 'none'      → Prevent embedding in iframes
+                                        (same as X-Frame-Options below)
+        • upgrade-insecure-requests   → Auto-upgrade HTTP links to HTTPS
+    -->
+    <meta http-equiv="Content-Security-Policy"
+          content="
+            default-src 'self';
+            script-src 'self' https://unpkg.com 'unsafe-inline';
+            style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+            font-src 'self' https://fonts.gstatic.com;
+            img-src 'self' data:;
+            connect-src 'none';
+            object-src 'none';
+            base-uri 'self';
+            form-action 'self';
+            frame-ancestors 'none';
+            upgrade-insecure-requests;
+          ">
+
+    <!--
+        2. X-FRAME-OPTIONS
+        ───────────────────
+        Prevents this page from being loaded inside an <iframe> on
+        another website. Stops clickjacking attacks where attackers
+        overlay your page invisibly to trick users into clicking things.
+        "DENY" means no site — including this one — can iframe it.
+        (Also enforced above via CSP frame-ancestors 'none')
+    -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+
+    <!--
+        3. X-CONTENT-TYPE-OPTIONS
+        ──────────────────────────
+        Tells the browser: "Do NOT guess the file type — trust the
+        Content-Type header exactly." Prevents MIME-sniffing attacks
+        where a file uploaded as an image might actually contain
+        executable script that a browser could mistakenly run.
+        "nosniff" = strict mode, no guessing allowed.
+    -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+    <!--
+        4. REFERRER POLICY
+        ───────────────────
+        Controls what URL information is sent to other sites when a
+        user clicks a link and leaves your page. "strict-origin-when-
+        cross-origin" means:
+        • Same-site links → full URL is shared (normal behaviour)
+        • Cross-site links → only your domain name is shared, NOT
+          the full path (e.g., not "yoursite.com/quiz?user=samad")
+        This protects user privacy and prevents leaking page structure.
+    -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!--
+        5. PERMISSIONS POLICY
+        ──────────────────────
+        Explicitly disables browser features your site doesn't need.
+        Even if an attacker injected a script, it could NOT access
+        the user's camera, microphone, or location. Principle of
+        least privilege — only enable what you actually use.
+        This site needs none of these features, so all are blocked.
+    -->
+    <meta http-equiv="Permissions-Policy"
+          content="
+            camera=(),
+            microphone=(),
+            geolocation=(),
+            payment=(),
+            usb=(),
+            fullscreen=(self),
+            display-capture=()
+          ">
+
+    <!--
+        6. SUBRESOURCE INTEGRITY (SRI)
+        ────────────────────────────────
+        SRI hashes are added directly on the <link> and <script> tags
+        below. Each external file gets a sha384 cryptographic hash.
+        When the browser downloads the file, it recomputes the hash
+        and compares — if it doesn't match (e.g., CDN was compromised
+        or file was tampered with), the browser REFUSES to load it.
+
+        HOW TO GENERATE YOUR OWN HASH (run in terminal):
+          curl -sL [URL] | openssl dgst -sha384 -binary | openssl base64 -A
+        Then prefix with "sha384-"
+
+        crossorigin="anonymous" is required for SRI to work on
+        cross-origin resources — it tells the browser to fetch without
+        sending cookies, and to enforce the integrity check.
+
+        ⚠️  IMPORTANT: Google Fonts generates dynamic CSS based on the
+        user's browser, so its hash changes per request — SRI cannot
+        be used on the Fonts CSS link itself. Instead we use a
+        preconnect and trust the HTTPS connection for fonts.
+        Phosphor Icons from unpkg is stable and SRI-compatible.
+
+        ACTION NEEDED when you deploy:
+        Run the curl command above on the live unpkg URL to get the
+        exact hash for the version you are pinning, then replace
+        "GENERATE-THIS-HASH" below with the real value.
+    -->
+
+    <!-- Preconnect to external domains for performance + security scoping -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
+
+    <!-- Google Fonts — SRI not applicable (dynamic CSS); HTTPS is the protection here -->
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+          rel="stylesheet"
+          crossorigin="anonymous">
+
+    <!--
+        Phosphor Icons — pinned to a specific version for SRI stability.
+        Replace "GENERATE-THIS-HASH" with the real hash using:
+        curl -sL https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js \
+          | openssl dgst -sha384 -binary | openssl base64 -A
+    -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"
+            crossorigin="anonymous"></script>
+            <!-- integrity="sha384-GENERATE-THIS-HASH" — add after computing locally -->
+    <style>
+        :root {
+            --navy: #0f1e3d;
+            --navy-mid: #1a2f5a;
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --accent: #f59e0b;
+            --accent-bright: #fbbf24;
+            --teal: #0d9488;
+            --rose: #e11d48;
+            --emerald: #059669;
+            --slate: #64748b;
+            --slate-light: #f1f5f9;
+            --white: #ffffff;
+            --text: #0f172a;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: #f0f4ff;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--navy);
+            border-bottom: 2px solid var(--blue);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            min-height: 60px;
+        }
+
+        .nav-brand {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand span { color: var(--accent); }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            padding: 0.5rem 0;
+        }
+
+        .nav-tab {
+            background: none;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7);
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+        .nav-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); font-weight: 600; }
+
+        /* ── PAGES ── */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 3.5rem 1.5rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(37,99,235,0.3) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(245,158,11,0.15) 0%, transparent 40%);
+        }
+
+        .hero-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            line-height: 1.15;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero h1 em { color: var(--accent); font-style: italic; }
+
+        .hero p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.75);
+            max-width: 480px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.4);
+            color: var(--accent-bright);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Gap chart */
+        .gap-chart {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 180px;
+            backdrop-filter: blur(10px);
+        }
+
+        .gap-chart-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .gap-bars {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            height: 100px;
+        }
+
+        .gap-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .gap-bar {
+            width: 40px;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .gap-bar.desired { background: #34d399; height: 90px; }
+        .gap-bar.actual { background: #94a3b8; height: 55px; }
+
+        .gap-label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .gap-arrow {
+            position: absolute;
+            right: -1.4rem;
+            top: 0;
+            bottom: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gap-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.65rem;
+            color: var(--accent-bright);
+            font-weight: 700;
+            gap: 0.15rem;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--slate);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+        @media (max-width: 700px) {
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .hero-inner { grid-template-columns: 1fr; }
+            .gap-chart { display: none; }
+        }
+
+        @media (max-width: 500px) {
+            .grid-2-mobile { grid-template-columns: 1fr; }
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* ── ADDIE ── */
+        .addie-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .addie-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--slate-light);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.1rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--slate);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .addie-item.highlight {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: var(--white);
+            position: relative;
+        }
+
+        .addie-item.highlight::after {
+            content: '★ TNA';
+            position: absolute;
+            top: -10px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--navy);
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 999px;
+        }
+
+        .addie-arrow { color: var(--border); font-size: 1.2rem; }
+
+        /* ── 3 LEVELS ── */
+        .level-card {
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+        }
+
+        .level-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ── METHODS ── */
+        .method-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .method-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+        .method-header {
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .method-body {
+            padding: 0 1rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .pros-cons-box { padding: 0.6rem; border-radius: 8px; }
+        .pros-box { background: #f0fdf4; }
+        .cons-box { background: #fff1f2; }
+
+        .pros-cons-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .pros-cons-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .pros-cons-box li {
+            font-size: 0.7rem;
+            color: #374151;
+            padding-left: 0.75rem;
+            position: relative;
+            line-height: 1.35;
+        }
+
+        .pros-cons-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--slate);
+        }
+
+        /* ── TIMELINE ── */
+        .timeline { display: flex; flex-direction: column; gap: 0; }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+            padding-bottom: 1.25rem;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 1;
+            box-shadow: 0 0 0 4px #dbeafe;
+        }
+
+        .timeline-text h4 {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--navy);
+            margin-bottom: 0.15rem;
+        }
+
+        .timeline-text p { font-size: 0.78rem; color: var(--slate); }
+
+        /* ── GILBERT ── */
+        .gilbert-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .gilbert-box {
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+        }
+
+        .gilbert-box.highlight-box {
+            background: #eff6ff;
+            border-color: var(--blue);
+        }
+
+        .gilbert-box h5 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .gilbert-box p {
+            font-size: 0.68rem;
+            color: var(--slate);
+            line-height: 1.35;
+        }
+
+        .gilbert-header {
+            grid-column: 1 / -1;
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── SOLUTIONS ── */
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .solutions-grid { grid-template-columns: 1fr; }
+            .method-body { grid-template-columns: 1fr; }
+            .gilbert-grid { grid-template-columns: 1fr 1fr; }
+            .addie-arrow { display: none; }
+        }
+
+        .sol-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sol-item:last-child { border-bottom: none; }
+
+        .sol-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 0.3rem;
+            flex-shrink: 0;
+        }
+
+        /* ── TNA REPORT ── */
+        .report-steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .report-steps { grid-template-columns: 1fr 1fr; }
+        }
+
+        .report-step {
+            background: var(--navy);
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 0.9rem 0.75rem;
+            text-align: center;
+        }
+
+        .report-step-num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .report-step-title { font-size: 0.78rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .report-step-desc { font-size: 0.65rem; color: rgba(255,255,255,0.6); }
+
+        /* ── SECTION SPACING ── */
+        .section { margin-bottom: 3rem; }
+
+        /* ════════════════════════════════════
+           QUIZ PAGE
+        ════════════════════════════════════ */
+        .quiz-hero {
+            background: linear-gradient(135deg, #1a0533 0%, #2d1b69 60%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .quiz-hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-hero h1 em { color: var(--accent); font-style: italic; }
+
+        .quiz-hero p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+        .quiz-stats {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .quiz-stat {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 0.6rem 1.2rem;
+            text-align: center;
+        }
+
+        .quiz-stat-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .quiz-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+
+        /* Quiz container */
+        .quiz-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        .quiz-progress-bar-wrap {
+            background: #e2e8f0;
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue), var(--accent));
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--slate);
+            margin-bottom: 1.5rem;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1.5px solid var(--border);
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+        }
+
+        .question-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--blue);
+            background: #eff6ff;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            margin-bottom: 0.9rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            background: #f8fafc;
+            cursor: pointer;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            text-align: left;
+            transition: all 0.15s;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--blue);
+            background: #eff6ff;
+            color: var(--blue);
+        }
+
+        .option-letter {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--slate);
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .option-btn.correct {
+            border-color: var(--emerald);
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .option-btn.correct .option-letter {
+            background: var(--emerald);
+            color: var(--white);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--rose);
+            background: #fff1f2;
+            color: #9f1239;
+        }
+
+        .option-btn.wrong .option-letter {
+            background: var(--rose);
+            color: var(--white);
+        }
+
+        .option-btn.disabled-neutral {
+            opacity: 0.5;
+        }
+
+        .option-btn:disabled { cursor: default; }
+
+        .feedback-box {
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.83rem;
+            margin-top: 1rem;
+            display: none;
+            line-height: 1.55;
+        }
+
+        .feedback-box.show { display: block; }
+
+        .feedback-box.correct-fb {
+            background: #f0fdf4;
+            border: 1.5px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .feedback-box.wrong-fb {
+            background: #fff1f2;
+            border: 1.5px solid #fecdd3;
+            color: #9f1239;
+        }
+
+        .feedback-box strong { font-weight: 700; }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .btn-primary:disabled { background: var(--border); color: var(--slate); cursor: default; transform: none; }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--navy);
+            border: 1.5px solid var(--border);
+            padding: 0.7rem 1.2rem;
+            border-radius: var(--radius-sm);
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+
+        /* Score card */
+        .score-card {
+            display: none;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+
+        .score-card.show { display: block; }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            border: 6px solid;
+        }
+
+        .score-circle .score-num {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .score-circle .score-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .score-pass { border-color: var(--emerald); color: var(--emerald); }
+        .score-fail { border-color: var(--rose); color: var(--rose); }
+        .score-mid { border-color: var(--accent); color: var(--accent); }
+
+        .score-message {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+        }
+
+        .score-sub { font-size: 0.85rem; color: var(--slate); margin-bottom: 2rem; }
+
+        .score-breakdown {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .score-breakdown-item {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .score-correct-item { background: #f0fdf4; color: #166534; }
+        .score-wrong-item { background: #fff1f2; color: #9f1239; }
+
+        /* category filter */
+        .category-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .cat-btn {
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            font-family: 'Sora', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--slate);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .cat-btn:hover { border-color: var(--blue); color: var(--blue); }
+        .cat-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+        /* Separator */
+        .separator {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        /* ── Cheat sheet ── */
+        .cheat-section {
+            background: var(--navy);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cheat-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .cheat-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.82rem;
+        }
+
+        .cheat-row:last-child { border-bottom: none; }
+
+        .cheat-q { color: rgba(255,255,255,0.55); min-width: 140px; font-size: 0.75rem; }
+        .cheat-a { color: var(--white); font-weight: 600; }
+
+        /* pulse animation for active tab */
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+            100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+        }
+
+        .quiz-live { animation: pulse-ring 2s infinite; }
+    </style>
+</head>
+<body>
+
+    <!-- ══ NAVIGATION ══ -->
+    <nav>
+        <div class="nav-brand"><i class="ph-fill ph-graduation-cap"></i> TNA <span>Study Guide</span></div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
+            <button class="nav-tab" onclick="showPage('levels')">3 Levels</button>
+            <button class="nav-tab" onclick="showPage('methods')">Data Methods</button>
+            <button class="nav-tab" onclick="showPage('models')">Models</button>
+            <button class="nav-tab" onclick="showPage('outcomes')">Outcomes</button>
+            <button class="nav-tab quiz-live" onclick="showPage('quiz')">🎯 Quiz</button>
+        </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════
+         PAGE: OVERVIEW
+    ══════════════════════════════════════ -->
+    <div class="page active" id="page-overview">
+        <div class="hero">
+            <div class="hero-inner">
+                <div>
+                    <h1>Training Needs<br><em>Analysis (TNA)</em></h1>
+                    <p>A systematic investigation into whether training — or another organisational intervention — can solve a performance problem.</p>
+                    <div class="hero-badge"><i class="ph-fill ph-lightbulb"></i> First phase of the ADDIE model</div>
+                </div>
+                <div class="gap-chart">
+                    <div class="gap-chart-title">Performance Gap</div>
+                    <div class="gap-bars">
+                        <div class="gap-bar-wrap">
+                            <div class="gap-bar desired"></div>
+                            <div class="gap-label">Desired</div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;justify-content:space-between;height:90px;align-items:center">
+                            <div class="gap-indicator">
+                                <i class="ph-bold ph-caret-up"></i>
+                                <span>GAP</span>
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                        </div>
+                        <div class="gap-bar-wrap">
+                            <div class="gap-bar actual"></div>
+                            <div class="gap-label">Actual</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Key Definitions -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-book-open" style="color:var(--blue)"></i> Key Definitions</div>
+                <div class="section-subtitle">Two terms you must know cold for the exam</div>
+                <div class="grid-2">
+                    <div class="card" style="border-left: 4px solid var(--blue);">
+                        <div class="chip" style="background:#eff6ff;color:var(--blue);margin-bottom:0.6rem">Training Needs Analysis</div>
+                        <p style="font-size:0.85rem;color:var(--slate)">Investigation into <strong>whether training or another intervention</strong> can solve a performance problem or enable new performance.</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--teal);">
+                        <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-bottom:0.6rem">Training Needs Assessment</div>
+                        <p style="font-size:0.85rem;color:var(--slate)">The process of determining <strong>what KSAs</strong> (Knowledge, Skills, Attitudes) employees need to perform their jobs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDIE -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-arrows-clockwise" style="color:var(--blue)"></i> The ADDIE Model</div>
+                <div class="section-subtitle">TNA is the very first step — it determines whether training is even needed</div>
+                <div class="card" style="padding: 1.5rem">
+                    <div class="addie-row">
+                        <div class="addie-item highlight"><i class="ph-fill ph-magnifying-glass" style="font-size:1.4rem"></i>Analyse</div>
+                        <div class="addie-arrow">→</div>
+                        <div class="addie-item"><i class="ph-fill ph-pencil-circle" style="font-size:1.4rem"></i>Design</div>
+                        <div class="addie-arrow">→</div>
+                        <div class="addie-item"><i class="ph-fill ph-wrench" style="font-size:1.4rem"></i>Develop</div>
+                        <div class="addie-arrow">→</div>
+                        <div class="addie-item"><i class="ph-fill ph-rocket-launch" style="font-size:1.4rem"></i>Implement</div>
+                        <div class="addie-arrow">→</div>
+                        <div class="addie-item"><i class="ph-fill ph-check-circle" style="font-size:1.4rem"></i>Evaluate</div>
+                    </div>
+                    <div style="margin-top:1.25rem;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:0.75rem 1rem;font-size:0.8rem;color:#92400e">
+                        <strong>💡 Core Results targeted:</strong> Learning · Performance · Financial · Strategy
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits of TNA -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-star" style="color:var(--accent)"></i> Why Do a TNA?</div>
+                <div class="section-subtitle">8 key benefits to remember</div>
+                <div class="grid-2">
+                    <div class="card" style="padding:1rem">
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">①</span><div><strong>Aligns training with business goals</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">②</span><div><strong>Identifies performance gaps</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">③</span><div><strong>Designs relevant training programs</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">④</span><div><strong>Efficient use of resources</strong></div></li>
+                        </ul>
+                    </div>
+                    <div class="card" style="padding:1rem">
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑤</span><div><strong>Supports employee development</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑥</span><div><strong>Change management & adaptation</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑦</span><div><strong>Compliance & risk management</strong></div></li>
+                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑧</span><div><strong>Improves engagement & retention</strong></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: 3 LEVELS
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-levels">
+        <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
+            <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
+                <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">3 Levels of <em style="color:var(--accent)">Data Analysis</em></h1>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">TNA should be conducted at all 3 levels simultaneously — they are interlinked for a balanced analysis.</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="grid-3" style="margin-bottom:2rem">
+                <!-- Org -->
+                <div class="level-card" style="border-top: 4px solid #6366f1">
+                    <div class="level-icon" style="background:#eef2ff;color:#6366f1"><i class="ph-fill ph-buildings"></i></div>
+                    <h3 style="font-weight:700;margin-bottom:0.4rem">1. Organisational</h3>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Big picture — does training align with company strategy?</p>
+                    <div class="chip" style="background:#eef2ff;color:#6366f1;margin-bottom:0.75rem">Where is training needed?</div>
+                    <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
+                    <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
+                        <li>→ Mission, vision & long-term plans</li>
+                        <li>→ External/internal factors (tech, regulations)</li>
+                        <li>→ Short & long-term business objectives</li>
+                        <li>→ Organisational culture, structure & system</li>
+                    </ul>
+                    <hr style="margin:0.75rem 0;border-color:var(--border)">
+                    <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
+                    <p style="font-size:0.72rem;color:var(--slate)">KPIs, business plans, senior management interviews, market trend reports</p>
+                </div>
+
+                <!-- Dept -->
+                <div class="level-card" style="border-top: 4px solid var(--teal)">
+                    <div class="level-icon" style="background:#f0fdfa;color:var(--teal)"><i class="ph-fill ph-users-three"></i></div>
+                    <h3 style="font-weight:700;margin-bottom:0.4rem">2. Departmental</h3>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Task/operational level — what does the job require?</p>
+                    <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-bottom:0.75rem">What must employees do?</div>
+                    <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
+                    <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
+                        <li>→ Expected vs actual performance</li>
+                        <li>→ KSAs needed for the job</li>
+                        <li>→ Tools, processes, technology required</li>
+                        <li>→ Right people in right roles</li>
+                    </ul>
+                    <hr style="margin:0.75rem 0;border-color:var(--border)">
+                    <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
+                    <p style="font-size:0.72rem;color:var(--slate)">Job analysis, SOPs, observation, supervisor/SME interviews</p>
+                </div>
+
+                <!-- Individual -->
+                <div class="level-card" style="border-top: 4px solid var(--rose)">
+                    <div class="level-icon" style="background:#fff1f2;color:var(--rose)"><i class="ph-fill ph-user-focus"></i></div>
+                    <h3 style="font-weight:700;margin-bottom:0.4rem">3. Individual</h3>
+                    <p style="font-size:0.82rem;color:var(--slate);margin-bottom:0.75rem">Person-level — who needs what specific training?</p>
+                    <div class="chip" style="background:#fff1f2;color:var(--rose);margin-bottom:0.75rem">Who needs training?</div>
+                    <div style="font-size:0.78rem;margin-bottom:0.5rem;font-weight:700;color:var(--navy)">Focus Areas:</div>
+                    <ul style="font-size:0.75rem;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:0.35rem">
+                        <li>→ Employee strengths & weaknesses</li>
+                        <li>→ Career goals & learning styles</li>
+                        <li>→ Current job performance</li>
+                        <li>→ Future role changes</li>
+                    </ul>
+                    <hr style="margin:0.75rem 0;border-color:var(--border)">
+                    <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.35rem">Data Sources:</div>
+                    <p style="font-size:0.72rem;color:var(--slate)">Performance appraisals, skills tests, 360° feedback, coaching discussions</p>
+                </div>
+            </div>
+
+            <!-- Org factors -->
+            <div class="card">
+                <h3 style="font-weight:700;margin-bottom:0.5rem;font-size:0.95rem">⚡ Organisational Performance is Affected By 3 Factors</h3>
+                <div class="grid-3">
+                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">🎭 Culture</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Values, beliefs, rituals and symbols that define how employees work & interact.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">🏗️ Structure</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Hierarchical arrangement of authority, communications, rights and duties.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;margin-bottom:0.3rem;font-size:0.85rem">⚙️ System</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Rules, policies and procedures — e.g. inventory, hiring, accounting systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: DATA METHODS
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-methods">
+        <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
+            <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
+                <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">Data Gathering <em style="color:var(--accent)">Methods</em></h1>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">Use at least 2–3 methods together for a complete, well-rounded picture.</p>
+                <div style="display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap">
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">💬 Qualitative = Soft data (feelings, opinions)</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">📊 Quantitative = Hard data (numbers, %)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="grid-2" id="methods-grid">
+                <!-- Interview -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#eff6ff;border-bottom:1px solid #dbeafe">
+                        <div class="method-icon" style="background:#2563eb;color:#fff"><i class="ph-fill ph-chats-teardrop"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Interview (1-on-1)</div>
+                            <div class="chip" style="background:#2563eb;color:#fff;margin-top:0.25rem">Qualitative</div>
+                            <div style="font-size:0.68rem;color:var(--blue);margin-top:0.25rem">Best for: Root cause, SMEs, personal insight</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <ul><li>Rich, descriptive detail</li><li>Consistent data to identify patterns</li><li>Fleshes out quantitative survey data</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Very time-consuming</li><li>Skewed if interviewees not representative</li><li>Risk of interpreting responses</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Groups -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#faf5ff;border-bottom:1px solid #e9d5ff">
+                        <div class="method-icon" style="background:#7c3aed;color:#fff"><i class="ph-fill ph-users"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Focus Groups</div>
+                            <div class="chip" style="background:#7c3aed;color:#fff;margin-top:0.25rem">Qualitative</div>
+                            <div style="font-size:0.68rem;color:#7c3aed;margin-top:0.25rem">Best for: Shared issues, diverse perspectives</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <ul><li>Develops testable hypotheses</li><li>Facilitator notes nonverbal behaviors</li><li>All members heard, not just vocal ones</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Time- and resource-intensive</li><li>Dominant members may skew results</li><li>Hard for 1 facilitator to run + note-take</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observation -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#f0fdf4;border-bottom:1px solid #bbf7d0">
+                        <div class="method-icon" style="background:#059669;color:#fff"><i class="ph-fill ph-eye"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Observation</div>
+                            <div class="chip" style="background:#059669;color:#fff;margin-top:0.25rem">Qualitative</div>
+                            <div style="font-size:0.68rem;color:var(--teal);margin-top:0.25rem">Best for: Physical skills, workflow, on-the-job</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166634">✅ Advantages</div>
+                            <ul><li>Excellent for psychomotor skills</li><li>Creates step-by-step standard procedures</li><li>Identifies environment conditions</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Hard to identify task start/end</li><li>Misses mental processes</li><li>Hawthorne effect (act differently when watched)</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extant Data -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#fffbeb;border-bottom:1px solid #fde68a">
+                        <div class="method-icon" style="background:#d97706;color:#fff"><i class="ph-fill ph-folders"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Extant Data (Records)</div>
+                            <div class="chip" style="background:#d97706;color:#fff;margin-top:0.25rem">Quantitative</div>
+                            <div style="font-size:0.68rem;color:#d97706;margin-top:0.25rem">Best for: Initial baseline, org/dept level</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <ul><li>Hard, objective data</li><li>Trends & patterns over time</li><li>No confidentiality issues (aggregate)</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Collected for other purposes</li><li>No control over collection method</li><li>Data requires "sifting"</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Surveys -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#fdf2f8;border-bottom:1px solid #fbcfe8">
+                        <div class="method-icon" style="background:#db2777;color:#fff"><i class="ph-fill ph-clipboard-text"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Surveys & Questionnaires</div>
+                            <div class="chip" style="background:#db2777;color:#fff;margin-top:0.25rem">Both</div>
+                            <div style="font-size:0.68rem;color:#db2777;margin-top:0.25rem">Best for: Large groups, broad training trends</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <ul><li>Inexpensive and fast</li><li>Easy for respondents</li><li>Provides both qual & quant data</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Hard to write clear, unambiguous questions</li><li>Respondents may answer blindly</li><li>Large sample needed for reliability</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tests -->
+                <div class="method-card">
+                    <div class="method-header" style="background:#eef2ff;border-bottom:1px solid #c7d2fe">
+                        <div class="method-icon" style="background:#4f46e5;color:#fff"><i class="ph-fill ph-exam"></i></div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.95rem">Tests & Assessments</div>
+                            <div class="chip" style="background:#4f46e5;color:#fff;margin-top:0.25rem">Quantitative</div>
+                            <div style="font-size:0.68rem;color:#4f46e5;margin-top:0.25rem">Best for: Objective KSA validation</div>
+                        </div>
+                    </div>
+                    <div class="method-body">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
+                            <ul><li>Highly objective and consistent</li><li>Pinpoints specific K/S gaps</li><li>Focuses design on exact gap</li></ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
+                            <ul><li>Doesn't reveal thought processes</li><li>Test anxiety may affect results</li><li>Hard to cover K & S both in limited time</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: MODELS
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-models">
+        <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
+            <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
+                <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">Key <em style="color:var(--accent)">Models</em></h1>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">McGoldrick & Tobey's 7-Step Model + Gilbert's 6-Box performance analysis.</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="grid-2" style="align-items:start">
+                <!-- 7 step -->
+                <div class="card">
+                    <h2 style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:0.25rem">McGoldrick & Tobey</h2>
+                    <p style="font-size:0.78rem;color:var(--slate);margin-bottom:1.25rem">7-Step TNA Model — training must be <em>needs-driven, not assumption-driven</em></p>
+                    <div class="timeline">
+                        <div class="timeline-item"><div class="step-num">1</div><div class="timeline-text"><h4>Define Purpose & Scope</h4><p>Clarify why TNA is needed, what's in/out of scope.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">2</div><div class="timeline-text"><h4>Gather Background Information</h4><p>Review existing records, reports, past training data.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">3</div><div class="timeline-text"><h4>Identify Stakeholders & Gain Support</h4><p>Get buy-in from executives, managers, team leads.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">4</div><div class="timeline-text"><h4>Plan the Needs Assessment</h4><p>Choose methods, assign roles, set timeline & budget.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">5</div><div class="timeline-text"><h4>Collect Data</h4><p>Run surveys, interviews, focus groups, observations.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">6</div><div class="timeline-text"><h4>Analyze Data & Identify Gaps</h4><p>Compare current vs desired. Prioritize by urgency.</p></div></div>
+                        <div class="timeline-item"><div class="step-num">7</div><div class="timeline-text"><h4>Report Findings & Recommend</h4><p>Present tables/charts; quick wins + long-term solutions.</p></div></div>
+                    </div>
+                    <div style="margin-top:1.25rem;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:0.75rem;font-size:0.78rem;color:#92400e">
+                        <strong>Memory tip:</strong> <em>"Dogs Gather In Packs, Chasing After Rabbits"</em> (Define, Gather, Identify, Plan, Collect, Analyze, Report)
+                    </div>
+                </div>
+
+                <!-- Gilbert -->
+                <div class="card">
+                    <h2 style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:0.25rem">Gilbert's 6-Box Model</h2>
+                    <p style="font-size:0.78rem;color:var(--slate);margin-bottom:1.25rem">6 factors that cause performance gaps. <strong style="color:var(--rose)">Only Knowledge = Training Solution!</strong></p>
+                    
+                    <div class="gilbert-grid">
+                        <div class="gilbert-header" style="background:var(--navy);color:var(--white)">🏢 Organisational Factors (Environment)</div>
+                        <div class="gilbert-box">
+                            <h5>Physical</h5>
+                            <p>Tools, equipment, facilities, budget, supplies, manpower</p>
+                        </div>
+                        <div class="gilbert-box">
+                            <h5>Structure/Process</h5>
+                            <p>SOPs, reporting lines, management support, policies</p>
+                        </div>
+                        <div class="gilbert-box">
+                            <h5>Information</h5>
+                            <p>Feedback, clear standards, reliable data, job instructions</p>
+                        </div>
+
+                        <div class="gilbert-header" style="background:#6366f1;color:#fff;margin-top:0.5rem">👤 Individual Factors (Employee)</div>
+                        <div class="gilbert-box highlight-box" style="border-color:var(--blue);background:#eff6ff;grid-column:1">
+                            <h5 style="color:var(--blue)">💡 Knowledge ⭐</h5>
+                            <p style="color:var(--blue);font-weight:600">Training, coaching, mentoring — ONLY this can be fixed by training!</p>
+                        </div>
+                        <div class="gilbert-box">
+                            <h5>Motivation</h5>
+                            <p>Incentives, recognition, bonuses, career advancement</p>
+                        </div>
+                        <div class="gilbert-box">
+                            <h5>Wellness</h5>
+                            <p>Health care, vacation time, stress management, fitness</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:1.25rem;background:#fff1f2;border:1.5px solid #fecdd3;border-radius:10px;padding:0.85rem;font-size:0.82rem;color:#9f1239">
+                        <strong>🚨 The Golden Rule:</strong> "If the employee had the right skills, could they do the job?" 
+                        <br>→ <strong>YES</strong> = Training helps &nbsp;|&nbsp; <strong>NO</strong> = Fix the non-training issue first
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: OUTCOMES
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-outcomes">
+        <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
+            <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
+                <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">TNA <em style="color:var(--accent)">Outcomes</em></h1>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">From findings to report to Annual Training Plan — closing the performance gap.</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Solutions -->
+            <div class="section">
+                <div class="section-title">Training vs Non-Training Solutions</div>
+                <div class="section-subtitle">Always ask: is this a training problem or a non-training problem?</div>
+                <div class="solutions-grid">
+                    <div class="card" style="border-top: 4px solid var(--blue)">
+                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--blue)">🎓 Training Solutions</h3>
+                        <p style="font-size:0.75rem;color:var(--slate);margin-bottom:0.75rem">When the gap is due to <strong>lack of Knowledge/Skill</strong></p>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Classroom or Online Training</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Workshops & Seminars</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>On-the-Job Training (OJT)</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Coaching & Mentoring</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>E-Learning / Microlearning</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--blue)"></div>Simulations / Role Plays</div>
+                    </div>
+                    <div class="card" style="border-top: 4px solid var(--teal)">
+                        <h3 style="font-weight:700;margin-bottom:0.75rem;font-size:0.95rem;color:var(--teal)">🔧 Non-Training Solutions</h3>
+                        <p style="font-size:0.75rem;color:var(--slate);margin-bottom:0.75rem">When the gap is due to <strong>motivation, resources, policies, or environment</strong></p>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Process Improvement (streamline SOPs)</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Job Redesign</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Clearer Goals & KPIs</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Motivation & Rewards</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Resource / Tool Provision</div>
+                        <div class="sol-item"><div class="sol-dot" style="background:var(--teal)"></div>Leadership / Management Support</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TNA Report -->
+            <div class="section">
+                <div class="section-title">TNA Report Structure</div>
+                <div class="section-subtitle">The 5 essential elements of every TNA report</div>
+                <div class="report-steps">
+                    <div class="report-step"><div class="report-step-num">1</div><div class="report-step-title">Background</div><div class="report-step-desc">Context & trigger for the report</div></div>
+                    <div class="report-step"><div class="report-step-num">2</div><div class="report-step-title">Objective</div><div class="report-step-desc">Purpose of the TNA</div></div>
+                    <div class="report-step"><div class="report-step-num">3</div><div class="report-step-title">Methods</div><div class="report-step-desc">Data collection tools used</div></div>
+                    <div class="report-step"><div class="report-step-num">4</div><div class="report-step-title">Results</div><div class="report-step-desc">Tables & charts of findings</div></div>
+                    <div class="report-step"><div class="report-step-num">5</div><div class="report-step-title">Interventions</div><div class="report-step-desc">Training + Non-training actions</div></div>
+                </div>
+                <p style="text-align:center;font-size:0.8rem;color:var(--slate);margin-top:1rem">→ Leads to the <strong>Annual Training Plan (ATP)</strong> — a calendar of all scheduled training programs</p>
+            </div>
+
+            <!-- Quick cheat sheet -->
+            <div class="cheat-section">
+                <div class="cheat-title">⚡ Exam Cheat Sheet</div>
+                <div class="cheat-row"><span class="cheat-q">3 TNA levels?</span><span class="cheat-a">Organisational · Departmental · Individual</span></div>
+                <div class="cheat-row"><span class="cheat-q">Performance gap =</span><span class="cheat-a">Desired − Actual Performance</span></div>
+                <div class="cheat-row"><span class="cheat-q">Qualitative methods?</span><span class="cheat-a">Interview · Focus Group · Observation</span></div>
+                <div class="cheat-row"><span class="cheat-q">Quantitative methods?</span><span class="cheat-a">Extant Data · Surveys · Tests</span></div>
+                <div class="cheat-row"><span class="cheat-q">Gilbert's 6 factors?</span><span class="cheat-a">Physical · Structure · Information · Knowledge · Motivation · Wellness</span></div>
+                <div class="cheat-row"><span class="cheat-q">Only training can fix?</span><span class="cheat-a">Knowledge / Skill gaps only</span></div>
+                <div class="cheat-row"><span class="cheat-q">McGoldrick steps?</span><span class="cheat-a">7 steps (Define → Gather → Identify → Plan → Collect → Analyse → Report)</span></div>
+                <div class="cheat-row"><span class="cheat-q">TNA report elements?</span><span class="cheat-a">Background · Objective · Methods · Results · Interventions</span></div>
+                <div class="cheat-row"><span class="cheat-q">2 key TNA outcomes?</span><span class="cheat-a">Close performance gaps · Meet future performance needs</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: QUIZ
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-quiz">
+        <div class="quiz-hero">
+            <h1>TNA <em>Revision Quiz</em></h1>
+            <p>Test your knowledge before the exam. Based entirely on your CT2 module.</p>
+            <div class="quiz-stats">
+                <div class="quiz-stat"><div class="quiz-stat-num" id="stat-total">20</div><div class="quiz-stat-label">Questions</div></div>
+                <div class="quiz-stat"><div class="quiz-stat-num" id="stat-score">0</div><div class="quiz-stat-label">Score</div></div>
+                <div class="quiz-stat"><div class="quiz-stat-num" id="stat-remaining">20</div><div class="quiz-stat-label">Remaining</div></div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <!-- Category filter -->
+            <div class="category-filter">
+                <button class="cat-btn active" onclick="setCategory('all', this)">All Topics</button>
+                <button class="cat-btn" onclick="setCategory('fundamentals', this)">Fundamentals</button>
+                <button class="cat-btn" onclick="setCategory('levels', this)">3 Levels</button>
+                <button class="cat-btn" onclick="setCategory('methods', this)">Data Methods</button>
+                <button class="cat-btn" onclick="setCategory('models', this)">Models</button>
+                <button class="cat-btn" onclick="setCategory('outcomes', this)">Outcomes</button>
+            </div>
+
+            <!-- Progress -->
+            <div class="quiz-progress-bar-wrap">
+                <div class="quiz-progress-bar" id="progress-bar" style="width:0%"></div>
+            </div>
+            <div class="quiz-meta">
+                <span id="question-counter">Question 1 of 20</span>
+                <span id="score-display">Score: 0/0</span>
+            </div>
+
+            <!-- Question card -->
+            <div class="question-card" id="question-card">
+                <div class="question-category" id="q-category">Fundamentals</div>
+                <div class="question-text" id="q-text">Loading question...</div>
+                <div class="options" id="q-options"></div>
+                <div class="feedback-box" id="feedback-box"></div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="quiz-nav">
+                <button class="btn-secondary" onclick="restartQuiz()"><i class="ph-bold ph-arrow-counter-clockwise"></i> Restart</button>
+                <button class="btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+                    Next <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Score card -->
+            <div class="score-card" id="score-card">
+                <div class="score-circle" id="score-circle">
+                    <div class="score-num" id="final-score-num">0%</div>
+                    <div class="score-label">Score</div>
+                </div>
+                <div class="score-message" id="score-message">Well done!</div>
+                <div class="score-sub" id="score-sub">You answered X out of Y correctly.</div>
+                <div class="score-breakdown">
+                    <div class="score-breakdown-item score-correct-item">✅ Correct: <span id="bd-correct">0</span></div>
+                    <div class="score-breakdown-item score-wrong-item">❌ Wrong: <span id="bd-wrong">0</span></div>
+                </div>
+                <button class="btn-primary" onclick="restartQuiz()" style="margin:0 auto">
+                    <i class="ph-bold ph-arrow-counter-clockwise"></i> Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ══════════════════════════════════════
+    // NAVIGATION
+    // ══════════════════════════════════════
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('page-' + id).classList.add('active');
+        const tabs = document.querySelectorAll('.nav-tab');
+        const map = { overview: 0, levels: 1, methods: 2, models: 3, outcomes: 4, quiz: 5 };
+        if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (id === 'quiz') initQuiz();
+    }
+
+    // ══════════════════════════════════════
+    // QUIZ DATA
+    // ══════════════════════════════════════
+    const allQuestions = [
+        // FUNDAMENTALS
+        {
+            cat: 'fundamentals',
+            catLabel: 'Fundamentals',
+            q: 'What does TNA stand for and what is its main purpose?',
+            opts: [
+                'Training Needs Assessment — to train all employees',
+                'Training Needs Analysis — to investigate whether training or another intervention can solve a performance problem',
+                'Technical Needs Analysis — to assess technical equipment requirements',
+                'Training Needs Appraisal — to evaluate trainer performance'
+            ],
+            ans: 1,
+            exp: 'TNA = Training Needs Analysis. Its main purpose is to investigate whether training (or some other organisational intervention) can solve a performance problem or enable new performance. It is NOT automatically assumed that training is always the solution.'
+        },
+        {
+            cat: 'fundamentals',
+            catLabel: 'Fundamentals',
+            q: 'Training Needs Assessment (TNA) is best described as:',
+            opts: [
+                'The process of designing a training program',
+                'The process of determining what KSAs (Knowledge, Skills, Attitudes) employees need to perform their jobs',
+                'The process of evaluating whether training was effective',
+                'The process of selecting participants for training'
+            ],
+            ans: 1,
+            exp: 'Training Needs Assessment specifically determines WHAT KSAs employees need to perform their jobs. This is different from TNA (the broader investigation). Key term: KSA = Knowledge, Skills, Attitudes.'
+        },
+        {
+            cat: 'fundamentals',
+            catLabel: 'Fundamentals',
+            q: 'In the ADDIE model, where does TNA fit?',
+            opts: [
+                'It is the final Evaluate phase',
+                'It is in the Design phase',
+                'It is the first phase — Analyse',
+                'It spans the entire ADDIE process'
+            ],
+            ans: 2,
+            exp: 'TNA is the first phase (A = Analyse) of ADDIE. The sequence is: Analyse → Design → Develop → Implement → Evaluate. TNA happens before any training is designed or developed.'
+        },
+        {
+            cat: 'fundamentals',
+            catLabel: 'Fundamentals',
+            q: 'How is "performance gap" defined?',
+            opts: [
+                'The difference between junior and senior employee performance',
+                'The gap between training budget and actual spending',
+                'The gap between desired performance and actual performance',
+                'The difference between two employees performing the same job'
+            ],
+            ans: 2,
+            exp: 'Performance Gap = Desired Performance − Actual Performance. This is the core concept of TNA. You measure both desired (what should happen) and actual (what is currently happening) to find the gap.'
+        },
+        {
+            cat: 'fundamentals',
+            catLabel: 'Fundamentals',
+            q: 'Which of the following is NOT one of the core results that TNA feeds into?',
+            opts: ['Learning outcomes', 'Performance improvement', 'Equipment procurement', 'Financial results'],
+            ans: 2,
+            exp: 'TNA targets four core results: Learning, Performance, Financial, and Strategy. Equipment procurement is not one of them — that is an operational/procurement function.'
+        },
+        // LEVELS
+        {
+            cat: 'levels',
+            catLabel: '3 Levels of TNA',
+            q: 'At which TNA level would a trainer examine the company\'s mission, vision, and strategic goals?',
+            opts: ['Individual Level', 'Departmental Level', 'Organisational Level', 'Operational Level'],
+            ans: 2,
+            exp: 'Organisational Level TNA focuses on the big picture — aligning training with the company\'s mission, vision, and long-term strategic plans. It answers: "WHERE in the organisation is training needed?"'
+        },
+        {
+            cat: 'levels',
+            catLabel: '3 Levels of TNA',
+            q: 'A TNA conducted using job descriptions and SOPs to identify what knowledge, skills and abilities are needed for a specific role is at which level?',
+            opts: ['Organisational Level', 'Departmental/Task Level', 'Individual Level', 'Strategic Level'],
+            ans: 1,
+            exp: 'Departmental/Task Level TNA uses tools like job analysis, job descriptions, and SOPs to identify the KSAs required to perform specific jobs. It answers "WHAT must an employee do to perform the job?"'
+        },
+        {
+            cat: 'levels',
+            catLabel: '3 Levels of TNA',
+            q: 'Which data source is MOST appropriate for an Individual Level TNA?',
+            opts: [
+                'Company strategy documents and market trend reports',
+                'Standard Operating Procedures and job descriptions',
+                'Performance appraisals, 360° feedback, and skills tests',
+                'KPIs and business plans'
+            ],
+            ans: 2,
+            exp: 'Individual Level TNA focuses on specific employees. Best data sources are: performance appraisals, skills assessments and tests, 360° feedback, and one-on-one coaching discussions. These directly measure the individual\'s gap.'
+        },
+        {
+            cat: 'levels',
+            catLabel: '3 Levels of TNA',
+            q: 'Organisational performance is primarily affected by which THREE factors?',
+            opts: [
+                'Budget, Manpower, and Technology',
+                'Culture, Structure, and System',
+                'Leadership, Skills, and Motivation',
+                'Strategy, Finance, and Operations'
+            ],
+            ans: 1,
+            exp: 'The three factors affecting organisational performance are: Culture (beliefs, values, the way employees work), Structure (hierarchy, authority, reporting lines), and System (rules, policies, procedures like inventory or HR systems).'
+        },
+        {
+            cat: 'levels',
+            catLabel: '3 Levels of TNA',
+            q: 'A trainer notices a performance gap in a call centre. Staff know how to handle calls, but customer wait times are too long because the call system is outdated. This problem is BEST addressed at which level?',
+            opts: ['Individual Level — train the staff', 'Departmental Level — revise SOPs', 'Organisational Level — fix the system', 'No TNA needed'],
+            ans: 2,
+            exp: 'This is an Organisational Level issue. The problem is a SYSTEM issue (outdated equipment), not a knowledge/skill gap. Fixing the system is an organisational-level, non-training solution. This also demonstrates why TNA must distinguish training from non-training problems.'
+        },
+        // METHODS
+        {
+            cat: 'methods',
+            catLabel: 'Data Methods',
+            q: 'Which data collection method is classified as QUALITATIVE?',
+            opts: ['Extant Data', 'Surveys & Questionnaires', 'Tests & Assessments', 'Focus Groups'],
+            ans: 3,
+            exp: 'The three QUALITATIVE methods are: Interview, Focus Groups, and Observation. They yield "soft data" — subjective, descriptive, personal. The three QUANTITATIVE methods are: Extant Data, Surveys & Questionnaires, and Tests & Assessments.'
+        },
+        {
+            cat: 'methods',
+            catLabel: 'Data Methods',
+            q: 'A key disadvantage of using the Observation method for TNA is:',
+            opts: [
+                'It cannot be used for physical or psychomotor skills',
+                'It is too inexpensive to be credible',
+                'Performers may act differently when they know they are being watched (Hawthorne Effect)',
+                'It can only be done virtually, not in person'
+            ],
+            ans: 2,
+            exp: 'The Hawthorne Effect means performers may behave differently than normal because they know they are being observed. This is a key disadvantage of observation. A workaround is to also conduct a post-observation interview to get more accurate data.'
+        },
+        {
+            cat: 'methods',
+            catLabel: 'Data Methods',
+            q: 'Extant data would NOT include which of the following?',
+            opts: [
+                'Annual performance appraisal reports',
+                'Customer complaint records',
+                'An interview with a department manager',
+                'Staff turnover rates'
+            ],
+            ans: 2,
+            exp: 'Extant data is EXISTING records and documents — reports, financial statements, turnover rates, complaints, audit results, etc. An interview is a QUALITATIVE data collection method (primary data), not extant (existing) data.'
+        },
+        {
+            cat: 'methods',
+            catLabel: 'Data Methods',
+            q: 'Which data collection method provides BOTH qualitative AND quantitative data?',
+            opts: ['Observation', 'Interview', 'Surveys & Questionnaires', 'Extant Data'],
+            ans: 2,
+            exp: 'Surveys & Questionnaires can provide BOTH types. Open-ended questions yield qualitative (soft) data, while the tally/frequency of answers is quantitative (hard). For example, how many times each answer is chosen = quantitative; what people write in comment boxes = qualitative.'
+        },
+        {
+            cat: 'methods',
+            catLabel: 'Data Methods',
+            q: 'The best data collection approach for a TNA is:',
+            opts: [
+                'Use only quantitative methods for accuracy',
+                'Use only qualitative methods for rich data',
+                'Use only one method to keep things consistent',
+                'Combine at least 2-3 methods for a well-rounded picture'
+            ],
+            ans: 3,
+            exp: 'Best practice is to combine at least 2-3 methods. Example: Surveys (large groups) + Interviews (depth) + Observation (actual performance) + Assessments (objective validation). No single method captures everything.'
+        },
+        // MODELS
+        {
+            cat: 'models',
+            catLabel: 'Models',
+            q: 'According to Gilbert\'s 6-Box Model, which factor is the ONLY one that can be directly addressed by training?',
+            opts: ['Motivation', 'Physical (tools & equipment)', 'Knowledge', 'Wellness'],
+            ans: 2,
+            exp: 'In Gilbert\'s 6-Box Model, ONLY the Knowledge box can be directly solved by training (training, coaching, mentoring, education). The other 5 factors — Physical, Structure/Process, Information, Motivation, and Wellness — require non-training solutions.'
+        },
+        {
+            cat: 'models',
+            catLabel: 'Models',
+            q: 'In the McGoldrick & Tobey 7-Step Model, what happens in Step 4?',
+            opts: [
+                'Collect data from stakeholders',
+                'Identify the performance gap',
+                'Plan the needs assessment (choose methods, set budget and timeline)',
+                'Report findings to management'
+            ],
+            ans: 2,
+            exp: 'Step 4 is "Plan the Needs Assessment." This is where you decide HOW you will conduct the TNA — selecting data collection methods (surveys, interviews, etc.), choosing who will do it, setting the timeline, and establishing a budget.'
+        },
+        {
+            cat: 'models',
+            catLabel: 'Models',
+            q: 'An employee is missing sales targets. Investigation shows they meet clients regularly but are not confident in handling objections. What does this suggest?',
+            opts: [
+                'This is a non-training issue — revise the commission scheme',
+                'This is a training issue — the employee lacks the skill to handle objections',
+                'This is an equipment issue — provide better sales tools',
+                'No intervention is needed'
+            ],
+            ans: 1,
+            exp: 'Lack of confidence in handling objections = a SKILL GAP. The employee does not have the skill/knowledge to handle objections effectively. This is a TRAINING solution — e.g., an objection-handling workshop. (Note: if it was the commission scheme causing demotivation, that would be a non-training solution.)'
+        },
+        // OUTCOMES
+        {
+            cat: 'outcomes',
+            catLabel: 'Outcomes',
+            q: 'Which of the following is a NON-TRAINING solution to a performance gap?',
+            opts: [
+                'Sending the employee to a workshop on time management',
+                'Enrolling the employee in an e-learning module',
+                'Revising the incentive structure and reward system',
+                'Providing on-the-job training with a mentor'
+            ],
+            ans: 2,
+            exp: 'Revising the incentive/reward system is a NON-TRAINING solution. It addresses the Motivation factor in Gilbert\'s model. Workshops, e-learning, and OJT with a mentor are all training solutions addressing knowledge/skill gaps.'
+        },
+        {
+            cat: 'outcomes',
+            catLabel: 'Outcomes',
+            q: 'What are the 5 essential elements that a TNA Report must contain?',
+            opts: [
+                'Summary, Analysis, Budget, Timeline, Evaluation',
+                'Background, Objective, Analysis Methods, Results of Analysis, Recommended Interventions',
+                'Executive Summary, Data, Graphs, Conclusions, Appendix',
+                'Mission, Vision, Goals, KPIs, Action Plan'
+            ],
+            ans: 1,
+            exp: 'A TNA Report must contain: (1) Background — context/triggers, (2) Objective/Purpose, (3) Analysis Methods — data collection tools used, (4) Results of Analysis — tables and charts, (5) Recommended Interventions — training and non-training actions.'
+        }
+    ];
+
+    // ══════════════════════════════════════
+    // QUIZ STATE
+    // ══════════════════════════════════════
+    let currentCategory = 'all';
+    let filteredQuestions = [];
+    let shuffledQuestions = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let answeredCount = 0;
+    let answered = false;
+
+    function setCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        restartQuiz();
+    }
+
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function initQuiz() {
+        filteredQuestions = currentCategory === 'all'
+            ? allQuestions
+            : allQuestions.filter(q => q.cat === currentCategory);
+        shuffledQuestions = shuffle(filteredQuestions);
+        currentIndex = 0;
+        correctCount = 0;
+        answeredCount = 0;
+        document.getElementById('stat-total').textContent = shuffledQuestions.length;
+        document.getElementById('score-card').classList.remove('show');
+        document.getElementById('question-card').style.display = '';
+        document.querySelector('.quiz-nav').style.display = '';
+        renderQuestion();
+    }
+
+    function restartQuiz() {
+        initQuiz();
+    }
+
+    function renderQuestion() {
+        if (currentIndex >= shuffledQuestions.length) {
+            showFinalScore();
+            return;
+        }
+
+        answered = false;
+        const q = shuffledQuestions[currentIndex];
+        const total = shuffledQuestions.length;
+
+        document.getElementById('q-category').textContent = q.catLabel;
+        document.getElementById('q-text').textContent = q.q;
+        document.getElementById('question-counter').textContent = `Question ${currentIndex + 1} of ${total}`;
+        document.getElementById('score-display').textContent = `Score: ${correctCount}/${answeredCount}`;
+        document.getElementById('stat-remaining').textContent = total - currentIndex;
+        document.getElementById('stat-score').textContent = correctCount;
+
+        const pct = (currentIndex / total) * 100;
+        document.getElementById('progress-bar').style.width = pct + '%';
+
+        const letters = ['A', 'B', 'C', 'D'];
+        const optContainer = document.getElementById('q-options');
+        optContainer.innerHTML = '';
+
+        // Shuffle options but track correct answer
+        const optionsWithIndex = q.opts.map((o, i) => ({ text: o, original: i }));
+        const shuffledOpts = shuffle(optionsWithIndex);
+        const newCorrectIdx = shuffledOpts.findIndex(o => o.original === q.ans);
+
+        shuffledOpts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+            btn.onclick = () => selectAnswer(i, newCorrectIdx, btn, optContainer, q.exp);
+            optContainer.appendChild(btn);
+        });
+
+        const fb = document.getElementById('feedback-box');
+        fb.className = 'feedback-box';
+        fb.textContent = '';
+
+        document.getElementById('next-btn').disabled = true;
+    }
+
+    function selectAnswer(selected, correct, clickedBtn, container, explanation) {
+        if (answered) return;
+        answered = true;
+        answeredCount++;
+
+        const allBtns = container.querySelectorAll('.option-btn');
+
+        allBtns.forEach((btn, i) => {
+            btn.disabled = true;
+            if (i === correct) {
+                btn.classList.add('correct');
+            } else if (i === selected && selected !== correct) {
+                btn.classList.add('wrong');
+            } else {
+                btn.classList.add('disabled-neutral');
+            }
+        });
+
+        const fb = document.getElementById('feedback-box');
+        if (selected === correct) {
+            correctCount++;
+            fb.className = 'feedback-box correct-fb show';
+            fb.innerHTML = `<strong>✅ Correct!</strong> ${explanation}`;
+        } else {
+            fb.className = 'feedback-box wrong-fb show';
+            fb.innerHTML = `<strong>❌ Not quite.</strong> ${explanation}`;
+        }
+
+        document.getElementById('stat-score').textContent = correctCount;
+        document.getElementById('score-display').textContent = `Score: ${correctCount}/${answeredCount}`;
+        document.getElementById('next-btn').disabled = false;
+
+        if (currentIndex === shuffledQuestions.length - 1) {
+            document.getElementById('next-btn').innerHTML = 'See Results <i class="ph-bold ph-flag-checkered"></i>';
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex >= shuffledQuestions.length) {
+            showFinalScore();
+        } else {
+            renderQuestion();
+        }
+    }
+
+    function showFinalScore() {
+        document.getElementById('question-card').style.display = 'none';
+        document.querySelector('.quiz-nav').style.display = 'none';
+
+        const total = shuffledQuestions.length;
+        const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+        document.getElementById('final-score-num').textContent = pct + '%';
+        document.getElementById('bd-correct').textContent = correctCount;
+        document.getElementById('bd-wrong').textContent = total - correctCount;
+        document.getElementById('score-sub').textContent = `You answered ${correctCount} out of ${total} correctly.`;
+
+        const circle = document.getElementById('score-circle');
+        const msg = document.getElementById('score-message');
+        circle.className = 'score-circle';
+
+        if (pct >= 80) {
+            circle.classList.add('score-pass');
+            msg.textContent = '🎉 Excellent! Ready for the exam!';
+        } else if (pct >= 60) {
+            circle.classList.add('score-mid');
+            msg.textContent = '💪 Good effort! Review the weak areas.';
+        } else {
+            circle.classList.add('score-fail');
+            msg.textContent = '📚 Keep studying — you\'ll get there!';
+        }
+
+        document.getElementById('progress-bar').style.width = '100%';
+        document.getElementById('score-card').classList.add('show');
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+# ============================================================
+# NETLIFY / STATIC HOST SECURITY HEADERS
+# ============================================================
+# Place this file in the ROOT of your published site folder.
+# These HTTP response headers are stronger than <meta> tags
+# because they are enforced by the server BEFORE the browser
+# even parses the HTML — a more reliable layer of protection.
+#
+# Works on: Netlify (natively), Vercel (use vercel.json instead),
+#           GitHub Pages (partially via _config), Apache (.htaccess),
+#           Nginx (add_header directives in server block).
+# ============================================================
+
+/*
+  # 1. CONTENT SECURITY POLICY
+  # Restricts which sources can load scripts, styles, fonts, images.
+  # Prevents XSS — even if a script is injected, the browser blocks it.
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
+
+  # 2. X-FRAME-OPTIONS
+  # Blocks your site from being loaded in an <iframe> anywhere.
+  # Prevents clickjacking attacks.
+  X-Frame-Options: DENY
+
+  # 3. X-CONTENT-TYPE-OPTIONS
+  # Prevents browsers from MIME-sniffing a response away from the
+  # declared Content-Type. Stops certain file-type confusion attacks.
+  X-Content-Type-Options: nosniff
+
+  # 4. REFERRER POLICY
+  # Controls what URL info is sent when users follow links off your site.
+  # Protects user privacy and hides your internal URL structure.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # 5. PERMISSIONS POLICY
+  # Disables browser APIs your site does not use.
+  # Even if a script were injected, it could not access camera/mic/location.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()
+
+  # 6. STRICT TRANSPORT SECURITY (HSTS)
+  # Forces HTTPS for 1 year (31536000 seconds).
+  # After first visit, browser will NEVER make an HTTP request to your domain.
+  # includeSubDomains: applies to all subdomains too.
+  # preload: allows your domain to be baked into browsers' HTTPS-only lists.
+  # ⚠️  Only enable this once you are 100% sure your site runs on HTTPS.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # 7. CACHE CONTROL for HTML pages
+  # Prevents sensitive page content from being stored in shared/proxy caches.
+  # "no-store" = never cache. "must-revalidate" = always check freshness.
+  Cache-Control: no-store, must-revalidate
