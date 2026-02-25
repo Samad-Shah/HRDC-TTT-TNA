@@ -219,11 +219,140 @@
         .std-table tr:nth-child(even) td { background: #f8fafc; }
 
         /* Gagne steps */
-        .gagne-grid { display: flex; flex-direction: column; gap: 0.5rem; }
-        .gagne-step { display: flex; gap: 0.75rem; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; }
-        .gagne-num { width: 28px; height: 28px; border-radius: 50%; background: var(--teal); color: var(--white); font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .gagne-title { font-weight: 700; font-size: 0.83rem; color: var(--navy); }
-        .gagne-desc { font-size: 0.73rem; color: var(--slate); margin-top: 0.1rem; }
+        /* ── GAGNÉ REDESIGN ── */
+        .gagne-acronym-banner {
+            background: linear-gradient(135deg, #0a1f3d 0%, #0d3a2f 100%);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(13,148,136,0.3);
+        }
+        .gagne-acronym-label {
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 0.6rem;
+        }
+        .gagne-acronym-phrase {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+            color: var(--white);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .gagne-acronym-phrase .hl { color: var(--accent); font-style: italic; }
+        .gagne-letters {
+            display: flex; gap: 0.3rem; flex-wrap: wrap;
+        }
+        .gagne-letter-chip {
+            display: flex; flex-direction: column; align-items: center;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 0.35rem 0.6rem;
+            min-width: 42px;
+        }
+        .gagne-letter-chip .big-letter {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.15rem; font-weight: 700; line-height: 1;
+        }
+        .gagne-letter-chip .small-word {
+            font-size: 0.52rem; color: rgba(255,255,255,0.45);
+            font-weight: 600; margin-top: 0.2rem; text-align: center;
+            letter-spacing: 0.03em;
+        }
+
+        /* Phase grouping */
+        .gagne-phase {
+            margin-bottom: 1.25rem;
+        }
+        .gagne-phase-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 0.65rem;
+        }
+        .gagne-phase-label {
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.09em;
+            text-transform: uppercase; padding: 0.22rem 0.8rem;
+            border-radius: 999px;
+        }
+        .gagne-phase-line {
+            flex: 1; height: 1px; background: var(--border);
+        }
+        .gagne-cards-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.65rem;
+        }
+        @media (max-width: 680px) {
+            .gagne-cards-row { grid-template-columns: 1fr; }
+        }
+        .gagne-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            padding: 1rem 1rem 0.85rem;
+            transition: transform 0.18s, box-shadow 0.18s;
+            position: relative;
+            overflow: hidden;
+        }
+        .gagne-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+        }
+        .gagne-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .gagne-card-top {
+            display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem;
+        }
+        .gagne-card-num {
+            width: 22px; height: 22px; border-radius: 50%;
+            font-size: 0.65rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; color: var(--white);
+        }
+        .gagne-card-acro {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 700; line-height: 1;
+            flex-shrink: 0;
+        }
+        .gagne-card-title {
+            font-weight: 700; font-size: 0.8rem; color: var(--navy); line-height: 1.3;
+        }
+        .gagne-card-process {
+            display: inline-block;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em;
+            padding: 0.15rem 0.5rem; border-radius: 999px;
+            margin-bottom: 0.45rem; text-transform: uppercase;
+        }
+        .gagne-card-desc {
+            font-size: 0.73rem; color: var(--slate); line-height: 1.45; margin-bottom: 0.45rem;
+        }
+        .gagne-card-methods {
+            font-size: 0.67rem; font-style: italic; color: #64748b;
+            border-top: 1px solid var(--border); padding-top: 0.4rem;
+        }
+
+        /* Phase colour schemes */
+        /* Phase 1 — Setup — teal */
+        .ph1 .gagne-card::before { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+        .ph1 .gagne-card-num { background: #0d9488; }
+        .ph1 .gagne-card-acro { color: #0d9488; }
+        .ph1 .gagne-card-process { background: #f0fdfa; color: #0d9488; }
+        .ph1-label { background: #f0fdfa; color: #0d9488; }
+        /* Phase 2 — Deliver — blue */
+        .ph2 .gagne-card::before { background: linear-gradient(90deg, #2563eb, #6366f1); }
+        .ph2 .gagne-card-num { background: #2563eb; }
+        .ph2 .gagne-card-acro { color: #2563eb; }
+        .ph2 .gagne-card-process { background: #eff6ff; color: #2563eb; }
+        .ph2-label { background: #eff6ff; color: #2563eb; }
+        /* Phase 3 — Consolidate — amber */
+        .ph3 .gagne-card::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+        .ph3 .gagne-card-num { background: #d97706; }
+        .ph3 .gagne-card-acro { color: #d97706; }
+        .ph3 .gagne-card-process { background: #fffbeb; color: #92400e; }
+        .ph3-label { background: #fffbeb; color: #b45309; }
 
         /* Corrective action */
         .action-flow { display: flex; flex-direction: column; gap: 0; }
@@ -610,18 +739,151 @@
             <!-- Gagné's 9 Events -->
             <div class="section">
                 <div class="section-title"><i class="ph-fill ph-steps" style="color:var(--teal)"></i> Gagné's Nine Events of Instruction</div>
-                <div class="section-subtitle">A systematic framework that aligns with how the brain processes information — a training plan checklist</div>
-                <div class="gagne-grid">
-                    <div class="gagne-step"><div class="gagne-num">1</div><div><div class="gagne-title">Gain Attention (Reception)</div><div class="gagne-desc">Use icebreakers, a problem scenario, visuals, or a thought-provoking question. Without attention, no learning happens.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">2</div><div><div class="gagne-title">Inform Learners of Objectives (Expectancy)</div><div class="gagne-desc">Clearly state learning objectives and link them to job relevance. Adults learn better when they know what's in it for them.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">3</div><div><div class="gagne-title">Stimulate Recall of Prior Learning (Retrieval)</div><div class="gagne-desc">New knowledge sticks better when connected to what learners already know. Use brainstorming, review questions, or sharing past experiences.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">4</div><div><div class="gagne-title">Present the Content (Selective Perception)</div><div class="gagne-desc">Deliver information in a logical, clear, and engaging way. Use a mix of methods: lecture, video, demo, storytelling, and examples.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">5</div><div><div class="gagne-title">Provide Learning Guidance (Semantic Encoding)</div><div class="gagne-desc">Offer strategies using job aids, frameworks, case studies, mnemonics, or visual diagrams.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">6</div><div><div class="gagne-title">Elicit Performance (Responding)</div><div class="gagne-desc">Learners must practise. Use role plays, group tasks, exercises, or real-world application tasks.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">7</div><div><div class="gagne-title">Provide Feedback (Reinforcement)</div><div class="gagne-desc">Immediate, specific, and constructive feedback helps learners correct mistakes and strengthen correct behaviour.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">8</div><div><div class="gagne-title">Assess Performance (Retrieval & Reinforcement)</div><div class="gagne-desc">Test whether learning objectives have been achieved. Methods: quizzes, skill demonstrations, projects, or workplace tasks.</div></div></div>
-                    <div class="gagne-step"><div class="gagne-num">9</div><div><div class="gagne-title">Enhance Retention and Transfer (Generalisation)</div><div class="gagne-desc">Provide action plans, job aids, follow-up coaching, or workplace assignments to apply learning beyond the classroom.</div></div></div>
+                <div class="section-subtitle">A systematic framework aligned with how the brain processes information — think of it as a training plan checklist</div>
+
+                <!-- Acronym Banner -->
+                <div class="gagne-acronym-banner">
+                    <div class="gagne-acronym-label">🧠 Memory Trick — Acronym</div>
+                    <div class="gagne-acronym-phrase">
+                        "<hl class="hl">G</hl>ood <hl class="hl">I</hl>nstructors <hl class="hl">S</hl>hould <hl class="hl">P</hl>repare <hl class="hl">P</hl>roperly —
+                        <hl class="hl">E</hl>nsuring <hl class="hl">P</hl>eople <hl class="hl">A</hl>ctually <hl class="hl">E</hl>xcel"
+                    </div>
+                    <div class="gagne-letters">
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#14b8a6">G</span><span class="small-word">Gain</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#14b8a6">I</span><span class="small-word">Inform</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#14b8a6">S</span><span class="small-word">Stimulate</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#60a5fa">P</span><span class="small-word">Present</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#60a5fa">P</span><span class="small-word">Provide</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#60a5fa">E</span><span class="small-word">Elicit</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#fbbf24">P</span><span class="small-word">Provide</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#fbbf24">A</span><span class="small-word">Assess</span></div>
+                        <div class="gagne-letter-chip"><span class="big-letter" style="color:#fbbf24">E</span><span class="small-word">Enhance</span></div>
+                    </div>
                 </div>
+
+                <!-- Phase 1: Setup -->
+                <div class="gagne-phase ph1">
+                    <div class="gagne-phase-header">
+                        <span class="gagne-phase-label ph1-label">Phase 1 — Setup (Events 1–3)</span>
+                        <div class="gagne-phase-line"></div>
+                        <span style="font-size:0.7rem;color:var(--slate);white-space:nowrap">Prepare the learner</span>
+                    </div>
+                    <div class="gagne-cards-row">
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">1</div>
+                                <div class="gagne-card-acro">G</div>
+                                <div class="gagne-card-title">Gain Attention</div>
+                            </div>
+                            <div class="gagne-card-process">Reception</div>
+                            <div class="gagne-card-desc">Without attention, no learning happens. You must hook the learner before anything else.</div>
+                            <div class="gagne-card-methods">💡 Icebreakers, problem scenario, visuals, thought-provoking question</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">2</div>
+                                <div class="gagne-card-acro">I</div>
+                                <div class="gagne-card-title">Inform Learners of Objectives</div>
+                            </div>
+                            <div class="gagne-card-process">Expectancy</div>
+                            <div class="gagne-card-desc">Adults learn better when they know what's in it for them. Link objectives to job relevance.</div>
+                            <div class="gagne-card-methods">💡 State objectives, show relevance to the job</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">3</div>
+                                <div class="gagne-card-acro">S</div>
+                                <div class="gagne-card-title">Stimulate Recall of Prior Learning</div>
+                            </div>
+                            <div class="gagne-card-process">Retrieval</div>
+                            <div class="gagne-card-desc">New knowledge sticks better when connected to what learners already know.</div>
+                            <div class="gagne-card-methods">💡 Brainstorming, review questions, sharing past experiences</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Deliver -->
+                <div class="gagne-phase ph2">
+                    <div class="gagne-phase-header">
+                        <span class="gagne-phase-label ph2-label">Phase 2 — Deliver (Events 4–6)</span>
+                        <div class="gagne-phase-line"></div>
+                        <span style="font-size:0.7rem;color:var(--slate);white-space:nowrap">Teach &amp; practise</span>
+                    </div>
+                    <div class="gagne-cards-row">
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">4</div>
+                                <div class="gagne-card-acro">P</div>
+                                <div class="gagne-card-title">Present the Content</div>
+                            </div>
+                            <div class="gagne-card-process">Selective Perception</div>
+                            <div class="gagne-card-desc">Deliver information in a logical, clear, and engaging way — not just a data dump.</div>
+                            <div class="gagne-card-methods">💡 Lecture, video, demo, storytelling, examples</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">5</div>
+                                <div class="gagne-card-acro">P</div>
+                                <div class="gagne-card-title">Provide Learning Guidance</div>
+                            </div>
+                            <div class="gagne-card-process">Semantic Encoding</div>
+                            <div class="gagne-card-desc">Help learners organise and make sense of the new information.</div>
+                            <div class="gagne-card-methods">💡 Job aids, frameworks, case studies, mnemonics, visual diagrams</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">6</div>
+                                <div class="gagne-card-acro">E</div>
+                                <div class="gagne-card-title">Elicit Performance</div>
+                            </div>
+                            <div class="gagne-card-process">Responding</div>
+                            <div class="gagne-card-desc">Learners must actively practise — not just passively receive information.</div>
+                            <div class="gagne-card-methods">💡 Role plays, group tasks, exercises, real-world application tasks</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Consolidate -->
+                <div class="gagne-phase ph3">
+                    <div class="gagne-phase-header">
+                        <span class="gagne-phase-label ph3-label">Phase 3 — Consolidate (Events 7–9)</span>
+                        <div class="gagne-phase-line"></div>
+                        <span style="font-size:0.7rem;color:var(--slate);white-space:nowrap">Lock it in</span>
+                    </div>
+                    <div class="gagne-cards-row">
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">7</div>
+                                <div class="gagne-card-acro">P</div>
+                                <div class="gagne-card-title">Provide Feedback</div>
+                            </div>
+                            <div class="gagne-card-process">Reinforcement</div>
+                            <div class="gagne-card-desc">Helps learners correct mistakes and strengthen correct behaviour. Must be immediate and specific.</div>
+                            <div class="gagne-card-methods">💡 Verbal feedback, written comments, peer review</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">8</div>
+                                <div class="gagne-card-acro">A</div>
+                                <div class="gagne-card-title">Assess Performance</div>
+                            </div>
+                            <div class="gagne-card-process">Retrieval &amp; Reinforcement</div>
+                            <div class="gagne-card-desc">Test whether learning objectives have been achieved — against the standard.</div>
+                            <div class="gagne-card-methods">💡 Quizzes, skill demos, projects, workplace tasks</div>
+                        </div>
+                        <div class="gagne-card">
+                            <div class="gagne-card-top">
+                                <div class="gagne-card-num">9</div>
+                                <div class="gagne-card-acro">E</div>
+                                <div class="gagne-card-title">Enhance Retention &amp; Transfer</div>
+                            </div>
+                            <div class="gagne-card-process">Generalisation</div>
+                            <div class="gagne-card-desc">Ensure learners can apply what they learned beyond the classroom — to the real job.</div>
+                            <div class="gagne-card-methods">💡 Action plans, job aids, follow-up coaching, workplace assignments</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Assessment -->
