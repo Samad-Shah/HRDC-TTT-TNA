@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT3 — Design Competency Based Training</title>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --navy: #0f1e3d;
+            --navy-mid: #1a2f5a;
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --accent: #f59e0b;
+            --accent-bright: #fbbf24;
+            --teal: #0d9488;
+            --rose: #e11d48;
+            --emerald: #059669;
+            --slate: #64748b;
+            --slate-light: #f1f5f9;
+            --white: #ffffff;
+            --text: #0f172a;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Sora', sans-serif; background: #f0f4ff; color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+        /* NAV */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--navy); border-bottom: 2px solid var(--teal);
+            padding: 0 1.5rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; min-height: 60px;
+        }
+        .nav-brand { color: var(--white); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-brand span { color: var(--accent); }
+        .nav-home {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.8); padding: 0.3rem 0.75rem; border-radius: 999px;
+            font-size: 0.73rem; font-weight: 600; text-decoration: none;
+            display: flex; align-items: center; gap: 0.3rem;
+            transition: all 0.2s;
+        }
+        .nav-home:hover { background: rgba(255,255,255,0.2); color: var(--white); }
+        .nav-tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; padding: 0.5rem 0; }
+        .nav-tab {
+            background: none; border: 1.5px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7); padding: 0.35rem 0.9rem; border-radius: 999px;
+            font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+        .nav-tab.active { background: var(--teal); border-color: var(--teal); color: var(--white); font-weight: 600; }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(13,148,136,0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(13,148,136,0); }
+            100% { box-shadow: 0 0 0 0 rgba(13,148,136,0); }
+        }
+        .quiz-live { animation: pulse-ring 2s infinite; }
+
+        /* PAGES */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #0a1628 0%, #0f2d3d 50%, #0d3a2f 100%);
+            color: var(--white); padding: 3.5rem 1.5rem 4rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(13,148,136,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245,158,11,0.18) 0%, transparent 40%);
+        }
+        .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+        .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; margin-bottom: 0.75rem; }
+        .hero h1 em { color: var(--accent); font-style: italic; }
+        .hero p { font-size: 0.95rem; color: rgba(255,255,255,0.72); max-width: 500px; margin-bottom: 1.5rem; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13,148,136,0.2); border: 1px solid rgba(13,148,136,0.5); color: #5eead4; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+
+        /* QUIZ HERO */
+        .quiz-hero { background: linear-gradient(135deg, #0a1628 0%, #0d2d3d 60%, #062d25 100%); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; }
+        .quiz-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,4vw,2.8rem); margin-bottom: 0.5rem; }
+        .quiz-hero h1 em { color: var(--accent); font-style: italic; }
+        .quiz-hero p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+        .quiz-stats { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+        .quiz-stat { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 0.6rem 1.2rem; text-align: center; }
+        .quiz-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .quiz-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+
+        /* CONTENT */
+        .content { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .section-title { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem; color: var(--navy); display: flex; align-items: center; gap: 0.5rem; }
+        .section-subtitle { font-size: 0.85rem; color: var(--slate); margin-bottom: 1.5rem; }
+        .section { margin-bottom: 3rem; }
+
+        /* CARDS */
+        .card { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+        @media (max-width: 700px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+        .chip { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+
+        /* Feature list */
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.83rem; color: #374151; }
+        .feature-list li::before { content: '✓'; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: 0; }
+        .timeline-item { display: flex; gap: 1rem; position: relative; padding-bottom: 1.25rem; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: 0; width: 2px; background: #e2e8f0; }
+        .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); color: var(--white); font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; box-shadow: 0 0 0 4px #ccfbf1; }
+        .timeline-text h4 { font-weight: 700; font-size: 0.9rem; color: var(--navy); margin-bottom: 0.15rem; }
+        .timeline-text p { font-size: 0.78rem; color: var(--slate); }
+
+        /* Bloom pyramid */
+        .bloom-levels { display: flex; flex-direction: column; gap: 0.4rem; }
+        .bloom-level { border-radius: 8px; padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+        .bloom-label { font-weight: 700; font-size: 0.82rem; }
+        .bloom-verbs { font-size: 0.7rem; opacity: 0.8; }
+
+        /* Verb table */
+        .verb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+        .verb-box { padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.78rem; font-weight: 600; }
+
+        /* Methods grid */
+        .methods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
+        .method-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; transition: box-shadow 0.2s; }
+        .method-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+        .method-num { display: inline-block; background: var(--teal); color: var(--white); font-size: 0.65rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 999px; margin-bottom: 0.4rem; }
+        .method-title { font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 0.3rem; }
+        .method-desc { font-size: 0.74rem; color: var(--slate); line-height: 1.4; }
+
+        /* Online tools */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem; }
+        .tool-name { font-weight: 700; font-size: 0.87rem; color: var(--navy); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem; }
+        .tool-desc { font-size: 0.73rem; color: var(--slate); line-height: 1.4; }
+
+        /* Quiz styles */
+        .quiz-container { max-width: 720px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .quiz-progress-bar-wrap { background: #e2e8f0; border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 0.5rem; }
+        .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--teal), var(--accent)); border-radius: 999px; transition: width 0.5s ease; }
+        .quiz-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--slate); margin-bottom: 1.5rem; }
+        .question-card { background: var(--card-bg); border-radius: var(--radius); border: 1.5px solid var(--border); padding: 1.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+        .question-category { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 700; color: var(--teal); background: #f0fdfa; padding: 0.25rem 0.65rem; border-radius: 999px; margin-bottom: 0.9rem; letter-spacing: 0.03em; text-transform: uppercase; }
+        .question-text { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 1.25rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .option-btn { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border); background: #f8fafc; cursor: pointer; font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text); text-align: left; transition: all 0.15s; width: 100%; }
+        .option-btn:hover:not(:disabled) { border-color: var(--teal); background: #f0fdfa; color: var(--teal); }
+        .option-letter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); color: var(--slate); font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+        .option-btn.correct { border-color: var(--emerald); background: #f0fdf4; color: #166534; }
+        .option-btn.correct .option-letter { background: var(--emerald); color: var(--white); }
+        .option-btn.wrong { border-color: var(--rose); background: #fff1f2; color: #9f1239; }
+        .option-btn.wrong .option-letter { background: var(--rose); color: var(--white); }
+        .option-btn.disabled-neutral { opacity: 0.5; }
+        .option-btn:disabled { cursor: default; }
+        .feedback-box { padding: 1rem; border-radius: var(--radius-sm); font-size: 0.83rem; margin-top: 1rem; display: none; line-height: 1.55; }
+        .feedback-box.show { display: block; }
+        .feedback-box.correct-fb { background: #f0fdf4; border: 1.5px solid #bbf7d0; color: #166534; }
+        .feedback-box.wrong-fb { background: #fff1f2; border: 1.5px solid #fecdd3; color: #9f1239; }
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-primary { background: var(--teal); color: var(--white); border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: background 0.2s, transform 0.1s; }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-1px); }
+        .btn-primary:disabled { background: var(--border); color: var(--slate); cursor: default; transform: none; }
+        .btn-secondary { background: var(--white); color: var(--navy); border: 1.5px solid var(--border); padding: 0.7rem 1.2rem; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+        .score-card { display: none; background: var(--card-bg); border-radius: var(--radius); border: 2px solid var(--border); padding: 2.5rem; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+        .score-card.show { display: block; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 6px solid; }
+        .score-circle .score-num { font-size: 2rem; font-weight: 800; }
+        .score-circle .score-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .score-pass { border-color: var(--emerald); color: var(--emerald); }
+        .score-fail { border-color: var(--rose); color: var(--rose); }
+        .score-mid { border-color: var(--accent); color: var(--accent); }
+        .score-message { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--navy); }
+        .score-sub { font-size: 0.85rem; color: var(--slate); margin-bottom: 2rem; }
+        .score-breakdown { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .score-breakdown-item { padding: 0.6rem 1.2rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; }
+        .score-correct-item { background: #f0fdf4; color: #166534; }
+        .score-wrong-item { background: #fff1f2; color: #9f1239; }
+        .category-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .cat-btn { padding: 0.4rem 0.9rem; border-radius: 999px; border: 1.5px solid var(--border); background: var(--white); font-family: 'Sora', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--slate); cursor: pointer; transition: all 0.15s; }
+        .cat-btn:hover { border-color: var(--teal); color: var(--teal); }
+        .cat-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+        /* Cheat sheet */
+        .cheat-section { background: var(--navy); color: var(--white); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+        .cheat-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; }
+        .cheat-row { display: flex; gap: 0.5rem; align-items: flex-start; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.82rem; }
+        .cheat-row:last-child { border-bottom: none; }
+        .cheat-q { color: rgba(255,255,255,0.55); min-width: 160px; font-size: 0.75rem; }
+        .cheat-a { color: var(--white); font-weight: 600; }
+
+        /* Separator */
+        .separator { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+        /* Workplace standards table */
+        .std-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .std-table th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-size: 0.78rem; font-weight: 700; }
+        .std-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+        .std-table tr:last-child td { border-bottom: none; }
+        .std-table tr:nth-child(even) td { background: #f8fafc; }
+
+        /* Gagne steps */
+        .gagne-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+        .gagne-step { display: flex; gap: 0.75rem; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; }
+        .gagne-num { width: 28px; height: 28px; border-radius: 50%; background: var(--teal); color: var(--white); font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .gagne-title { font-weight: 700; font-size: 0.83rem; color: var(--navy); }
+        .gagne-desc { font-size: 0.73rem; color: var(--slate); margin-top: 0.1rem; }
+
+        /* Corrective action */
+        .action-flow { display: flex; flex-direction: column; gap: 0; }
+        .action-step { background: linear-gradient(135deg, #0f2d3d, #164e63); color: var(--white); border-radius: 10px; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.85rem; position: relative; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+        .action-step::after { content: '↓'; position: absolute; bottom: -1rem; left: 50%; transform: translateX(-50%); color: var(--teal); font-size: 0.9rem; font-weight: 800; }
+        .action-step:last-child::after { display: none; }
+        .action-num { background: var(--teal); color: var(--white); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div style="display:flex;align-items:center;gap:1rem">
+            <a href="index.html" class="nav-home"><i class="ph-bold ph-house"></i> Home</a>
+            <div class="nav-brand"><i class="ph-fill ph-pencil-simple" style="color:var(--teal)"></i> CT3 <span>Design CBT</span></div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('overview')">CBT Basics</button>
+            <button class="nav-tab" onclick="showPage('objectives')">Learning Objectives</button>
+            <button class="nav-tab" onclick="showPage('content')">Training Content</button>
+            <button class="nav-tab" onclick="showPage('methods')">Training Methods</button>
+            <button class="nav-tab" onclick="showPage('review')">Review Design</button>
+            <button class="nav-tab quiz-live" onclick="showPage('quiz')">🎯 Quiz</button>
+        </div>
+    </nav>
+
+    <!-- ══ PAGE: CBT BASICS ══ -->
+    <div class="page active" id="page-overview">
+        <div class="hero">
+            <div class="hero-inner">
+                <h1>CT3: Design<br><em>Competency-Based</em><br>Training</h1>
+                <p>This module covers how to design a training programme based on learning outcomes — from writing objectives to selecting methods and reviewing the design.</p>
+                <div class="hero-badge"><i class="ph-fill ph-target"></i> HRD Corp Train The Trainer · Module CT3</div>
+            </div>
+        </div>
+        <div class="content">
+
+            <!-- Purpose -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-info" style="color:var(--teal)"></i> Purpose of CT3</div>
+                <div class="section-subtitle">What this module covers and what you'll be able to do at the end</div>
+                <div class="card" style="border-left:4px solid var(--teal)">
+                    <p style="font-size:0.88rem;color:var(--slate);line-height:1.7;margin-bottom:1rem">This module defines the fundamentals in designing competency-based training based on learning outcomes — covering how to develop training content, select training methods, and develop training resources.</p>
+                    <div class="grid-2">
+                        <div>
+                            <div style="font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em">After this training, you will be able to:</div>
+                            <ul class="feature-list">
+                                <li>Write competency-based learning objectives</li>
+                                <li>Interpret TNA findings to workplace standards</li>
+                                <li>Identify training topics for designing training content</li>
+                                <li>Select appropriate training methods</li>
+                                <li>Develop training resources</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em">Module Content:</div>
+                            <ul class="feature-list">
+                                <li>1.0 Competency-Based Training</li>
+                                <li>2.0 Learning Objectives & Outcomes</li>
+                                <li>3.0 Training Content</li>
+                                <li>4.0 Training Methods</li>
+                                <li>5.0 Review Training Design</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What is CBT -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-certificate" style="color:var(--teal)"></i> What is Competency-Based Training?</div>
+                <div class="section-subtitle">CBT focuses on what learners <em>can do</em> — not just how long they sat in class</div>
+                <div class="grid-2">
+                    <div class="card" style="border-left:4px solid var(--teal)">
+                        <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-bottom:0.6rem">Definition</div>
+                        <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">CBT is a training approach that focuses on developing specific <strong>skills, knowledge, and behaviours</strong> (competencies) that learners must demonstrate to perform effectively in a job or role.</p>
+                    </div>
+                    <div class="card" style="border-left:4px solid var(--accent)">
+                        <div class="chip" style="background:#fffbeb;color:#92400e;margin-bottom:0.6rem">Training Rationale</div>
+                        <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">Training rationale = <strong>the reason for organising a training</strong>. It is identified first, based on the training needs assessment (TNA), before designing the programme.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5 Key Features -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-list-checks" style="color:var(--teal)"></i> 5 Key Features of CBT</div>
+                <div class="grid-3">
+                    <div class="card">
+                        <div style="font-size:1.4rem;margin-bottom:0.5rem">🎯</div>
+                        <div style="font-weight:700;font-size:0.87rem;color:var(--navy);margin-bottom:0.3rem">Focus on Outcomes</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">What learners <em>can do</em> at the end of training — not just what they know.</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.4rem;margin-bottom:0.5rem">📏</div>
+                        <div style="font-weight:700;font-size:0.87rem;color:var(--navy);margin-bottom:0.3rem">Standards-Based</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Clear criteria or benchmarks define success.</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.4rem;margin-bottom:0.5rem">🔧</div>
+                        <div style="font-weight:700;font-size:0.87rem;color:var(--navy);margin-bottom:0.3rem">Practical & Applied</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Emphasises hands-on performance in real or simulated work situations.</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.4rem;margin-bottom:0.5rem">👤</div>
+                        <div style="font-weight:700;font-size:0.87rem;color:var(--navy);margin-bottom:0.3rem">Individual Progress</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Learners move forward once they show competence — not after a fixed time period.</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.4rem;margin-bottom:0.5rem">📋</div>
+                        <div style="font-weight:700;font-size:0.87rem;color:var(--navy);margin-bottom:0.3rem">Assessment-Driven</div>
+                        <p style="font-size:0.75rem;color:var(--slate)">Success measured through demonstrations, assessments, or workplace evidence.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workplace Standards -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-buildings" style="color:var(--teal)"></i> Workplace Standards</div>
+                <div class="section-subtitle">Standards are the benchmark for desired performance across different subject areas</div>
+                <div class="card" style="padding:0;overflow:hidden">
+                    <table class="std-table">
+                        <thead><tr><th>Subject Area</th><th>Workplace Standard</th></tr></thead>
+                        <tbody>
+                            <tr><td>Quality</td><td>Company quality standard, <strong>ISO 9000</strong></td></tr>
+                            <tr><td>Technical / Engineering</td><td>Technical manual, Engineering standard</td></tr>
+                            <tr><td>Manufacturing Process</td><td>Standard Operating Procedure (SOP)</td></tr>
+                            <tr><td>Food Industry</td><td>Hazard Analysis & Critical Control Point <strong>(HACCP)</strong></td></tr>
+                            <tr><td>Safety</td><td>Safety & Health Act, 1994 <strong>(OSHA)</strong>, Safety procedure</td></tr>
+                            <tr><td>Environmental</td><td><strong>ISO 14000</strong></td></tr>
+                            <tr><td>Ethics</td><td>Company Code of Conduct Policy</td></tr>
+                            <tr><td>Disciplinary Action</td><td>HR Policy</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Learner-Centric -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-users" style="color:var(--teal)"></i> Learner-Centric Training</div>
+                <div class="section-subtitle">Training must focus on participant needs — not the trainer's preferences</div>
+                <div class="card">
+                    <p style="font-size:0.85rem;color:var(--slate);margin-bottom:1rem;line-height:1.6">A learner-centric programme addresses the needs of <strong>three stakeholders</strong>. Meeting all three greatly increases training success:</p>
+                    <div class="grid-3">
+                        <div style="background:#f0fdfa;border-radius:10px;padding:1rem;border:1px solid #99f6e4">
+                            <div style="font-weight:700;font-size:0.85rem;color:var(--teal);margin-bottom:0.3rem">1. The Participants</div>
+                            <p style="font-size:0.75rem;color:var(--slate)">Training is designed specifically to meet the needs of every learner in the workshop.</p>
+                        </div>
+                        <div style="background:#fffbeb;border-radius:10px;padding:1rem;border:1px solid #fde68a">
+                            <div style="font-weight:700;font-size:0.85rem;color:#92400e;margin-bottom:0.3rem">2. The Supervisor/Manager</div>
+                            <p style="font-size:0.75rem;color:var(--slate)">The person who identified the need. Find out their expectations and incorporate them.</p>
+                        </div>
+                        <div style="background:#eff6ff;border-radius:10px;padding:1rem;border:1px solid #bfdbfe">
+                            <div style="font-weight:700;font-size:0.85rem;color:var(--blue);margin-bottom:0.3rem">3. The Person Paying</div>
+                            <p style="font-size:0.75rem;color:var(--slate)">The trainee, supervisor, or manager. What outcomes do they expect?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Ref -->
+            <div class="cheat-section">
+                <div class="cheat-title">📌 Quick Reference — CBT Fundamentals</div>
+                <div class="cheat-row"><span class="cheat-q">Training Rationale from?</span><span class="cheat-a">Training Needs Analysis (TNA)</span></div>
+                <div class="cheat-row"><span class="cheat-q">CBT progression?</span><span class="cheat-a">Individual — move when competent, NOT after fixed time</span></div>
+                <div class="cheat-row"><span class="cheat-q">Safety standard (Malaysia)?</span><span class="cheat-a">Occupational Safety and Health Act (OSHA) 1994</span></div>
+                <div class="cheat-row"><span class="cheat-q">Quality international standard?</span><span class="cheat-a">ISO 9000 series</span></div>
+                <div class="cheat-row"><span class="cheat-q">Environmental standard?</span><span class="cheat-a">ISO 14000</span></div>
+                <div class="cheat-row"><span class="cheat-q">Food industry standard?</span><span class="cheat-a">HACCP</span></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ PAGE: LEARNING OBJECTIVES ══ -->
+    <div class="page" id="page-objectives">
+        <div class="hero">
+            <div class="hero-inner">
+                <h1>Section 2:<br><em>Learning Objectives</em><br>&amp; Outcomes</h1>
+                <p>Learning objectives are precise statements that define what learners must achieve to demonstrate the required competencies.</p>
+                <div class="hero-badge"><i class="ph-fill ph-target"></i> 3 Components · Bloom's Taxonomy · Enabling Objectives</div>
+            </div>
+        </div>
+        <div class="content">
+
+            <!-- 3 Components -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-puzzle-piece" style="color:var(--teal)"></i> 3 Essential Components of a Learning Objective</div>
+                <div class="section-subtitle">All objectives MUST include all three — also known as the PCS formula</div>
+                <div class="grid-3">
+                    <div class="card" style="border-top:4px solid var(--teal)">
+                        <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-bottom:0.6rem">1. Performance (P)</div>
+                        <p style="font-size:0.82rem;color:var(--slate);line-height:1.55">A precise statement of what the learner will be <strong>capable of doing</strong>. Must use an <strong>action verb</strong> that is measurable. E.g., "Write a customer reply letter"</p>
+                    </div>
+                    <div class="card" style="border-top:4px solid var(--accent)">
+                        <div class="chip" style="background:#fffbeb;color:#92400e;margin-bottom:0.6rem">2. Condition (C)</div>
+                        <p style="font-size:0.82rem;color:var(--slate);line-height:1.55">The <strong>circumstances</strong> under which the performance occurs. Tells the trainer what resources and environment to provide. E.g., "using MS Word"</p>
+                    </div>
+                    <div class="card" style="border-top:4px solid var(--blue)">
+                        <div class="chip" style="background:#eff6ff;color:var(--blue);margin-bottom:0.6rem">3. Standard (S)</div>
+                        <p style="font-size:0.82rem;color:var(--slate);line-height:1.55">The <strong>minimum acceptable level</strong> of performance. Can be quantity, quality, or time-based. E.g., "with no spelling mistakes"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Objectives -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-notebook" style="color:var(--teal)"></i> Examples of Well-Written Objectives</div>
+                <div style="display:flex;flex-direction:column;gap:0.75rem">
+                    <div class="card" style="padding:1.25rem">
+                        <div style="font-weight:700;font-size:0.82rem;color:var(--navy);margin-bottom:0.5rem">Example 1</div>
+                        <p style="font-size:0.88rem;color:var(--text);margin-bottom:0.6rem;font-style:italic">"Write a customer reply letter with no spelling mistakes by using MS Word."</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+                            <span class="chip" style="background:#f0fdfa;color:var(--teal)">P: Write a customer reply letter</span>
+                            <span class="chip" style="background:#fffbeb;color:#92400e">S: with no spelling mistakes</span>
+                            <span class="chip" style="background:#eff6ff;color:var(--blue)">C: using MS Word</span>
+                        </div>
+                    </div>
+                    <div class="card" style="padding:1.25rem">
+                        <div style="font-weight:700;font-size:0.82rem;color:var(--navy);margin-bottom:0.5rem">Example 2</div>
+                        <p style="font-size:0.88rem;color:var(--text);margin-bottom:0.6rem;font-style:italic">"Copy a table from a spreadsheet into a word processor document within three minutes and without reference to the manual."</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+                            <span class="chip" style="background:#f0fdfa;color:var(--teal)">P: Copy a table from spreadsheet into doc</span>
+                            <span class="chip" style="background:#fffbeb;color:#92400e">S: within 3 minutes</span>
+                            <span class="chip" style="background:#eff6ff;color:var(--blue)">C: without referencing the manual</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action vs Abstract Verbs -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-text-aa" style="color:var(--teal)"></i> Action Verbs vs Abstract Verbs</div>
+                <div class="section-subtitle">Always use ACTION verbs — they are measurable. Avoid ABSTRACT verbs — they cannot be assessed.</div>
+                <div class="verb-grid">
+                    <div class="verb-box" style="background:#f0fdfa;border:1.5px solid #99f6e4">
+                        <div style="font-weight:800;font-size:0.78rem;color:var(--teal);margin-bottom:0.6rem;text-transform:uppercase">✅ Action Verbs (USE THESE)</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.3rem;font-size:0.78rem">
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To write</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To demonstrate</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To define</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To solve</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To explain</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To apply</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To identify</span>
+                            <span style="background:var(--teal);color:white;padding:0.15rem 0.5rem;border-radius:6px">To list</span>
+                        </div>
+                    </div>
+                    <div class="verb-box" style="background:#fff1f2;border:1.5px solid #fecdd3">
+                        <div style="font-weight:800;font-size:0.78rem;color:var(--rose);margin-bottom:0.6rem;text-transform:uppercase">❌ Abstract Verbs (AVOID THESE)</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.3rem;font-size:0.78rem">
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To know</span>
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To understand</span>
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To be familiar with</span>
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To perceive</span>
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To be aware of</span>
+                            <span style="background:var(--rose);color:white;padding:0.15rem 0.5rem;border-radius:6px">To think about</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloom's Taxonomy -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-pyramid" style="color:var(--teal)"></i> Bloom's Taxonomy</div>
+                <div class="section-subtitle">Created in 1956 by Dr Benjamin Bloom — 3 domains, 6 cognitive levels (lowest → highest)</div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div style="font-weight:700;font-size:0.82rem;color:var(--navy);margin-bottom:0.75rem">3 Learning Domains</div>
+                        <ul class="feature-list">
+                            <li><strong>Cognitive</strong> — Mental skills (Knowledge)</li>
+                            <li><strong>Affective</strong> — Growth in feelings/emotions (Attitude)</li>
+                            <li><strong>Psychomotor</strong> — Manual/physical skills (Skills)</li>
+                        </ul>
+                        <div style="margin-top:0.75rem;font-size:0.73rem;color:var(--slate);background:#f8fafc;padding:0.6rem;border-radius:8px">Also known as <strong>KSA</strong>: Knowledge, Skills, Attitudes</div>
+                    </div>
+                    <div class="bloom-levels">
+                        <div class="bloom-level" style="background:#fef3c7;color:#78350f"><span class="bloom-label">🔝 Create</span><span class="bloom-verbs">construct, design, formulate, organize</span></div>
+                        <div class="bloom-level" style="background:#fde68a;color:#78350f"><span class="bloom-label">Evaluate</span><span class="bloom-verbs">assess, critique, evaluate, rank, rate</span></div>
+                        <div class="bloom-level" style="background:#bbf7d0;color:#14532d"><span class="bloom-label">Analyse</span><span class="bloom-verbs">analyze, categorize, compare, differentiate</span></div>
+                        <div class="bloom-level" style="background:#bfdbfe;color:#1e3a8a"><span class="bloom-label">Apply</span><span class="bloom-verbs">choose, demonstrate, implement, perform</span></div>
+                        <div class="bloom-level" style="background:#ddd6fe;color:#4c1d95"><span class="bloom-label">Understand</span><span class="bloom-verbs">characterize, describe, explain, identify</span></div>
+                        <div class="bloom-level" style="background:#e2e8f0;color:#374151"><span class="bloom-label">⬇️ Remember</span><span class="bloom-verbs">define, list, recognize</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enabling Objectives -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-flow-arrow" style="color:var(--teal)"></i> Enabling Objectives</div>
+                <div class="section-subtitle">Sub-skills that must be learned before the Terminal Objective can be achieved</div>
+                <div class="card">
+                    <p style="font-size:0.85rem;color:var(--slate);margin-bottom:1rem;line-height:1.6">The <strong>Learning (Terminal) Objective</strong> states the final performance. <strong>Enabling Objectives</strong> are the discrete knowledge and skills needed to meet it.</p>
+                    <div style="background:#f0fdfa;border-radius:10px;padding:1rem;margin-bottom:1rem">
+                        <div style="font-weight:700;font-size:0.82rem;color:var(--teal);margin-bottom:0.5rem">Example — Terminal Objective: "To make a pizza"</div>
+                        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                            <span class="chip" style="background:var(--teal);color:white">EO1: To use an oven</span>
+                            <span class="chip" style="background:var(--teal);color:white">EO2: To make pizza dough</span>
+                            <span class="chip" style="background:var(--teal);color:white">EO3: To make pizza sauce</span>
+                        </div>
+                    </div>
+                    <div style="font-weight:700;font-size:0.82rem;color:var(--navy);margin-bottom:0.4rem">2 questions to identify enabling objectives:</div>
+                    <ul class="feature-list">
+                        <li>Why do learners need to be able to do that?</li>
+                        <li>What do learners need to know to be able to do that?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Criteria -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-check-circle" style="color:var(--teal)"></i> Criteria for Writing Learning Objectives</div>
+                <div class="card">
+                    <ul class="feature-list">
+                        <li>Make sure there is <strong>one measurable verb</strong> in each objective</li>
+                        <li>Each objective needs one verb — if two verbs exist (define AND apply), mastery becomes ambiguous</li>
+                        <li>Ensure the verb is from the highest appropriate Bloom's Taxonomy level</li>
+                        <li>Strive to keep objectives <strong>measurable, clear and concise</strong></li>
+                        <li>Use only <strong>relevant terminology</strong> familiar to learners</li>
+                        <li>Avoid double verbs like "remove and repair" — use the more inclusive one (repair implies removing)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <div class="cheat-title">📌 Quick Reference — Learning Objectives</div>
+                <div class="cheat-row"><span class="cheat-q">3 components?</span><span class="cheat-a">Performance + Condition + Standard (PCS)</span></div>
+                <div class="cheat-row"><span class="cheat-q">Standard categories (3)?</span><span class="cheat-a">Quantity, Quality, Time</span></div>
+                <div class="cheat-row"><span class="cheat-q">Bloom's domains (3)?</span><span class="cheat-a">Cognitive, Affective, Psychomotor</span></div>
+                <div class="cheat-row"><span class="cheat-q">Bloom's levels (low→high)?</span><span class="cheat-a">Remember → Understand → Apply → Analyse → Evaluate → Create</span></div>
+                <div class="cheat-row"><span class="cheat-q">Terminal vs Enabling Obj?</span><span class="cheat-a">Terminal = final goal; Enabling = sub-skills needed to get there</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ PAGE: TRAINING CONTENT ══ -->
+    <div class="page" id="page-content">
+        <div class="hero">
+            <div class="hero-inner">
+                <h1>Section 3:<br><em>Determine Training</em><br>Content</h1>
+                <p>Once learning objectives are set, structure the training content using a training plan, sequencing methods, and Gagné's Nine Events of Instruction.</p>
+                <div class="hero-badge"><i class="ph-fill ph-stack"></i> Training Plan · Sequencing · Gagné's 9 Events</div>
+            </div>
+        </div>
+        <div class="content">
+
+            <!-- Training Plan -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-clipboard-text" style="color:var(--teal)"></i> What is a Training Plan?</div>
+                <div class="section-subtitle">Also known as a teaching plan or session plan</div>
+                <div class="card">
+                    <p style="font-size:0.85rem;color:var(--slate);margin-bottom:1rem;line-height:1.6">A <strong>training plan</strong> is an overview/outline of how training will be implemented. It contains:</p>
+                    <div class="grid-2">
+                        <ul class="feature-list">
+                            <li>Training programme flow</li>
+                            <li>Training content (topics/modules)</li>
+                            <li>Key learning objectives</li>
+                        </ul>
+                        <ul class="feature-list">
+                            <li>Duration per module</li>
+                            <li>Assessment methods</li>
+                            <li>Training resources/materials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sequencing Methods -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-sort-ascending" style="color:var(--teal)"></i> Sequencing Methods</div>
+                <div class="section-subtitle">Determine the order and structure of training topics to maximise learning effectiveness</div>
+                <div class="methods-grid">
+                    <div class="method-card"><span class="method-num">1</span><div class="method-title">Job Performance Order</div><div class="method-desc">Learning sequence mirrors the job/task sequence.</div></div>
+                    <div class="method-card"><span class="method-num">2</span><div class="method-title">Simple to Complex</div><div class="method-desc">Objectives sequenced by increasing complexity.</div></div>
+                    <div class="method-card"><span class="method-num">3</span><div class="method-title">Critical Sequence</div><div class="method-desc">Topics ordered by relative importance — most critical first.</div></div>
+                    <div class="method-card"><span class="method-num">4</span><div class="method-title">Known to Unknown</div><div class="method-desc">Familiar topics come before unfamiliar ones.</div></div>
+                    <div class="method-card"><span class="method-num">5</span><div class="method-title">Dependent Relationship</div><div class="method-desc">Mastery of one objective requires prior mastery of another.</div></div>
+                    <div class="method-card"><span class="method-num">6</span><div class="method-title">Supportive Relationship</div><div class="method-desc">Transfer of learning from one objective helps another through common elements.</div></div>
+                    <div class="method-card"><span class="method-num">7</span><div class="method-title">Cause to Effect</div><div class="method-desc">Objectives sequenced from cause to its effect.</div></div>
+                </div>
+            </div>
+
+            <!-- Gagné's 9 Events -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-steps" style="color:var(--teal)"></i> Gagné's Nine Events of Instruction</div>
+                <div class="section-subtitle">A systematic framework that aligns with how the brain processes information — a training plan checklist</div>
+                <div class="gagne-grid">
+                    <div class="gagne-step"><div class="gagne-num">1</div><div><div class="gagne-title">Gain Attention (Reception)</div><div class="gagne-desc">Use icebreakers, a problem scenario, visuals, or a thought-provoking question. Without attention, no learning happens.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">2</div><div><div class="gagne-title">Inform Learners of Objectives (Expectancy)</div><div class="gagne-desc">Clearly state learning objectives and link them to job relevance. Adults learn better when they know what's in it for them.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">3</div><div><div class="gagne-title">Stimulate Recall of Prior Learning (Retrieval)</div><div class="gagne-desc">New knowledge sticks better when connected to what learners already know. Use brainstorming, review questions, or sharing past experiences.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">4</div><div><div class="gagne-title">Present the Content (Selective Perception)</div><div class="gagne-desc">Deliver information in a logical, clear, and engaging way. Use a mix of methods: lecture, video, demo, storytelling, and examples.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">5</div><div><div class="gagne-title">Provide Learning Guidance (Semantic Encoding)</div><div class="gagne-desc">Offer strategies using job aids, frameworks, case studies, mnemonics, or visual diagrams.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">6</div><div><div class="gagne-title">Elicit Performance (Responding)</div><div class="gagne-desc">Learners must practise. Use role plays, group tasks, exercises, or real-world application tasks.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">7</div><div><div class="gagne-title">Provide Feedback (Reinforcement)</div><div class="gagne-desc">Immediate, specific, and constructive feedback helps learners correct mistakes and strengthen correct behaviour.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">8</div><div><div class="gagne-title">Assess Performance (Retrieval & Reinforcement)</div><div class="gagne-desc">Test whether learning objectives have been achieved. Methods: quizzes, skill demonstrations, projects, or workplace tasks.</div></div></div>
+                    <div class="gagne-step"><div class="gagne-num">9</div><div><div class="gagne-title">Enhance Retention and Transfer (Generalisation)</div><div class="gagne-desc">Provide action plans, job aids, follow-up coaching, or workplace assignments to apply learning beyond the classroom.</div></div></div>
+                </div>
+            </div>
+
+            <!-- Assessment -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-exam" style="color:var(--teal)"></i> Developing Test & Assessment</div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div style="font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:0.5rem">3 Objectives of Assessment</div>
+                        <div class="timeline">
+                            <div class="timeline-item"><div class="step-num">1</div><div class="timeline-text"><h4>Selection</h4><p>Tests used to select candidates for hiring or promotion.</p></div></div>
+                            <div class="timeline-item"><div class="step-num">2</div><div class="timeline-text"><h4>Programme Evaluation</h4><p>Determine quality of learning and impact on work performance.</p></div></div>
+                            <div class="timeline-item"><div class="step-num">3</div><div class="timeline-text"><h4>Instructional Improvement</h4><p>Tests assist in improving training quality.</p></div></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div style="font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:0.5rem">Performance Assessment</div>
+                        <p style="font-size:0.8rem;color:var(--slate);line-height:1.6;margin-bottom:0.75rem">Measures <strong>actual performance or job skills</strong> using the observation method. Assesses psychomotor skills like typing, repairing, or troubleshooting.</p>
+                        <div style="background:#f0fdfa;border-radius:8px;padding:0.75rem;font-size:0.77rem;color:#134e4a">The observer can be an <strong>instructor, supervisor, experienced manager, or external expert</strong>. Performance is rated against workplace standards.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <div class="cheat-title">📌 Quick Reference — Training Content</div>
+                <div class="cheat-row"><span class="cheat-q">Training Plan also known as?</span><span class="cheat-a">Teaching plan / Session plan</span></div>
+                <div class="cheat-row"><span class="cheat-q">Gagné's Event 1?</span><span class="cheat-a">Gain Attention (Reception)</span></div>
+                <div class="cheat-row"><span class="cheat-q">Gagné's Event 5?</span><span class="cheat-a">Provide Learning Guidance (Semantic Encoding)</span></div>
+                <div class="cheat-row"><span class="cheat-q">Gagné's Event 9?</span><span class="cheat-a">Enhance Retention and Transfer (Generalisation)</span></div>
+                <div class="cheat-row"><span class="cheat-q">3 objectives of assessment?</span><span class="cheat-a">Selection, Programme Evaluation, Instructional Improvement</span></div>
+                <div class="cheat-row"><span class="cheat-q">Training topics also known as?</span><span class="cheat-a">Modules</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ PAGE: TRAINING METHODS ══ -->
+    <div class="page" id="page-methods">
+        <div class="hero">
+            <div class="hero-inner">
+                <h1>Section 4:<br><em>Determine Training</em><br>Methods</h1>
+                <p>Select methods that suit the content AND the learner's learning style. Using varied methods increases engagement and effectiveness.</p>
+                <div class="hero-badge"><i class="ph-fill ph-wrench"></i> 22 Training Methods + 7 Online Tools</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-list" style="color:var(--teal)"></i> 22 Training Methods</div>
+                <div class="section-subtitle">A great trainer selects methods that suit both the content and the learner's learning style</div>
+                <div class="methods-grid">
+                    <div class="method-card"><span class="method-num">1</span><div class="method-title">Action-Centred Leadership</div><div class="method-desc">Learner leads projects and internalises leadership frameworks through real projects.</div></div>
+                    <div class="method-card"><span class="method-num">2</span><div class="method-title">Action Learning</div><div class="method-desc">Learner applies a learning model to solve real work challenges. A coach facilitates and tracks progress.</div></div>
+                    <div class="method-card"><span class="method-num">3</span><div class="method-title">Assignment</div><div class="method-desc">Learner given a task with guidance. May include problems, projects, or exercises to complete.</div></div>
+                    <div class="method-card"><span class="method-num">4</span><div class="method-title">Brainstorming</div><div class="method-desc">List creative ideas about a topic. All members share ideas openly before arriving at the best option.</div></div>
+                    <div class="method-card"><span class="method-num">5</span><div class="method-title">Buzz Group</div><div class="method-desc">Small groups each discuss a topic; a representative presents the group's consensus to the class.</div></div>
+                    <div class="method-card"><span class="method-num">6</span><div class="method-title">Case Study</div><div class="method-desc">Learners act out roles in a written scenario and solve problems presented in the case.</div></div>
+                    <div class="method-card"><span class="method-num">7</span><div class="method-title">Conference Method</div><div class="method-desc">12–20 people share ideas, examine facts, test assumptions, and draw agreed conclusions through open discussion.</div></div>
+                    <div class="method-card"><span class="method-num">8</span><div class="method-title">Coaching Session</div><div class="method-desc">Trainer uses questioning and deep listening to coach the learner to solve personal or work-related issues.</div></div>
+                    <div class="method-card"><span class="method-num">9</span><div class="method-title">Demonstration</div><div class="method-desc">Trainer shows the learner a performance of a concept, theory, or use of a machine.</div></div>
+                    <div class="method-card"><span class="method-num">10</span><div class="method-title">Discovery Learning</div><div class="method-desc">Learning through finding principles and relationships by experimentation, trial and error.</div></div>
+                    <div class="method-card"><span class="method-num">11</span><div class="method-title">Group Discussion</div><div class="method-desc">Large group divided into smaller groups; each discusses a specific subject and shares later.</div></div>
+                    <div class="method-card"><span class="method-num">12</span><div class="method-title">Encounter Group</div><div class="method-desc">Unstructured group with facilitator helping participants express feelings on common issues/challenges.</div></div>
+                    <div class="method-card"><span class="method-num">13</span><div class="method-title">Ice Breaker</div><div class="method-desc">Exercise to break down barriers among members. Goal: help everyone learn together quickly, comfortably and easily.</div></div>
+                    <div class="method-card"><span class="method-num">14</span><div class="method-title">Energizer</div><div class="method-desc">Brief ~5 minute physical activity to increase motivation and energy, especially after a break.</div></div>
+                    <div class="method-card"><span class="method-num">15</span><div class="method-title">Giving Lecture</div><div class="method-desc">Talk using visual aids where learners listen, take notes, and ask questions.</div></div>
+                    <div class="method-card"><span class="method-num">16</span><div class="method-title">Management/Business Games</div><div class="method-desc">Business challenge in a game environment requiring decisions; debrief and sharing after.</div></div>
+                    <div class="method-card"><span class="method-num">17</span><div class="method-title">Mirroring Technique</div><div class="method-desc">Learner copies the teacher to learn a skill — dancing, tae-kwondo, singing, cooking, etc.</div></div>
+                    <div class="method-card"><span class="method-num">18</span><div class="method-title">Problem Solving</div><div class="method-desc">Learners divided into small groups to solve a specific problem.</div></div>
+                    <div class="method-card"><span class="method-num">19</span><div class="method-title">Role Play</div><div class="method-desc">Learners demonstrate 2 different roles in a scenario — e.g., one is a consultant, the other a customer.</div></div>
+                    <div class="method-card"><span class="method-num">20</span><div class="method-title">Triad</div><div class="method-desc">Groups of 3: A and B discuss; C observes and provides comments for learning purposes.</div></div>
+                    <div class="method-card"><span class="method-num">21</span><div class="method-title">Simulation Exercise</div><div class="method-desc">Demonstrate a skill in a real-world, controlled environment — e.g., helicopter rescue in a swimming pool.</div></div>
+                    <div class="method-card"><span class="method-num">22</span><div class="method-title">Sitting Next to Nellie</div><div class="method-desc">New learner placed with an experienced colleague to observe work (job shadowing).</div></div>
+                </div>
+            </div>
+
+            <!-- Online Tools -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-desktop" style="color:var(--teal)"></i> Online Tools for Trainers</div>
+                <div class="section-subtitle">Digital tools to increase engagement, interaction, and collaboration</div>
+                <div class="tools-grid">
+                    <div class="tool-card"><div class="tool-name">🎮 Kahoot!</div><div class="tool-desc">Game-based platform. Create quizzes, polls, and challenges for energisers, knowledge checks, and assessments.</div></div>
+                    <div class="tool-card"><div class="tool-name">📊 Mentimeter</div><div class="tool-desc">Interactive presentation tool. Run live polls, Q&amp;A, and word clouds in real time using phones/laptops.</div></div>
+                    <div class="tool-card"><div class="tool-name">🎨 Canva</div><div class="tool-desc">Simple design tool. Create professional slides, posters, infographics, and social media content.</div></div>
+                    <div class="tool-card"><div class="tool-name">📌 Padlet</div><div class="tool-desc">Digital collaboration board. Learners post ideas, questions, or reflections on a shared "wall".</div></div>
+                    <div class="tool-card"><div class="tool-name">📁 Google Workspace</div><div class="tool-desc">Docs/Slides for co-creating; Forms for surveys; Jamboard as a virtual whiteboard for collaboration.</div></div>
+                    <div class="tool-card"><div class="tool-name">🏆 Quizizz</div><div class="tool-desc">Interactive quiz platform. Allows self-paced learning, homework, and detailed reports. Great for reinforcement.</div></div>
+                    <div class="tool-card"><div class="tool-name">🗳️ Slido</div><div class="tool-desc">Audience interaction tool. Live polls, quizzes, Q&amp;A. Participants upvote questions to surface the most relevant.</div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ PAGE: REVIEW ══ -->
+    <div class="page" id="page-review">
+        <div class="hero">
+            <div class="hero-inner">
+                <h1>Section 5:<br><em>Review Training</em><br>Design</h1>
+                <p>After completing training design, review with the business unit manager and subject matter experts before delivery.</p>
+                <div class="hero-badge"><i class="ph-fill ph-magnifying-glass"></i> Feedback · Review · Corrective Action</div>
+            </div>
+        </div>
+        <div class="content">
+
+            <!-- Gather Feedback -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-chat-circle" style="color:var(--teal)"></i> 5.1 Gather Feedback / Comments</div>
+                <div class="section-subtitle">Conduct evaluation of the training programme BEFORE delivery by asking the right stakeholder questions</div>
+                <div class="card">
+                    <p style="font-size:0.83rem;color:var(--slate);margin-bottom:1rem">7 feedback-gathering questions to ask:</p>
+                    <div class="timeline">
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q1</div><div class="timeline-text"><h4>Who is in charge of training design?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q2</div><div class="timeline-text"><h4>How will you know if the training programme design is meeting the objective?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q3</div><div class="timeline-text"><h4>Who is the client that determines the training programme design?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q4</div><div class="timeline-text"><h4>What is the biggest expectation of the client?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q5</div><div class="timeline-text"><h4>Will your training programme drive the business results desired by your client?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q6</div><div class="timeline-text"><h4>Are you using evaluation methods to measure success?</h4></div></div>
+                        <div class="timeline-item"><div class="step-num" style="font-size:0.7rem">Q7</div><div class="timeline-text"><h4>Are there follow-up sessions planned, including assessing performance results?</h4></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Content -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-list-magnifying-glass" style="color:var(--teal)"></i> 5.2 Review Training Content &amp; Sequence</div>
+                <div class="card">
+                    <ul class="feature-list">
+                        <li>Is the information in the content correct?</li>
+                        <li>Has the content been edited to ensure no error?</li>
+                        <li>Is there any important content missing?</li>
+                        <li>Is there a smooth flow from one chapter to the next?</li>
+                        <li>Can the participants learn well using this sequencing method?</li>
+                        <li>Is there a break time to allow the learner to rest?</li>
+                        <li>Have you tried the training activities?</li>
+                        <li>Are the test and assessment relevant and practical?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Corrective Action -->
+            <div class="section">
+                <div class="section-title"><i class="ph-fill ph-wrench" style="color:var(--teal)"></i> 5.3 Training Design Corrective Action Process</div>
+                <div class="grid-2">
+                    <div class="card">
+                        <p style="font-size:0.82rem;color:var(--slate);margin-bottom:1rem;line-height:1.6">When an issue threatens training quality, <strong>prompt corrective action</strong> is necessary. Investigate the root cause and develop a quick solution.</p>
+                        <div class="action-flow">
+                            <div class="action-step"><div class="action-num">1</div>Identify the Problem</div>
+                            <div style="height:0.6rem"></div>
+                            <div class="action-step"><div class="action-num">2</div>Identify the Root Cause of the Problem</div>
+                            <div style="height:0.6rem"></div>
+                            <div class="action-step"><div class="action-num">3</div>Develop a Solution to the Problem</div>
+                            <div style="height:0.6rem"></div>
+                            <div class="action-step"><div class="action-num">4</div>Implement the Solution</div>
+                            <div style="height:0.6rem"></div>
+                            <div class="action-step" style="margin-bottom:0"><div class="action-num">5</div>Assess the Solution</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cheat-section" style="margin-bottom:0">
+                            <div class="cheat-title">📌 Quick Reference — Review</div>
+                            <div class="cheat-row"><span class="cheat-q">Review with whom?</span><span class="cheat-a">Business unit manager + subject matter experts</span></div>
+                            <div class="cheat-row"><span class="cheat-q">Goal of feedback?</span><span class="cheat-a">Ensure training meets objectives BEFORE delivery</span></div>
+                            <div class="cheat-row"><span class="cheat-q">Corrective process starts?</span><span class="cheat-a">Identify the Problem (step 1)</span></div>
+                            <div class="cheat-row"><span class="cheat-q">Corrective process ends?</span><span class="cheat-a">Assess the Solution (step 5)</span></div>
+                            <div class="cheat-row"><span class="cheat-q">Step after root cause?</span><span class="cheat-a">Develop a Solution (step 3)</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══ PAGE: QUIZ ══ -->
+    <div class="page" id="page-quiz">
+        <div class="quiz-hero">
+            <h1>CT3 <em>Quiz</em></h1>
+            <p>Test your knowledge of Design Competency-Based Training</p>
+            <div class="quiz-stats">
+                <div class="quiz-stat"><div class="quiz-stat-num" id="stat-score">0</div><div class="quiz-stat-label">Score</div></div>
+                <div class="quiz-stat"><div class="quiz-stat-num">67</div><div class="quiz-stat-label">Question Pool</div></div>
+                <div class="quiz-stat"><div class="quiz-stat-num">20</div><div class="quiz-stat-label">Per Session</div></div>
+            </div>
+        </div>
+        <div class="quiz-container">
+            <div class="category-filter" id="cat-filter">
+                <button class="cat-btn active" onclick="selectCategory('all', this)">All Topics</button>
+                <button class="cat-btn" onclick="selectCategory('cbt', this)">CBT Basics</button>
+                <button class="cat-btn" onclick="selectCategory('objectives', this)">Learning Objectives</button>
+                <button class="cat-btn" onclick="selectCategory('content', this)">Training Content</button>
+                <button class="cat-btn" onclick="selectCategory('methods', this)">Training Methods</button>
+                <button class="cat-btn" onclick="selectCategory('review', this)">Review Design</button>
+            </div>
+
+            <div class="quiz-progress-bar-wrap">
+                <div class="quiz-progress-bar" id="progress-bar" style="width:0%"></div>
+            </div>
+            <div class="quiz-meta">
+                <span id="question-counter">Question 1 of 20</span>
+                <span id="score-display">Score: 0/0</span>
+            </div>
+
+            <div class="question-card" id="question-card">
+                <div class="question-category" id="question-cat-label">Category</div>
+                <div class="question-text" id="question-text">Loading question...</div>
+                <div class="options" id="options-container"></div>
+                <div class="feedback-box" id="feedback-box"></div>
+            </div>
+
+            <div class="quiz-nav">
+                <button class="btn-secondary" onclick="restartQuiz()">↺ Restart</button>
+                <button class="btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+                    Next <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="score-card" id="score-card">
+                <div class="score-circle" id="score-circle">
+                    <span class="score-num" id="final-score-num">0%</span>
+                    <span class="score-label">Score</span>
+                </div>
+                <div class="score-message" id="score-message">Well done!</div>
+                <div class="score-sub" id="score-sub">You answered X out of 20 correctly.</div>
+                <div class="score-breakdown">
+                    <div class="score-breakdown-item score-correct-item">✅ Correct: <strong id="bd-correct">0</strong></div>
+                    <div class="score-breakdown-item score-wrong-item">❌ Wrong: <strong id="bd-wrong">0</strong></div>
+                </div>
+                <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+                    <button class="btn-primary" onclick="restartQuiz()">↺ New Session</button>
+                    <button class="btn-secondary" onclick="showPage('overview')">📖 Study Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="background:var(--navy);border-top:2px solid #0d3a2f;padding:2rem 1.5rem;text-align:center;font-family:'Sora',sans-serif;">
+        <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0.6rem;">
+            <div style="width:40px;height:40px;background:linear-gradient(135deg,#0d9488,#059669);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:0.25rem;">🎓</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:500;">Made by</div>
+            <a href="https://www.tiktok.com/@samadsaidwhaaat" target="_blank" rel="noopener noreferrer"
+               style="color:#f59e0b;font-size:1rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:0.4rem;">
+                <i class="ph-fill ph-at"></i>samadsaidwhaaat
+            </a>
+            <div style="width:40px;height:1px;background:rgba(255,255,255,0.1);margin:0.25rem 0;"></div>
+            <p style="color:rgba(255,255,255,0.35);font-size:0.72rem;max-width:380px;line-height:1.6;">
+                CT3 Study Guide — HRD Corp Train The Trainer. Based on CT3: Design Competency Based Training Programme.
+            </p>
+            <div style="color:rgba(255,255,255,0.2);font-size:0.68rem;margin-top:0.25rem;">
+                © <span id="footer-year"></span> · All rights reserved
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // PAGE SWITCHING
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('page-' + id).classList.add('active');
+        const tabs = document.querySelectorAll('.nav-tab');
+        const pageMap = { overview:0, objectives:1, content:2, methods:3, review:4, quiz:5 };
+        if (pageMap[id] !== undefined) tabs[pageMap[id]].classList.add('active');
+        window.scrollTo(0, 0);
+        if (id === 'quiz' && shuffledQuestions.length === 0) startQuiz();
+    }
+
+    // ══════════════════════════════════════
+    // QUESTION BANK — 67 questions
+    // ══════════════════════════════════════
+    const ALL_QUESTIONS = [
+        // ── CBT BASICS (12 questions) ──
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'What is Competency-Based Training (CBT)?',
+          opts:['Training based on time spent in class','A training approach focusing on specific skills, knowledge, and behaviours learners must demonstrate to perform effectively','Online training for remote workers only','Training assessed purely by written exams'],
+          ans:1, exp:'CBT focuses on developing specific skills, knowledge, and behaviours (competencies) that learners must demonstrate. The key difference is that learners must SHOW they can do the task — not just attend class.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'What is "training rationale"?',
+          opts:['The budget allocated for training','The duration of the training programme','The reason for organising a training programme','The evaluation method used after training'],
+          ans:2, exp:'Training rationale is the reason of organising a training. It is derived from the training needs analysis and must be identified BEFORE designing the programme.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Training rationale is derived from:',
+          opts:['HR policy documents','The trainer\'s personal experience','The training needs analysis (TNA)','The company\'s annual report'],
+          ans:2, exp:'The training rationale is derived from the training needs analysis that was carried out. TNA is always the starting point for designing a competency-based training programme.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Which statement is NOT a key feature of Competency-Based Training?',
+          opts:['Focus on outcomes — what learners can do','Standards-based with clear criteria','Learners progress after a fixed time period regardless of competence','Assessment-driven through demonstrations or workplace evidence'],
+          ans:2, exp:'In CBT, individual progress means learners move forward once they SHOW competence — NOT after a fixed time period. This is one of the most important distinctions of CBT versus traditional training.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'In CBT, how is success measured?',
+          opts:['By number of hours spent in class','Through demonstrations, assessments, or workplace evidence','By written exam only','By the trainer\'s subjective evaluation'],
+          ans:1, exp:'CBT is assessment-driven — success is measured through concrete demonstrations, formal assessments, or real workplace evidence. This ensures the learner can actually perform, not just theorise.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Workplace standards are designed to ensure:',
+          opts:['Training budgets are controlled','Products, services, and systems are safe, reliable, and consistently perform the quality they are intended to','Trainers are paid fairly','HR departments have less work'],
+          ans:1, exp:'Workplace standards ensure products, services, and systems are safe, reliable, and consistently perform the quality they are intended to. They establish common values that define behaviour, safety, and quality requirements.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'The Occupational Safety and Health Act (OSHA) in Malaysia was enacted in which year?',
+          opts:['1984','1990','1994','2000'],
+          ans:2, exp:'OSHA 1994 — the Occupational Safety and Health Act — is the safety standard referenced for organisations in Malaysia. The Department of Safety and Health (DOSH) works with organisations to maintain safe workplaces.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Which ISO series sets international quality management standards for organisations?',
+          opts:['ISO 14000','ISO 9000','ISO 45001','ISO 31000'],
+          ans:1, exp:'ISO 9000 series stipulates a set of quality standards for an organisation to follow in order to meet International Quality Standards. ISO 14000 is for environmental management.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'A learner-centric training programme focuses on:',
+          opts:['The trainer\'s preferences and teaching style','The content available to be delivered','The needs, abilities, and contexts of the participants','The company\'s budget limitations only'],
+          ans:2, exp:'Learner-centric means training focuses on the PARTICIPANTS — their needs, abilities, and contexts — rather than being driven solely by content or the trainer\'s preferences.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Which is considered a "condition of employment" standard in organisations?',
+          opts:['ISO 9000 quality standard','Professional behaviour standards (Code of Conduct, HR policies)','HACCP food safety standards','OSHA safety regulations only'],
+          ans:1, exp:'Professional behaviour standards — defined by the company Code of Conduct, HR policies, and standard work procedures — are a condition of employment. They ensure a respectful working environment.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Which workplace standard applies to the FOOD INDUSTRY?',
+          opts:['ISO 9000','ISO 14000','HACCP (Hazard Analysis & Critical Control Point)','OSHA 1994'],
+          ans:2, exp:'HACCP (Hazard Analysis & Critical Control Point) is the workplace standard for the food industry. It ensures food products are safe through systematic identification and control of biological, chemical, and physical hazards.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Which workplace standard applies to ENVIRONMENTAL management?',
+          opts:['ISO 9000','ISO 14000','Company Code of Conduct','OSHA 1994'],
+          ans:1, exp:'ISO 14000 is the environmental management standard. ISO 9000 covers quality management. OSHA covers safety.' },
+
+        // ── LEARNING OBJECTIVES (15 questions) ──
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'A learning objective must include which 3 essential components?',
+          opts:['Goals, Timeline, and Resources','Topic, Method, and Assessment','Statement of Performance, Statement of Condition, and Minimum Standard of Performance','Audience, Behaviour, and Context'],
+          ans:2, exp:'All objectives must include: (1) Statement of Performance — what the learner will do, (2) Statement of Condition — under what circumstances, (3) Minimum Standard of Performance — how well they must do it.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Which is an ACTION verb suitable for a learning objective?',
+          opts:['To understand','To be aware of','To know','To demonstrate'],
+          ans:3, exp:'Action verbs (like "to demonstrate") are measurable — you can observe whether someone demonstrated something. Abstract verbs like "to understand", "to know", and "to be aware of" cannot be directly measured or observed.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Which is an ABSTRACT verb that should be AVOIDED in learning objectives?',
+          opts:['To write','To explain','To be familiar with','To define'],
+          ans:2, exp:'"To be familiar with" is abstract — you cannot measure whether someone is "familiar with" something. Action verbs like "to write," "to explain," and "to define" describe observable, measurable behaviours.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'The statement of performance (in a learning objective) should be:',
+          opts:['Vague and open to trainer interpretation','Action-oriented and measurable','Abstract and broadly stated','Based on the trainer\'s subjective judgement'],
+          ans:1, exp:'The statement of performance (target behaviour) must be expressed as verbs that are action-oriented and measurable. This ensures trainers and learners both know exactly what must be demonstrated.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'The "statement of condition" in a learning objective specifies:',
+          opts:['The trainer\'s qualification','The budget for the training','The circumstances under which learners must carry out the performance','The assessment method only'],
+          ans:2, exp:'The conditions part specifies the CIRCUMSTANCES — including range of learning, tools/equipment/clothing, job aids and manuals, environmental conditions, and special physical requirements.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Standards in learning objectives can be divided into 3 categories. Which option lists them correctly?',
+          opts:['Time, Cost, and Quality','Quantity, Quality, and Time','Skills, Knowledge, and Attitude','Input, Process, and Output'],
+          ans:1, exp:'Standards are categorised as: (1) Quantity — how much will the trainee accomplish?, (2) Quality — how well will the trainee perform?, (3) Time — how long to complete the behaviour?' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'What is a Terminal Objective (Learning Objective)?',
+          opts:['The sub-skills needed to meet the learning objective','The overall performance expected at the END of training','The minimum acceptable standard for each enabling objective','The evaluation method used after training'],
+          ans:1, exp:'The Terminal Objective (or Learning Objective) is the final, overall performance the learner must be able to demonstrate at the end of training. Enabling objectives are the sub-skills needed to reach it.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Enabling objectives define:',
+          opts:['The overall purpose of the training programme','The discrete elements of knowledge and skills the learner needs to meet the learning objective','The evaluation criteria for the assessment','The environmental conditions for training delivery'],
+          ans:1, exp:'Enabling objectives define the discrete (specific, individual) elements of knowledge and skills that the learner must acquire in order to meet the learning (terminal) objective.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Bloom\'s Taxonomy was created in which year?',
+          opts:['1945','1950','1956','1963'],
+          ans:2, exp:'Bloom\'s Taxonomy was created in 1956 under the leadership of educational psychologist Dr Benjamin Bloom. It was revised in 2001. It categorises thinking skills from lowest (Remember) to highest (Create).' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'What are the 3 learning domains in Bloom\'s Taxonomy?',
+          opts:['Cognitive, Affective, and Psychomotor','Knowledge, Skills, and Environment','Thinking, Feeling, and Acting (TFA)','Analytical, Creative, and Evaluative'],
+          ans:0, exp:'Bloom\'s Taxonomy has 3 learning domains: Cognitive (mental skills/Knowledge), Affective (feelings/emotional growth/Attitude), and Psychomotor (manual/physical skills/Skills). Also referred to as KSA.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Arrange Bloom\'s 6 cognitive levels from LOWEST to HIGHEST:',
+          opts:['Apply → Understand → Remember → Analyse → Evaluate → Create','Remember → Understand → Apply → Analyse → Evaluate → Create','Remember → Apply → Understand → Create → Evaluate → Analyse','Understand → Remember → Apply → Analyse → Create → Evaluate'],
+          ans:1, exp:'Bloom\'s levels from lowest to highest cognitive skill: Remember → Understand → Apply → Analyse → Evaluate → Create. Remember is basic recall; Create is the highest order — making something new.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Which level of Bloom\'s Taxonomy involves "combining parts to make a new whole"?',
+          opts:['Evaluate','Analyse','Apply','Create'],
+          ans:3, exp:'Create (Synthesis/Creating) is the highest level of Bloom\'s Taxonomy — it involves combining parts to make a new whole. Example verbs: construct, design, formulate, organise, synthesize.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'When writing learning objectives, each objective should have:',
+          opts:['Multiple action verbs for thoroughness','One measurable verb per objective','At least two verbs per condition','Abstract verbs to cover broad outcomes'],
+          ans:1, exp:'One measurable verb per objective. If an objective has two verbs (e.g., define AND apply), what happens if a learner can define but not apply? Mastery becomes ambiguous. One verb per objective keeps it assessable.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'The two key questions to identify enabling objectives are:',
+          opts:['"Who is teaching this?" and "What resources are needed?"','"Why do learners need to be able to do that?" and "What do learners need to know to be able to do that?"','"How long will training take?" and "What is the assessment method?"','"What is the budget?" and "Who is the trainer?"'],
+          ans:1, exp:'To identify enabling objectives, ask: (1) Why do learners need to be able to do that? — to understand the purpose, and (2) What do learners need to know to be able to do that? — to unpack the sub-skills.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'In Example 1: "Write a customer reply letter with no spelling mistakes by using MS Word" — what component is "using MS Word"?',
+          opts:['Performance','Standard','Condition','Enabling objective'],
+          ans:2, exp:'"Using MS Word" is the Condition — it specifies the tool/circumstance under which the performance must occur. "Write a customer reply letter" = Performance. "With no spelling mistakes" = Standard.' },
+
+        // ── TRAINING CONTENT (13 questions) ──
+        { cat:'content', catLabel:'Training Content',
+          q:'A training plan is also known as:',
+          opts:['Annual training calendar','Teaching plan or session plan','Competency framework document','Skills gap report'],
+          ans:1, exp:'A training plan is also known as a teaching plan or session plan. It is an overview/outline of how training will be implemented, containing the programme flow, content, objectives, duration, assessment, and resources.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Training topics are also known as:',
+          opts:['Learning outcomes','Enabling objectives','Modules','Competency units'],
+          ans:2, exp:'Training topics are also known as Modules. They are part of the enabling objectives — each topic lists the knowledge and skills needed to meet the enabling objectives.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Which sequencing method orders training topics by relative importance — most critical first?',
+          opts:['Simple to Complex','Known to Unknown','Job Performance Order','Critical Sequence'],
+          ans:3, exp:'Critical Sequence orders objectives by their relative importance. The most critical content comes first. Compare to Simple to Complex (by difficulty) or Job Performance Order (mirrors the job sequence).' },
+        { cat:'content', catLabel:'Training Content',
+          q:'The "Dependent Relationship" sequencing method means:',
+          opts:['The learning sequence follows the job sequence','Mastery of one objective requires prior mastery of another','Topics move from simple to complex','Learning is sequenced from familiar to unfamiliar'],
+          ans:1, exp:'Dependent Relationship: mastery of one objective requires prior mastery of another. For example, you must learn to use an oven (EO1) before you can bake a cake (the terminal objective).' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Gagné\'s Nine Events of Instruction was designed to:',
+          opts:['Replace the ADDIE model entirely','Structure learning in systematic steps aligned with how the brain processes information','Create a schedule for online training only','Evaluate the trainer\'s delivery performance'],
+          ans:1, exp:'Robert Gagné proposed that learning happens in systematic steps, each aligning with how the brain processes information. His 9 Events provide a structured sequence from initial engagement to long-term retention and application.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'What is the FIRST event in Gagné\'s Nine Events of Instruction?',
+          opts:['Inform Learners of Objectives','Stimulate Recall of Prior Learning','Gain Attention','Present the Content'],
+          ans:2, exp:'Gain Attention (Reception) is the first event. Learners must first focus — without attention, no learning happens. Methods: icebreakers, a problem scenario, visuals, or a thought-provoking question.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Gagné\'s 5th event is "Provide Learning Guidance." What does this involve?',
+          opts:['Delivering the final assessment','Offering strategies using job aids, frameworks, mnemonics, or visual diagrams','Giving learners physical resource packs only','Enrolling learners for the next module'],
+          ans:1, exp:'Event 5 — Provide Learning Guidance (Semantic Encoding) — offers strategies to help learners understand and organise the content. Tools: job aids, frameworks, case studies, mnemonics, visual diagrams.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'The 3 objectives of conducting assessment (beyond measuring performance) are:',
+          opts:['Motivation, Reward, and Punishment','Compliance, Reporting, and Filing','Selection, Programme Evaluation, and Instructional Improvement','Grading, Ranking, and Certifying'],
+          ans:2, exp:'3 objectives: (1) Selection — tests to select candidates for hiring/promotion, (2) Programme Evaluation — determine quality of learning and impact on work, (3) Instructional Improvement — improve training quality.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Performance assessment measures:',
+          opts:['Written knowledge only','Actual performance or job skills using observation method','Time management and punctuality scores','Classroom participation only'],
+          ans:1, exp:'Performance assessment measures actual performance or job skills using the observation method. It measures psychomotor skills like typing, repairing, or troubleshooting technical equipment.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Training duration should ideally be:',
+          opts:['Always 2 days for any programme','No longer than what is necessary to cover the objectives','Set by HRD Corp regardless of content','Determined only by participant availability'],
+          ans:1, exp:'Training duration should not be more than what is necessary to cover the objectives. It determines the training materials and content volume.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'The key question a trainer asks when determining training content is:',
+          opts:['"How much will this cost?"','"What information does the learner need to perform the desired task?"','"How many participants can attend?"','"What training method is most popular right now?"'],
+          ans:1, exp:'"What information does the learner need to have to perform the desired task?" — this question keeps training content focused on job performance and prevents unnecessary content from being added.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Gagné\'s 9th event, "Enhance Retention and Transfer," is best implemented by:',
+          opts:['Repeating the lecture content a second time','Providing action plans, job aids, follow-up coaching, or workplace assignments','Conducting a final written exam','Issuing certificates of completion'],
+          ans:1, exp:'Event 9 — Enhance Retention and Transfer (Generalisation) — ensures learners can apply what they learned beyond the classroom. Methods: action plans, job aids, follow-up coaching, workplace assignments.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Which of these is listed as an example training resource?',
+          opts:['Employee performance review forms','HR policies and procedures manuals','Projector, flip chart, and whiteboard','Annual training plans'],
+          ans:2, exp:'Training resources include: training video, music, speaker, projector, projector screen, computer, remote control, flip chart, whiteboard, PA system, marker pens, stationery, and training games.' },
+
+        // ── TRAINING METHODS (13 questions) ──
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Action Learning differs from a standard assignment because:',
+          opts:['It uses a textbook and classroom only','Learners apply the learning model to solve real work challenges, with a coach facilitating','It focuses on memorising facts','It is only for senior management'],
+          ans:1, exp:'Action Learning: the learner applies the learning model to solve work-related challenges. A coach acts as facilitator and resource person. It\'s more than just an assignment — it\'s real-world problem solving with coaching support.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Brainstorming is best described as:',
+          opts:['Structured debate between two competing teams','A method of listing creative ideas about a single topic, where all ideas are shared openly before arriving at the best option','A teacher-led lecture with Q&A session','An individual reflection exercise'],
+          ans:1, exp:'Brainstorming: members openly share ideas, views, thoughts, and solutions before arriving at the best idea/option. The key is that ALL ideas are listed first — no filtering or criticism during the generation phase.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'In a Case Study, learners are asked to:',
+          opts:['Watch a demonstration video and copy it','Read theory from a textbook independently','Act out roles in a written situation/scenario and solve problems','Create their own training content'],
+          ans:2, exp:'Case Study: a written description of a situation/scenario is presented to a group who are requested to act out roles/characters and solve problems. It develops critical thinking and problem-solving in a real-world context.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'The Conference Method involves:',
+          opts:['An online webinar with unlimited participants','A group of 12–20 people sharing ideas, examining facts, testing assumptions, and drawing conclusions through open discussion','A one-on-one coaching session','A management presentation to shareholders'],
+          ans:1, exp:'Conference Method: 12–20 people share ideas, examine facts, test assumptions, and draw conclusions through open discussion, with acceptance of conclusions by all. Smaller and more focused than a lecture.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'The Mirroring Technique involves:',
+          opts:['Learners watching a video and summarising it','The learner copying the teacher to learn a skill, such as dancing, tae-kwondo, singing, or cooking','A group discussion using reflective questions','Pair work where each person gives feedback to the other'],
+          ans:1, exp:'Mirroring Technique: the learner copies the "teacher" to learn the skill — examples include dancing, tae-kwondo, singing, cooking, etc. It\'s ideal for psychomotor/physical skill development.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'"Sitting Next to Nellie" is a training method where:',
+          opts:['Learners attend classroom instruction from an expert trainer','A new learner is placed with an experienced colleague to observe and learn work activities (job shadowing)','Groups of learners sit together and solve problems','Learners complete self-directed online modules independently'],
+          ans:1, exp:'Sitting Next to Nellie: the new learner is placed with an experienced leader to observe what he/she is doing at work. Job shadowing is the best example. It\'s practical, cheap, and contextual.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'What is the primary purpose of an Ice Breaker?',
+          opts:['To introduce the main content of the training','To conduct the pre-test assessment','To break down barriers among members in an unknown group','To replace the energiser activity'],
+          ans:2, exp:'Ice Breaker: an exercise used to help break down barriers among members of an unknown group. The objective is to help everyone learn together quickly, comfortably, and easily. It creates a safe learning environment.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'A Simulation Exercise is used to:',
+          opts:['Assess theoretical knowledge only through a written test','Demonstrate a specific skill in a real-world, controlled environment','Replace all other forms of training','Manage large group discussions only'],
+          ans:1, exp:'Simulation Exercise: learning takes place by demonstrating a specific skill in a real-world, controlled environment. Example: conducting a helicopter rescue in a swimming pool for safety training.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'A Triad involves:',
+          opts:['Three trainers delivering content simultaneously','A group of three where one observes while the other two discuss a topic for a specific duration','Three written assignments submitted over three weeks','A group of three learners taking turns to present'],
+          ans:1, exp:'Triad: learners are formed into groups of three. A and B discuss a topic; C acts as observer and provides comments on the discussion for learning purposes. It develops communication, listening, and feedback skills.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Management Games/Business Games are best used to develop:',
+          opts:['Technical/procedural skills','Language proficiency','Decision-making in a game environment requiring actions within a group context','Safety compliance knowledge only'],
+          ans:2, exp:'Business Games: learners are given a business challenge in a game environment requiring actions and decisions from every person in the group. They can be good or bad choices, with debrief and sharing after.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Kahoot! is best used in training for:',
+          opts:['Creating professional presentation slides','Running live polls, Q&A, and word clouds','Game-based quizzes, knowledge checks, and energisers','Digital collaboration boards for brainstorming'],
+          ans:2, exp:'Kahoot! is a game-based learning platform. Trainers can create quizzes, polls, and challenges to make learning interactive and fun. Great for energisers, knowledge checks, and assessments.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Which online tool allows learners to post ideas on a shared digital "wall"?',
+          opts:['Kahoot!','Quizizz','Padlet','Slido'],
+          ans:2, exp:'Padlet is a digital collaboration board. Learners can post ideas, questions, or reflections on a shared "wall." It\'s useful for brainstorming, group work, and collecting feedback.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'A "Buzz Group" is best described as:',
+          opts:['An online live webinar with polling','Each small group discusses a topic and a selected representative presents the group\'s consensus to the class','A rapid-fire Q&A between the trainer and all learners','An individual presentation by each learner'],
+          ans:1, exp:'Buzz Group: each small group is given a topic to discuss. The consensus of the group\'s views is then presented to the class by a selected representative. It encourages participation from quieter members.' },
+
+        // ── REVIEW DESIGN (9 questions) ──
+        { cat:'review', catLabel:'Review Design',
+          q:'After completing training design, it should be reviewed with:',
+          opts:['Only the training participants','The business unit manager and subject matter experts','The finance department only','External training consultants only'],
+          ans:1, exp:'Training design should be reviewed with the business unit manager and subject matter experts to validate that all important areas of learning have been included BEFORE training delivery.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'The goal of gathering feedback on training design (before delivery) is to:',
+          opts:['Rank trainers by performance','Ensure training will meet objectives PRIOR to delivery','Reduce the training budget','Create the Annual Training Plan'],
+          ans:1, exp:'The goal of gathering feedback is to ensure that your training will meet your training objectives prior to training. It\'s a quality control check before delivery, not after.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'Which question belongs in the "Review Training Content and Sequence" checklist?',
+          opts:['"What is the trainer\'s salary?"','"Is there a smooth flow from one chapter to the next?"','"How much does the venue cost?"','"Has management approved the budget?"'],
+          ans:1, exp:'"Is there a smooth flow from one chapter to the next?" is one of 8 review questions for training content and sequence. It checks the logical progression of the training to ensure smooth learning.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'The Training Design Corrective Action Process BEGINS with:',
+          opts:['Implementing the solution','Identifying the root cause','Identifying the problem','Assessing the solution'],
+          ans:2, exp:'The corrective action process starts with: Step 1 — Identify the Problem. Then: Step 2 — Identify Root Cause → Step 3 — Develop Solution → Step 4 — Implement Solution → Step 5 — Assess Solution.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'After identifying the root cause in the corrective action process, the NEXT step is:',
+          opts:['Assess the solution','Implement the solution','Develop a solution to the problem','Document the problem in the report'],
+          ans:2, exp:'Step 3 is Develop a Solution to the Problem. The full sequence: Identify Problem → Identify Root Cause → Develop Solution → Implement Solution → Assess Solution.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'Which of the following is a feedback gathering question for training design review?',
+          opts:['"Who is the highest paid trainer?"','"Will your training programme drive the business results desired by your client?"','"What is the cost per participant?"','"How many days is the training??"'],
+          ans:1, exp:'"Will your training programme drive the business results desired by your client?" is one of 7 feedback questions. It ensures the training design is truly aligned with business outcomes — not just learning outcomes.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'Reviewing training design BEFORE delivery ensures:',
+          opts:['Trainers are evaluated fairly','All important areas of learning are included','Participants receive their certificates early','Training is approved by the government'],
+          ans:1, exp:'Reviewing training design before delivery is a quality control check to validate that all important areas of learning have been included. Bugs found before delivery are much cheaper to fix than after.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'The corrective action process ENDS with:',
+          opts:['Identifying the root cause','Implementing the solution','Assessing the solution','Developing the solution'],
+          ans:2, exp:'Step 5 — Assess the Solution — is the final step. After implementing the corrective action, you must assess whether the solution actually resolved the problem and improved training quality.' },
+        { cat:'review', catLabel:'Review Design',
+          q:'One of the 8 "Review Training Content" questions asks:',
+          opts:['"Have you tried the training activities?"','"What is the trainer\'s fee?"','"How many slides are in the presentation?"','"Is the venue large enough?"'],
+          ans:0, exp:'"Have you tried the training activities?" is one of the 8 content review questions. It ensures that activities have been tested for practicality and relevance before being delivered to participants.' },
+
+        // ── MIXED / CROSS-TOPIC (5 questions) ──
+        { cat:'content', catLabel:'Training Content',
+          q:'Bloom\'s Taxonomy verbs for the "Apply/Applying" level include:',
+          opts:['Define, list, recognize','Characterize, describe, explain','Choose, demonstrate, implement, perform','Analyze, categorize, compare, differentiate'],
+          ans:2, exp:'Application/Applying level verbs include: choose, demonstrate, implement, perform. They require the learner to USE knowledge in a new situation — not just recall or understand it.' },
+        { cat:'content', catLabel:'Training Content',
+          q:'Bloom\'s Taxonomy verbs for the "Evaluate/Evaluating" level include:',
+          opts:['Define, list, recognize','Assess, critique, evaluate, rank, rate','Construct, design, formulate, organise','Choose, demonstrate, implement'],
+          ans:1, exp:'Evaluation/Evaluating level verbs include: assess, critique, evaluate, rank, rate. This level involves judging the value of ideas or materials — higher order than Analysis.' },
+        { cat:'objectives', catLabel:'Learning Objectives',
+          q:'Writing "to IDENTIFY key principles of diversity" versus "to APPLY key principles of diversity" makes what key difference?',
+          opts:['No significant difference — both require the same training design','"Identify" requires only learning about principles; "Apply" requires using them to solve problems — making the training content significantly different','"Identify" is a higher-order verb than "Apply"','Both are abstract verbs and should be avoided'],
+          ans:1, exp:'The performance verb drives all training design. "Identify" = learners learn about principles (lower order). "Apply" = learners use principles to solve problems (higher order). The content designed for each is very different.' },
+        { cat:'cbt', catLabel:'CBT Basics',
+          q:'Designing CBT BEGINS with:',
+          opts:['Selecting training methods','Identifying the specific competencies required for effective job performance','Writing the training plan','Booking the training venue'],
+          ans:1, exp:'Designing CBT begins with identifying the specific competencies required for effective job performance — the knowledge, skills, and behaviours aligned with industry or organisational standards.' },
+        { cat:'methods', catLabel:'Training Methods',
+          q:'Quizizz differs from Kahoot! in which key way?',
+          opts:['Quizizz is only for children; Kahoot! is for adults','Quizizz allows self-paced learning, homework assignments, and detailed reports — great for reinforcement','Quizizz has no gamification features','Quizizz can only be used for written exams'],
+          ans:1, exp:'Quizizz is an interactive quiz and gamification platform. Similar to Kahoot! but allows SELF-PACED learning, homework assignments, and detailed reports. Great for knowledge reinforcement outside class time.' }
+    ];
+
+    // ══════════════════════════════════════
+    // QUIZ STATE
+    // ══════════════════════════════════════
+    const QUESTIONS_PER_SESSION = 20;
+    let currentCategory = 'all';
+    let shuffledQuestions = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let answeredCount = 0;
+    let answered = false;
+
+    function selectCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        restartQuiz();
+    }
+
+    function shuffleArray(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function startQuiz() {
+        const pool = currentCategory === 'all'
+            ? ALL_QUESTIONS
+            : ALL_QUESTIONS.filter(q => q.cat === currentCategory);
+        shuffledQuestions = shuffleArray(pool).slice(0, QUESTIONS_PER_SESSION);
+        currentIndex = 0; correctCount = 0; answeredCount = 0;
+        document.getElementById('stat-score').textContent = '0';
+        document.getElementById('score-display').textContent = 'Score: 0/0';
+        document.getElementById('score-card').classList.remove('show');
+        document.getElementById('question-card').style.display = '';
+        document.querySelector('.quiz-nav').style.display = '';
+        renderQuestion();
+    }
+
+    function restartQuiz() {
+        startQuiz();
+    }
+
+    function renderQuestion() {
+        answered = false;
+        const q = shuffledQuestions[currentIndex];
+        const total = shuffledQuestions.length;
+        const progress = ((currentIndex) / total) * 100;
+
+        document.getElementById('progress-bar').style.width = progress + '%';
+        document.getElementById('question-counter').textContent = `Question ${currentIndex + 1} of ${total}`;
+        document.getElementById('question-cat-label').textContent = q.catLabel;
+        document.getElementById('question-text').textContent = q.q;
+
+        // Shuffle options
+        const letters = ['A', 'B', 'C', 'D'];
+        const indexed = q.opts.map((text, i) => ({ text, origIdx: i }));
+        const shuffledOpts = shuffleArray(indexed);
+        const newCorrectIdx = shuffledOpts.findIndex(o => o.origIdx === q.ans);
+
+        const optContainer = document.getElementById('options-container');
+        optContainer.innerHTML = '';
+        shuffledOpts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+            btn.onclick = () => selectAnswer(i, newCorrectIdx, btn, optContainer, q.exp);
+            optContainer.appendChild(btn);
+        });
+
+        const fb = document.getElementById('feedback-box');
+        fb.className = 'feedback-box';
+        fb.textContent = '';
+        document.getElementById('next-btn').disabled = true;
+        document.getElementById('next-btn').innerHTML = 'Next <i class="ph-bold ph-arrow-right"></i>';
+    }
+
+    function selectAnswer(selected, correct, clickedBtn, container, explanation) {
+        if (answered) return;
+        answered = true;
+        answeredCount++;
+
+        container.querySelectorAll('.option-btn').forEach((btn, i) => {
+            btn.disabled = true;
+            if (i === correct) btn.classList.add('correct');
+            else if (i === selected) btn.classList.add('wrong');
+            else btn.classList.add('disabled-neutral');
+        });
+
+        const fb = document.getElementById('feedback-box');
+        if (selected === correct) {
+            correctCount++;
+            fb.className = 'feedback-box correct-fb show';
+            fb.innerHTML = `<strong>✅ Correct!</strong> ${explanation}`;
+        } else {
+            fb.className = 'feedback-box wrong-fb show';
+            fb.innerHTML = `<strong>❌ Not quite.</strong> ${explanation}`;
+        }
+
+        document.getElementById('stat-score').textContent = correctCount;
+        document.getElementById('score-display').textContent = `Score: ${correctCount}/${answeredCount}`;
+        document.getElementById('next-btn').disabled = false;
+
+        if (currentIndex === shuffledQuestions.length - 1) {
+            document.getElementById('next-btn').innerHTML = 'See Results <i class="ph-bold ph-flag-checkered"></i>';
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex >= shuffledQuestions.length) showFinalScore();
+        else renderQuestion();
+    }
+
+    function showFinalScore() {
+        document.getElementById('question-card').style.display = 'none';
+        document.querySelector('.quiz-nav').style.display = 'none';
+
+        const total = shuffledQuestions.length;
+        const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+        document.getElementById('final-score-num').textContent = pct + '%';
+        document.getElementById('bd-correct').textContent = correctCount;
+        document.getElementById('bd-wrong').textContent = total - correctCount;
+        document.getElementById('score-sub').textContent = `You answered ${correctCount} out of ${total} correctly.`;
+
+        const circle = document.getElementById('score-circle');
+        const msg = document.getElementById('score-message');
+        circle.className = 'score-circle';
+
+        if (pct >= 80) {
+            circle.classList.add('score-pass');
+            msg.textContent = '🎉 Excellent! Ready for the exam!';
+        } else if (pct >= 60) {
+            circle.classList.add('score-mid');
+            msg.textContent = '💪 Good effort! Review the weak areas.';
+        } else {
+            circle.classList.add('score-fail');
+            msg.textContent = '📚 Keep studying — you\'ll get there!';
+        }
+
+        document.getElementById('progress-bar').style.width = '100%';
+        document.getElementById('score-card').classList.add('show');
+    }
+    </script>
+
+</body>
+</html>

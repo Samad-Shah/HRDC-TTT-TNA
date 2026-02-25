@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTT Study Hub — Train The Trainer</title>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --navy: #0f1e3d;
+            --navy-mid: #1a2f5a;
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --accent: #f59e0b;
+            --accent-bright: #fbbf24;
+            --teal: #0d9488;
+            --emerald: #059669;
+            --slate: #64748b;
+            --slate-light: #f1f5f9;
+            --white: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --radius: 20px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Sora', sans-serif;
+            background: #f0f4ff;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--navy);
+            border-bottom: 2px solid var(--blue);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            min-height: 60px;
+        }
+        .nav-brand {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-brand span { color: var(--accent); }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 55%, #1e3a8a 100%);
+            color: var(--white);
+            padding: 5rem 1.5rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 15% 60%, rgba(37,99,235,0.35) 0%, transparent 50%),
+                radial-gradient(circle at 85% 25%, rgba(245,158,11,0.18) 0%, transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(13,148,136,0.15) 0%, transparent 40%);
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.4);
+            color: var(--accent-bright);
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.03em;
+        }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+        .hero h1 em { color: var(--accent); font-style: italic; }
+        .hero p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.72);
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.65;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 0.6rem 1.2rem;
+            text-align: center;
+        }
+        .hero-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .hero-stat-label { font-size: 0.68rem; color: rgba(255,255,255,0.55); margin-top: 0.1rem; }
+
+        /* CARDS SECTION */
+        .content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem 5rem;
+        }
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 0.4rem;
+            text-align: center;
+        }
+        .section-sub {
+            text-align: center;
+            color: var(--slate);
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* MODULE CARDS */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .module-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1.5px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04), 0 8px 30px rgba(0,0,0,0.03);
+            transition: transform 0.25s, box-shadow 0.25s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(37,99,235,0.12), 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .module-header {
+            padding: 1.75rem 1.75rem 1rem;
+            position: relative;
+        }
+        .module-tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.22rem 0.65rem;
+            border-radius: 999px;
+            margin-bottom: 1rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .module-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .module-card h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.45rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .module-card p {
+            font-size: 0.82rem;
+            color: var(--slate);
+            line-height: 1.6;
+        }
+        .module-body {
+            padding: 0 1.75rem 1.75rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .module-topics {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+        .module-topics li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            color: #374151;
+            padding: 0.38rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .module-topics li:last-child { border-bottom: none; }
+        .topic-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            margin-top: 0.38rem;
+            flex-shrink: 0;
+        }
+        .module-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.75rem;
+            border-top: 1px solid var(--border);
+            background: #f8fafc;
+        }
+        .module-cta {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .module-quiz-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--slate);
+        }
+
+        /* CT2 accent */
+        .ct2-tag { background: #eff6ff; color: var(--blue); }
+        .ct2-icon { background: linear-gradient(135deg, #2563eb, #6366f1); }
+        .ct2-dot { background: var(--blue); }
+        .ct2-cta { color: var(--blue); }
+        .ct2-card { border-color: rgba(37,99,235,0.25); }
+        .ct2-card:hover { border-color: var(--blue); }
+
+        /* CT3 accent */
+        .ct3-tag { background: #f0fdfa; color: var(--teal); }
+        .ct3-icon { background: linear-gradient(135deg, #0d9488, #059669); }
+        .ct3-dot { background: var(--teal); }
+        .ct3-cta { color: var(--teal); }
+        .ct3-card { border-color: rgba(13,148,136,0.25); }
+        .ct3-card:hover { border-color: var(--teal); }
+
+        /* HOW TO USE */
+        .how-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .how-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.25rem;
+            color: var(--navy);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .how-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        .how-num {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .how-text h4 { font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
+        .how-text p { font-size: 0.72rem; color: var(--slate); line-height: 1.4; }
+
+        /* FOOTER */
+        footer {
+            background: var(--navy);
+            border-top: 2px solid #1e3a8a;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .modules-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">
+            <i class="ph-fill ph-graduation-cap" style="font-size:1.2rem"></i>
+            TTT <span>Study Hub</span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <i class="ph-fill ph-certificate"></i>
+                HRD Corp · Train The Trainer Programme
+            </div>
+            <h1>Your <em>TTT</em><br>Study Hub</h1>
+            <p>Interactive study guides and quizzes for the HRD Corp Train The Trainer certification. Select a module below to start studying.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-num">2</div>
+                    <div class="hero-stat-label">Modules</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">125+</div>
+                    <div class="hero-stat-label">Quiz Questions</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">40</div>
+                    <div class="hero-stat-label">Per Session</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="section-title">Choose Your Module</div>
+        <div class="section-sub">Each module includes a full study guide and a randomised 20-question quiz session</div>
+
+        <div class="modules-grid">
+
+            <!-- CT2 Card -->
+            <a href="ct2.html" class="module-card ct2-card">
+                <div class="module-header">
+                    <span class="module-tag ct2-tag">CT 2</span>
+                    <div class="module-icon ct2-icon">🔍</div>
+                    <h2>Conduct Training Needs Analysis</h2>
+                    <p>Identify performance gaps, select analysis methods, and build a solid TNA report.</p>
+                </div>
+                <div class="module-body">
+                    <ul class="module-topics">
+                        <li><span class="topic-dot ct2-dot"></span>What is TNA & Training Needs Assessment</li>
+                        <li><span class="topic-dot ct2-dot"></span>3 Levels of TNA (Org, Dept, Individual)</li>
+                        <li><span class="topic-dot ct2-dot"></span>Data Collection Methods (Interviews, Surveys…)</li>
+                        <li><span class="topic-dot ct2-dot"></span>Gilbert's Human Performance Model</li>
+                        <li><span class="topic-dot ct2-dot"></span>TNA Outcomes & Training Types</li>
+                    </ul>
+                </div>
+                <div class="module-footer">
+                    <div class="module-cta ct2-cta">
+                        <i class="ph-bold ph-arrow-right"></i> Open Module
+                    </div>
+                    <div class="module-quiz-badge">
+                        <i class="ph-fill ph-question"></i> 60+ questions
+                    </div>
+                </div>
+            </a>
+
+            <!-- CT3 Card -->
+            <a href="ct3.html" class="module-card ct3-card">
+                <div class="module-header">
+                    <span class="module-tag ct3-tag">CT 3</span>
+                    <div class="module-icon ct3-icon">✏️</div>
+                    <h2>Design Competency Based Training</h2>
+                    <p>Write learning objectives, structure training content, select methods, and review your design.</p>
+                </div>
+                <div class="module-body">
+                    <ul class="module-topics">
+                        <li><span class="topic-dot ct3-dot"></span>Competency-Based Training Fundamentals</li>
+                        <li><span class="topic-dot ct3-dot"></span>Learning Objectives & Bloom's Taxonomy</li>
+                        <li><span class="topic-dot ct3-dot"></span>Training Content & Gagné's 9 Events</li>
+                        <li><span class="topic-dot ct3-dot"></span>22 Training Methods + Online Tools</li>
+                        <li><span class="topic-dot ct3-dot"></span>Review & Quality Check Training Design</li>
+                    </ul>
+                </div>
+                <div class="module-footer">
+                    <div class="module-cta ct3-cta">
+                        <i class="ph-bold ph-arrow-right"></i> Open Module
+                    </div>
+                    <div class="module-quiz-badge">
+                        <i class="ph-fill ph-question"></i> 67+ questions
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- How to use -->
+        <div class="how-section">
+            <div class="how-title"><i class="ph-fill ph-info" style="color:var(--blue)"></i> How to Use This Hub</div>
+            <div class="how-grid">
+                <div class="how-step">
+                    <div class="how-num">1</div>
+                    <div class="how-text">
+                        <h4>Pick a Module</h4>
+                        <p>Choose CT2 or CT3 based on what you need to study</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">2</div>
+                    <div class="how-text">
+                        <h4>Read the Guide</h4>
+                        <p>Use the tabbed study guide to review key concepts</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">3</div>
+                    <div class="how-text">
+                        <h4>Take the Quiz</h4>
+                        <p>20 randomised questions per session from a 60+ pool</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">4</div>
+                    <div class="how-text">
+                        <h4>Check Your Score</h4>
+                        <p>Instant feedback on every answer with explanations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div style="max-width:700px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0.6rem;">
+            <div style="width:40px;height:40px;background:linear-gradient(135deg,#2563eb,#6366f1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:0.25rem;">🎓</div>
+            <div style="color:rgba(255,255,255,0.45);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:500;">Made by</div>
+            <a href="https://www.tiktok.com/@samadsaidwhaaat" target="_blank" rel="noopener noreferrer"
+               style="color:#f59e0b;font-size:1rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:0.4rem;">
+                <i class="ph-fill ph-at"></i>samadsaidwhaaat
+            </a>
+            <p style="color:rgba(255,255,255,0.3);font-size:0.72rem;max-width:420px;line-height:1.6;text-align:center;margin-top:0.25rem;">
+                TTT Study Hub — built for the HRD Corp Train The Trainer assessment.
+            </p>
+            <div style="color:rgba(255,255,255,0.2);font-size:0.68rem;margin-top:0.25rem;">
+                © <script>document.write(new Date().getFullYear())</script> · All rights reserved
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
