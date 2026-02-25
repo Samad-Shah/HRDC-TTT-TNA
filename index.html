@@ -1106,6 +1106,25 @@
         }
 
         .quiz-live { animation: pulse-ring 2s infinite; }
+
+        /* ── MODAL OVERLAY ── */
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,20,50,0.65);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+        .modal-overlay.open{display:flex}
+        .modal-box{background:var(--white);border-radius:var(--radius);max-width:660px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.3);animation:modal-in 0.22s ease}
+        @keyframes modal-in{from{opacity:0;transform:scale(0.94) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:1}
+        .modal-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy)}
+        .modal-subtitle{font-size:0.75rem;color:var(--slate);margin-top:0.2rem}
+        .modal-close{background:#f1f5f9;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s}
+        .modal-close:hover{background:#e2e8f0}
+        .modal-body{padding:1.25rem 1.5rem 1.5rem}
+        .hpt-box-btn{cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative}
+        .hpt-box-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.12)}
+        .hpt-box-btn::after{content:'👆 tap for details';position:absolute;bottom:0.45rem;right:0.55rem;font-size:0.58rem;color:rgba(0,0,0,0.28);font-style:italic}
+        .modal-tag{display:inline-block;font-size:0.7rem;font-weight:600;padding:0.2rem 0.55rem;border-radius:20px;margin:0.15rem}
+        .modal-section-head{font-weight:700;font-size:0.82rem;color:var(--navy);margin:0.9rem 0 0.45rem;text-transform:uppercase;letter-spacing:0.04em}
+        .modal-item{display:flex;gap:0.5rem;align-items:flex-start;margin-bottom:0.35rem;font-size:0.79rem;color:var(--slate);line-height:1.5}
+        .modal-item::before{content:'→';font-weight:700;color:var(--accent);flex-shrink:0;margin-top:0.05rem}
     </style>
 </head>
 <body>
@@ -1119,6 +1138,7 @@
             <button class="nav-tab" onclick="showPage('methods')">Data Methods</button>
             <button class="nav-tab" onclick="showPage('models')">Models</button>
             <button class="nav-tab" onclick="showPage('outcomes')">Outcomes</button>
+            <button class="nav-tab" onclick="showPage('devsolutions')">Dev Solutions</button>
             <button class="nav-tab quiz-live" onclick="showPage('quiz')">🎯 Quiz</button>
         </div>
     </nav>
@@ -1198,24 +1218,44 @@
 
             <!-- Benefits of TNA -->
             <div class="section">
-                <div class="section-title"><i class="ph-fill ph-star" style="color:var(--accent)"></i> Why Do a TNA?</div>
-                <div class="section-subtitle">8 key benefits to remember</div>
-                <div class="grid-2">
-                    <div class="card" style="padding:1rem">
-                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">①</span><div><strong>Aligns training with business goals</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">②</span><div><strong>Identifies performance gaps</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">③</span><div><strong>Designs relevant training programs</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--blue);font-size:1rem">④</span><div><strong>Efficient use of resources</strong></div></li>
-                        </ul>
+                <div class="section-title"><i class="ph-fill ph-star" style="color:var(--accent)"></i> Why Do a TNA? — 9 Key Applications</div>
+                <div class="section-subtitle">Benefits of conducting a Training Needs Assessment before embarking on any training program</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid var(--blue)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--blue);margin-bottom:0.2rem">① Align with Business Goals</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Ensures training directly supports organisational strategy, mission, and KPIs. Example: if company aims to improve customer satisfaction, TNA identifies the need for customer service training.</p>
                     </div>
-                    <div class="card" style="padding:1rem">
-                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem">
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑤</span><div><strong>Supports employee development</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑥</span><div><strong>Change management & adaptation</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑦</span><div><strong>Compliance & risk management</strong></div></li>
-                            <li style="font-size:0.82rem;display:flex;gap:0.5rem;align-items:flex-start"><span style="color:var(--teal);font-size:1rem">⑧</span><div><strong>Improves engagement & retention</strong></div></li>
-                        </ul>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid var(--teal)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--teal);margin-bottom:0.2rem">② Identify Performance Gaps</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Distinguishes training-related issues (skill/knowledge gaps) from non-training issues (lack of resources, unclear processes, motivation problems).</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid #db2777">
+                        <div style="font-weight:700;font-size:0.78rem;color:#db2777;margin-bottom:0.2rem">③ Design Relevant Training</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Provides a foundation for developing practical, targeted, job-specific content. Avoids generic "one-size-fits-all" training by tailoring solutions to actual needs.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid #d97706">
+                        <div style="font-weight:700;font-size:0.78rem;color:#d97706;margin-bottom:0.2rem">④ Efficient Use of Resources</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Prevents wasted investment in unnecessary or misaligned training. Ensures training budgets are spent where they add the most value.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid #7c3aed">
+                        <div style="font-weight:700;font-size:0.78rem;color:#7c3aed;margin-bottom:0.2rem">⑤ Employee Development &amp; Career</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Identifies skill gaps for promotions, succession planning, and career pathways. Encourages a culture of continuous learning.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid var(--emerald)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--emerald);margin-bottom:0.2rem">⑥ Change Management</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Helps employees adapt to new systems, technology, or business processes. Example: Before implementing a new ERP system, TNA identifies training required for smooth adoption.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid #e11d48">
+                        <div style="font-weight:700;font-size:0.78rem;color:#e11d48;margin-bottom:0.2rem">⑦ Compliance &amp; Risk Management</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Ensures employees receive required regulatory or safety training. Reduces legal, safety, and operational risks.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid #4f46e5">
+                        <div style="font-weight:700;font-size:0.78rem;color:#4f46e5;margin-bottom:0.2rem">⑧ Improve Engagement &amp; Retention</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">When training is relevant, employees feel valued and supported in their roles. Boosts motivation, confidence, and loyalty.</p>
+                    </div>
+                    <div style="background:var(--card-bg);border-radius:var(--radius-sm);padding:0.75rem;border:1px solid var(--border);border-left:3px solid var(--navy)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.2rem">⑨ Evaluate Training Effectiveness</div>
+                        <p style="font-size:0.69rem;color:var(--slate);margin:0;line-height:1.45">Provides benchmarks to measure whether training interventions actually closed performance gaps. Feeds into models like Kirkpatrick's evaluation framework.</p>
                     </div>
                 </div>
             </div>
@@ -1327,9 +1367,13 @@
         </div>
 
         <div class="content">
+            <p style="font-size:0.8rem;color:var(--slate);margin-bottom:1.25rem;text-align:center">
+                👆 <strong>Click any card</strong> to see detailed notes, examples, best practices &amp; exam tips
+            </p>
             <div class="grid-2" id="methods-grid">
-                <!-- Interview -->
-                <div class="method-card">
+
+                <!-- ── Interview ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_interview')">
                     <div class="method-header" style="background:#eff6ff;border-bottom:1px solid #dbeafe">
                         <div class="method-icon" style="background:#2563eb;color:#fff"><i class="ph-fill ph-chats-teardrop"></i></div>
                         <div>
@@ -1341,17 +1385,25 @@
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
-                            <ul><li>Rich, descriptive detail</li><li>Consistent data to identify patterns</li><li>Fleshes out quantitative survey data</li></ul>
+                            <ul>
+                                <li>Provides rich, detailed qualitative data</li>
+                                <li>Consistent across interviews — enables pattern identification</li>
+                                <li>Can "flesh out" quantitative survey data with real examples</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Very time-consuming</li><li>Skewed if interviewees not representative</li><li>Risk of interpreting responses</li></ul>
+                            <ul>
+                                <li>Very time-consuming for the volume of data gained</li>
+                                <li>Skewed if interviewees don't represent the target population</li>
+                                <li>Interviewer must record — not interpret — responses</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Focus Groups -->
-                <div class="method-card">
+                <!-- ── Focus Groups ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_focus')">
                     <div class="method-header" style="background:#faf5ff;border-bottom:1px solid #e9d5ff">
                         <div class="method-icon" style="background:#7c3aed;color:#fff"><i class="ph-fill ph-users"></i></div>
                         <div>
@@ -1363,39 +1415,55 @@
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
-                            <ul><li>Develops testable hypotheses</li><li>Facilitator notes nonverbal behaviors</li><li>All members heard, not just vocal ones</li></ul>
+                            <ul>
+                                <li>Develops testable hypotheses for follow-up with surveys</li>
+                                <li>Facilitator can note nonverbal behaviours alongside statements</li>
+                                <li>Skilled facilitation ensures all members are heard — not just vocal ones</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Time- and resource-intensive</li><li>Dominant members may skew results</li><li>Hard for 1 facilitator to run + note-take</li></ul>
+                            <ul>
+                                <li>Very time- and resource-intensive</li>
+                                <li>Dominant members can give a false impression of unanimity</li>
+                                <li>Difficult for one facilitator to run the group and take notes simultaneously</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Observation -->
-                <div class="method-card">
+                <!-- ── Observation ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_obs')">
                     <div class="method-header" style="background:#f0fdf4;border-bottom:1px solid #bbf7d0">
                         <div class="method-icon" style="background:#059669;color:#fff"><i class="ph-fill ph-eye"></i></div>
                         <div>
                             <div style="font-weight:700;font-size:0.95rem">Observation</div>
                             <div class="chip" style="background:#059669;color:#fff;margin-top:0.25rem">Qualitative</div>
-                            <div style="font-size:0.68rem;color:var(--teal);margin-top:0.25rem">Best for: Physical skills, workflow, on-the-job</div>
+                            <div style="font-size:0.68rem;color:var(--teal);margin-top:0.25rem">Best for: Physical skills, workflow, on-the-job behaviour</div>
                         </div>
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166634">✅ Advantages</div>
-                            <ul><li>Excellent for psychomotor skills</li><li>Creates step-by-step standard procedures</li><li>Identifies environment conditions</li></ul>
+                            <ul>
+                                <li>Excellent for assessing psychomotor / physical skills</li>
+                                <li>Creates standardised step-by-step procedures and job aids</li>
+                                <li>Identifies environmental conditions that help or hinder performance</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Hard to identify task start/end</li><li>Misses mental processes</li><li>Hawthorne effect (act differently when watched)</li></ul>
+                            <ul>
+                                <li>Hard to identify exactly where a task begins and ends</li>
+                                <li>Misses the performer's mental / cognitive processes</li>
+                                <li>Hawthorne effect — people behave differently when being observed</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Extant Data -->
-                <div class="method-card">
+                <!-- ── Extant Data ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_extant')">
                     <div class="method-header" style="background:#fffbeb;border-bottom:1px solid #fde68a">
                         <div class="method-icon" style="background:#d97706;color:#fff"><i class="ph-fill ph-folders"></i></div>
                         <div>
@@ -1407,43 +1475,59 @@
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
-                            <ul><li>Hard, objective data</li><li>Trends & patterns over time</li><li>No confidentiality issues (aggregate)</li></ul>
+                            <ul>
+                                <li>Hard, objective data — not subject to interview bias</li>
+                                <li>Reveals trends and patterns over time</li>
+                                <li>No confidentiality issues — data used in aggregate form</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Collected for other purposes</li><li>No control over collection method</li><li>Data requires "sifting"</li></ul>
+                            <ul>
+                                <li>Usually collected for purposes other than TNA — issues must be inferred</li>
+                                <li>No control over the methodology used to collect the data</li>
+                                <li>May be mixed with extraneous data — must be carefully "sifted"</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Surveys -->
-                <div class="method-card">
+                <!-- ── Surveys & Questionnaires ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_survey')">
                     <div class="method-header" style="background:#fdf2f8;border-bottom:1px solid #fbcfe8">
                         <div class="method-icon" style="background:#db2777;color:#fff"><i class="ph-fill ph-clipboard-text"></i></div>
                         <div>
-                            <div style="font-weight:700;font-size:0.95rem">Surveys & Questionnaires</div>
-                            <div class="chip" style="background:#db2777;color:#fff;margin-top:0.25rem">Both</div>
+                            <div style="font-weight:700;font-size:0.95rem">Surveys &amp; Questionnaires</div>
+                            <div class="chip" style="background:#db2777;color:#fff;margin-top:0.25rem">Both Qual &amp; Quant</div>
                             <div style="font-size:0.68rem;color:#db2777;margin-top:0.25rem">Best for: Large groups, broad training trends</div>
                         </div>
                     </div>
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
-                            <ul><li>Inexpensive and fast</li><li>Easy for respondents</li><li>Provides both qual & quant data</li></ul>
+                            <ul>
+                                <li>Inexpensive, quick, and easy to administer</li>
+                                <li>Results easy to tally — provides both qual &amp; quant data</li>
+                                <li>Easy for respondents to participate at their own convenience</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Hard to write clear, unambiguous questions</li><li>Respondents may answer blindly</li><li>Large sample needed for reliability</li></ul>
+                            <ul>
+                                <li>Challenging to write clear questions that get the data you need</li>
+                                <li>Respondents may check answers randomly without reading</li>
+                                <li>Large sample needed for reliable data; answer scales can be tricky</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tests -->
-                <div class="method-card">
+                <!-- ── Tests & Assessments ── -->
+                <div class="hpt-box-btn method-card" onclick="openModal('meth_tests')">
                     <div class="method-header" style="background:#eef2ff;border-bottom:1px solid #c7d2fe">
                         <div class="method-icon" style="background:#4f46e5;color:#fff"><i class="ph-fill ph-exam"></i></div>
                         <div>
-                            <div style="font-weight:700;font-size:0.95rem">Tests & Assessments</div>
+                            <div style="font-weight:700;font-size:0.95rem">Tests &amp; Assessments</div>
                             <div class="chip" style="background:#4f46e5;color:#fff;margin-top:0.25rem">Quantitative</div>
                             <div style="font-size:0.68rem;color:#4f46e5;margin-top:0.25rem">Best for: Objective KSA validation</div>
                         </div>
@@ -1451,15 +1535,65 @@
                     <div class="method-body">
                         <div class="pros-cons-box pros-box">
                             <div class="pros-cons-label" style="color:#166534">✅ Advantages</div>
-                            <ul><li>Highly objective and consistent</li><li>Pinpoints specific K/S gaps</li><li>Focuses design on exact gap</li></ul>
+                            <ul>
+                                <li>Highly objective and consistent — removes interviewer bias</li>
+                                <li>Specifically identifies the gap between current and desired K/S/A</li>
+                                <li>Focuses training design on the precise gap, not generalised information</li>
+                            </ul>
                         </div>
                         <div class="pros-cons-box cons-box">
                             <div class="pros-cons-label" style="color:#9f1239">❌ Disadvantages</div>
-                            <ul><li>Doesn't reveal thought processes</li><li>Test anxiety may affect results</li><li>Hard to cover K & S both in limited time</li></ul>
+                            <ul>
+                                <li>Doesn't reveal the thought processes behind a participant's answers</li>
+                                <li>Test anxiety may cause some participants to perform poorly</li>
+                                <li>Challenging to cover both knowledge and skills assessments in limited time</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+
             </div>
+
+            <!-- When-to-use table -->
+            <div style="margin-top:2rem;background:var(--navy);border-radius:var(--radius);padding:1.25rem;overflow-x:auto">
+                <div style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--accent);margin-bottom:0.9rem">📋 Quick Reference — When to Use Each Method</div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.75rem;min-width:520px">
+                    <thead>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.15)">
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.67rem;text-transform:uppercase;letter-spacing:0.05em">Method</th>
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.67rem;text-transform:uppercase;letter-spacing:0.05em">Use When…</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#93c5fd;font-weight:600;white-space:nowrap">Interview (one-to-one)</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Detailed personal input needed · Interviewing managers, SMEs, key employees · Exploring root cause of performance gaps</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#6ee7b7;font-weight:600;white-space:nowrap">Focus Group</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Exploring shared issues or challenges · Getting feedback from front-line staff · Time/resources limited but diverse input needed</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#4ade80;font-weight:600;white-space:nowrap">Observation</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Analysing practical skills, workflows, or on-the-job behaviour · Roles with clear observable tasks (e.g. customer service, machine operation)</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#fcd34d;font-weight:600;white-space:nowrap">Extant Data</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Company has reliable data systems (HR records, KPIs, complaints) · Best as an initial step before collecting new data</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#f9a8d4;font-weight:600;white-space:nowrap">Survey/Questionnaire</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Broad input needed across departments · Identifying general training trends or measuring perceptions · Large workforce</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0.6rem 0.75rem;color:#c4b5fd;font-weight:600;white-space:nowrap">Tests &amp; Assessments</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Technical/knowledge-based roles requiring proficiency proof · Roles where certification or accuracy is critical (IT, accounting, healthcare)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top:0.75rem;font-size:0.72rem;color:rgba(255,255,255,0.45);font-style:italic">💡 Best practice: Use at least 2–3 methods for a well-rounded picture (e.g. surveys + interviews + performance data)</div>
+            </div>
+
         </div>
     </div>
 
@@ -1557,39 +1691,39 @@
                     <div class="chip" style="background:#f0fdf4;color:#166534;font-size:0.72rem;white-space:nowrap">6 Stages</div>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem">
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid #6366f1">
+                    <div class="hpt-box-btn" onclick="openModal('hpt1')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid #6366f1">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">📊</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">1. Business Analysis</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Understand the organisation's goals, vision, and the business context driving the performance need.</p>
                     </div>
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--blue)">
+                    <div class="hpt-box-btn" onclick="openModal('hpt2')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--blue)">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">🔍</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">2. Performance Analysis</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Identify the gap between desired and actual performance. What should be happening vs. what is happening?</p>
                     </div>
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--teal)">
+                    <div class="hpt-box-btn" onclick="openModal('hpt3')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--teal)">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">🧩</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">3. Cause Analysis</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Examine the underlying root causes of the performance gap to design comprehensive, targeted interventions.</p>
                     </div>
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--accent)">
+                    <div class="hpt-box-btn" onclick="openModal('hpt4')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--accent)">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">🎯</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">4. Intervention Selection</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Choose the most appropriate solution — training or non-training — based on the root cause analysis.</p>
                     </div>
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid #f97316">
+                    <div class="hpt-box-btn" onclick="openModal('hpt5')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid #f97316">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">🔄</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">5. Change Management</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Plan and manage the transition — communicate changes, build stakeholder support, reduce resistance.</p>
                     </div>
-                    <div style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--emerald)">
+                    <div class="hpt-box-btn" onclick="openModal('hpt6')" style="background:#f8fafc;border-radius:10px;padding:1rem;border:1px solid var(--border);border-top:3px solid var(--emerald)">
                         <div style="font-size:1.2rem;margin-bottom:0.35rem">✅</div>
                         <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.25rem;color:var(--navy)">6. Evaluation</div>
                         <p style="font-size:0.72rem;color:var(--slate);line-height:1.45">Measure whether the intervention successfully closed the performance gap and delivered business value.</p>
                     </div>
                 </div>
                 <div style="margin-top:1rem;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:0.75rem;font-size:0.78rem;color:#1e40af">
-                    <strong>💡 Key insight:</strong> HPT is broader than ADDIE — it explicitly includes <em>non-training interventions</em> and emphasises that <strong>root cause analysis (Stage 3)</strong> must happen before any solution is selected. This is what distinguishes a strategic TNA from a superficial one.
+                    <strong>💡 Key insight:</strong> HPT is broader than ADDIE — it explicitly includes <em>non-training interventions</em> and emphasises that <strong>root cause analysis (Stage 3)</strong> must happen before any solution is selected. <strong>👆 Click any stage box above for detailed notes including all possible interventions!</strong>
                 </div>
             </div>
         </div>
@@ -1635,18 +1769,23 @@
                 </div>
             </div>
 
+            </div>
+
             <!-- TNA Report -->
             <div class="section">
                 <div class="section-title">TNA Report Structure</div>
-                <div class="section-subtitle">The 5 essential elements of every TNA report</div>
+                <div class="section-subtitle">The <strong>6 elements</strong> every TNA report must contain</div>
                 <div class="report-steps">
-                    <div class="report-step"><div class="report-step-num">1</div><div class="report-step-title">Background</div><div class="report-step-desc">Context & trigger for the report</div></div>
-                    <div class="report-step"><div class="report-step-num">2</div><div class="report-step-title">Objective</div><div class="report-step-desc">Purpose of the TNA</div></div>
-                    <div class="report-step"><div class="report-step-num">3</div><div class="report-step-title">Methods</div><div class="report-step-desc">Data collection tools used</div></div>
-                    <div class="report-step"><div class="report-step-num">4</div><div class="report-step-title">Results</div><div class="report-step-desc">Tables & charts of findings</div></div>
-                    <div class="report-step"><div class="report-step-num">5</div><div class="report-step-title">Interventions</div><div class="report-step-desc">Training + Non-training actions</div></div>
+                    <div class="report-step"><div class="report-step-num">1</div><div class="report-step-title">Background</div><div class="report-step-desc">Context &amp; what caused this report to be made</div></div>
+                    <div class="report-step"><div class="report-step-num">2</div><div class="report-step-title">Objective / Purpose</div><div class="report-step-desc">What this TNA aims to validate or determine</div></div>
+                    <div class="report-step"><div class="report-step-num">3</div><div class="report-step-title">Analysis Methods</div><div class="report-step-desc">Data collection tools used (interview, survey, etc.)</div></div>
+                    <div class="report-step"><div class="report-step-num">4</div><div class="report-step-title">Results of Analysis</div><div class="report-step-desc">Tables &amp; charts presenting the performance gaps</div></div>
+                    <div class="report-step"><div class="report-step-num">5</div><div class="report-step-title">Recommended Interventions</div><div class="report-step-desc">Training &amp; non-training actions with timetables</div></div>
+                    <div class="report-step"><div class="report-step-num">6</div><div class="report-step-title">Conclusion &amp; Next Steps</div><div class="report-step-desc">Summary of gaps, priorities &amp; development of the Annual Training Plan (ATP)</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.8rem;color:var(--slate);margin-top:1rem">→ Leads to the <strong>Annual Training Plan (ATP)</strong> — a calendar of all scheduled training programs</p>
+                <div style="margin-top:1rem;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:0.85rem;font-size:0.78rem;color:#1e40af">
+                    <strong>🎯 Remember:</strong> The 6 elements are <em>Background → Objective → Analysis Methods → Results → Recommended Interventions → Conclusion &amp; Next Steps</em>. The report then leads to the <strong>Annual Training Plan (ATP)</strong>.
+                </div>
             </div>
 
             <!-- Identify Training Programs -->
@@ -1723,8 +1862,286 @@
                 <div class="cheat-row"><span class="cheat-q">Post-TNA 4 stages?</span><span class="cheat-a">Present Report → Financial Approval → Gather Resources → Implement Training</span></div>
                 <div class="cheat-row"><span class="cheat-q">In-house vs External?</span><span class="cheat-a">In-house = internal trainers / custom content · External = public programs from providers</span></div>
                 <div class="cheat-row"><span class="cheat-q">TNA report elements?</span><span class="cheat-a">Background · Objective · Methods · Results · Interventions</span></div>
+                <div class="cheat-row"><span class="cheat-q">4 dev solution types?</span><span class="cheat-a">Formal Training · OJT · Coaching & Mentoring · Self-Directed Learning</span></div>
+                <div class="cheat-row"><span class="cheat-q">Coaching vs Mentoring?</span><span class="cheat-a">Coaching = short-term, specific gap, performance · Mentoring = long-term, career, experience-sharing</span></div>
+                <div class="cheat-row"><span class="cheat-q">OJT examples?</span><span class="cheat-a">Job Shadowing · Job Rotation · Buddy System · Stretch Assignment · Understudy</span></div>
                 <div class="cheat-row"><span class="cheat-q">6 training types?</span><span class="cheat-a">Technical · Quality · Soft Skills · Safety · Managerial · Team</span></div>
             </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: DEVELOPMENT SOLUTIONS
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-devsolutions">
+        <div class="hero" style="padding: 2.5rem 1.5rem 3rem">
+            <div style="max-width:700px;margin:0 auto;position:relative;z-index:1">
+                <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.5rem">Development <em style="color:var(--accent)">Solutions</em></h1>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.9rem">Once a training gap is confirmed, choose the right approach. Not every gap is solved the same way.</p>
+                <div style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap">
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">🏫 Formal Training</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">🔧 On-the-Job Training</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">💬 Coaching & Mentoring</div>
+                    <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:0.5rem 1rem;font-size:0.78rem;font-weight:600">📚 Self-Directed</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- Intro banner -->
+            <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.5rem;font-size:0.82rem;line-height:1.6;display:flex;gap:0.75rem;align-items:flex-start">
+                <span style="font-size:1.3rem;flex-shrink:0">💡</span>
+                <div>Not all training gaps are solved the same way. Development solutions are grouped into <strong>4 categories</strong> — each suited to different types of gaps, learners, and contexts. A well-designed TNA recommendation will specify <em>which</em> development approach is most appropriate, not just "send them to training."</div>
+            </div>
+
+            <!-- Category 1: Formal Training -->
+            <div class="card" style="margin-bottom:1rem;border-left:4px solid var(--blue)">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap">
+                    <div style="width:42px;height:42px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🏫</div>
+                    <div>
+                        <div style="font-weight:700;font-size:1rem;color:var(--navy)">1. Formal / Structured Training</div>
+                        <div style="font-size:0.72rem;color:var(--slate)">Organised, scheduled programs with defined content and learning objectives</div>
+                    </div>
+                    <div class="chip" style="background:#eff6ff;color:var(--blue);margin-left:auto;white-space:nowrap">Best for: New skills, compliance, certification</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🖥️ Classroom Training</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Instructor-led, face-to-face sessions. High interaction and immediate Q&A. Best when group discussion adds value.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">💻 E-Learning / Online</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Self-paced digital modules. Flexible, scalable, cost-effective for large groups or geographically spread teams.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎓 Workshops & Seminars</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Short, focused sessions on a specific topic. Practical exercises and group activities cement learning quickly.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">📱 Microlearning</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Bite-sized content (3–10 mins). Reduces cognitive overload, ideal for mobile learners or refresher training.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎭 Simulations & Role Play</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Practice real scenarios in a safe environment. Excellent for customer service, sales, and crisis response training.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">📜 Blended Learning</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Combines online and face-to-face delivery. Offers flexibility of e-learning with the depth of classroom interaction.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: OJT -->
+            <div class="card" style="margin-bottom:1rem;border-left:4px solid var(--teal)">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap">
+                    <div style="width:42px;height:42px;background:#f0fdfa;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🔧</div>
+                    <div>
+                        <div style="font-weight:700;font-size:1rem;color:var(--navy)">2. On-the-Job Training (OJT)</div>
+                        <div style="font-size:0.72rem;color:var(--slate)">Learning by doing — development happens within the actual work environment</div>
+                    </div>
+                    <div class="chip" style="background:#f0fdfa;color:var(--teal);margin-left:auto;white-space:nowrap">Best for: Practical skills, real-world application</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">👁️ Job Shadowing</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Observing an experienced employee perform their role. Low-risk introduction to new tasks or departments.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🔄 Job Rotation</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Moving employees across different roles or departments. Builds breadth of skills and cross-functional understanding.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">📋 Understudy / Acting Up</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Taking on a more senior role temporarily. Excellent for succession planning and leadership readiness.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎯 Stretch Assignments</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Assigning challenging projects beyond current capability. Accelerates growth through purposeful discomfort.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🤝 Buddy System</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Pairing a new employee with an experienced peer. Supports onboarding and reduces early performance gaps.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">📁 Special Projects</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Involvement in cross-functional or strategic projects. Develops collaboration, problem-solving, and leadership.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 3: Coaching & Mentoring -->
+            <div class="card" style="margin-bottom:1rem;border-left:4px solid #7c3aed">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap">
+                    <div style="width:42px;height:42px;background:#f5f3ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">💬</div>
+                    <div>
+                        <div style="font-weight:700;font-size:1rem;color:var(--navy)">3. Coaching & Mentoring</div>
+                        <div style="font-size:0.72rem;color:var(--slate)">One-on-one guided development through dialogue, reflection, and targeted feedback</div>
+                    </div>
+                    <div class="chip" style="background:#f5f3ff;color:#7c3aed;margin-left:auto;white-space:nowrap">Best for: Behaviour change, leadership, personal growth</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+                    <div style="background:#f8fafc;border-radius:8px;padding:1rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.82rem;color:#7c3aed;margin-bottom:0.5rem">🏋️ Coaching</div>
+                        <p style="font-size:0.72rem;color:var(--slate);line-height:1.5;margin-bottom:0.6rem">A structured, time-bound relationship focused on <strong>improving specific performance</strong> or closing an identified skill gap. The coach asks powerful questions to unlock the coachee's own solutions.</p>
+                        <div style="font-size:0.7rem;color:var(--slate)">
+                            <div style="font-weight:700;margin-bottom:0.25rem;color:var(--navy)">Key features:</div>
+                            <div style="display:flex;flex-direction:column;gap:0.2rem">
+                                <span>→ Performance-focused and goal-oriented</span>
+                                <span>→ Usually short-term (weeks to months)</span>
+                                <span>→ Coach does not need to be a subject expert</span>
+                                <span>→ Uses questioning, not instruction</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:1rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.82rem;color:#7c3aed;margin-bottom:0.5rem">🧭 Mentoring</div>
+                        <p style="font-size:0.72rem;color:var(--slate);line-height:1.5;margin-bottom:0.6rem">A longer-term relationship where a more experienced person guides career and personal development. The mentor shares knowledge, experience, and perspective — not just task skills.</p>
+                        <div style="font-size:0.7rem;color:var(--slate)">
+                            <div style="font-weight:700;margin-bottom:0.25rem;color:var(--navy)">Key features:</div>
+                            <div style="display:flex;flex-direction:column;gap:0.2rem">
+                                <span>→ Career and development focused</span>
+                                <span>→ Usually long-term (months to years)</span>
+                                <span>→ Mentor IS a subject/domain expert</span>
+                                <span>→ Uses advice, guidance, and experience sharing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:0.9rem;background:#ede9fe;border:1px solid #c4b5fd;border-radius:10px;padding:0.75rem 1rem;font-size:0.78rem;color:#4c1d95;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;text-align:center">
+                    <span><strong>Coaching</strong> = fix a specific gap · short-term · performance</span>
+                    <span style="color:#a78bfa">|</span>
+                    <span><strong>Mentoring</strong> = grow the whole person · long-term · career</span>
+                </div>
+            </div>
+
+            <!-- Category 4: Self-Directed Learning -->
+            <div class="card" style="margin-bottom:1.5rem;border-left:4px solid var(--accent)">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap">
+                    <div style="width:42px;height:42px;background:#fffbeb;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">📚</div>
+                    <div>
+                        <div style="font-weight:700;font-size:1rem;color:var(--navy)">4. Self-Directed Learning</div>
+                        <div style="font-size:0.72rem;color:var(--slate)">Employee takes ownership of their own development through independent learning activities</div>
+                    </div>
+                    <div class="chip" style="background:#fffbeb;color:#92400e;margin-left:auto;white-space:nowrap">Best for: Motivated individuals, continuous growth</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">📖 Reading & Research</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Books, journals, articles, and whitepapers. Low cost, flexible, and builds deep theoretical knowledge.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🌐 Online Courses (MOOCs)</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Platforms like Coursera, LinkedIn Learning, or Udemy. Learner chooses pace, topic, and timing.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎧 Podcasts & Webinars</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Audio and live/recorded video content. Great for learning on the go and staying current with industry trends.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🤔 Reflective Practice</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Journaling, after-action reviews, self-assessment. Turns everyday experience into deliberate learning.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">👥 Communities of Practice</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Peer learning groups, industry forums, professional associations. Learn from others facing similar challenges.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🏆 Professional Certifications</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Self-study toward industry credentials (e.g., HRD Corp, HRCI, SHRM). Validates skills with formal recognition.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 5: E-Learning & Technology-Based Learning -->
+            <div class="card" style="margin-bottom:1.5rem;border-left:4px solid #db2777">
+                <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.9rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap">
+                    <div style="width:42px;height:42px;background:#fdf2f8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">🌐</div>
+                    <div>
+                        <div style="font-weight:700;font-size:1rem;color:var(--navy)">5. E-Learning &amp; Technology-Based Learning</div>
+                        <div style="font-size:0.72rem;color:var(--slate)">Digital and technology-enabled learning solutions — flexible, scalable, and trackable</div>
+                    </div>
+                    <div class="chip" style="background:#fdf2f8;color:#9d174d;margin-left:auto;white-space:nowrap">Best for: Large workforce, remote teams, consistent delivery</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">💻 E-Learning / LMS</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Online modules delivered via Learning Management Systems (LMS). Self-paced, trackable, and consistent across large groups.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">⚡ Microlearning</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Short, focused learning bursts of 3–10 minutes. Addresses one specific topic. High retention, easily fits into work schedules.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎮 Gamification</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Game elements (points, leaderboards, badges) applied to training. Boosts engagement and motivation for learners.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🥽 Simulations &amp; VR</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Virtual simulations and role-play scenarios. Practice in a safe environment — ideal for sales, customer service, technical skills.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🎬 Video-Based Learning</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Instructional videos, recorded webinars, explainer animations. Visual, engaging, and easy to replay on demand.</p>
+                    </div>
+                    <div style="background:#f8fafc;border-radius:8px;padding:0.75rem;border:1px solid var(--border)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--navy);margin-bottom:0.25rem">🤝 Blended Learning</div>
+                        <p style="font-size:0.7rem;color:var(--slate);line-height:1.4">Combines online (e-learning, microlearning) with face-to-face instruction. Gets the best of both worlds — flexibility and human interaction.</p>
+                    </div>
+                </div>
+                <div style="margin-top:0.9rem;background:#fdf2f8;border:1px solid #fbcfe8;border-radius:10px;padding:0.75rem 1rem;font-size:0.78rem;color:#9d174d">
+                    💡 <strong>Why it's separate from Formal Training:</strong> E-Learning is technology-mediated — it can be delivered asynchronously at scale without a live trainer, and learning progress is tracked digitally. Formal training typically requires a trainer/facilitator in real-time.
+                </div>
+            </div>
+
+            <!-- Summary comparison table -->
+            <div style="background:var(--navy);border-radius:var(--radius);padding:1.25rem;overflow-x:auto;margin-bottom:2rem">
+                <div style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--accent);margin-bottom:0.9rem">Quick Comparison — Which Solution When?</div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.75rem;min-width:500px">
+                    <thead>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.15)">
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em">Category</th>
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em">Best Used When…</th>
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em">Timeframe</th>
+                            <th style="text-align:left;padding:0.5rem 0.75rem;color:rgba(255,255,255,0.5);font-weight:600;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.05em">Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#93c5fd;font-weight:600">Formal Training</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">New skill/knowledge must be built from scratch; compliance needed</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Short–Medium</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Medium–High</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#6ee7b7;font-weight:600">OJT</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Practical skills needed; learning transfer to the job is critical</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Ongoing</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Low–Medium</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#c4b5fd;font-weight:600">Coaching & Mentoring</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Behaviour/mindset change needed; leadership or career development</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Medium–Long</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Low (time cost)</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.07)">
+                            <td style="padding:0.6rem 0.75rem;color:#fcd34d;font-weight:600">Self-Directed</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Learner is motivated; continuous growth beyond structured programs</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Flexible</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Very Low</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0.6rem 0.75rem;color:#f9a8d4;font-weight:600">E-Learning &amp; Tech</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.75)">Large workforce, remote teams, need for scalable consistent delivery</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Short–Flexible</td>
+                            <td style="padding:0.6rem 0.75rem;color:rgba(255,255,255,0.6)">Low (once built)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 
@@ -1734,9 +2151,9 @@
     <div class="page" id="page-quiz">
         <div class="quiz-hero">
             <h1>TNA <em>Revision Quiz</em></h1>
-            <p>50-question pool. Each session gives you 20 random questions — try again for a different set!</p>
+            <p>65-question pool. Each session gives you 20 random questions — try again for a different set!</p>
             <div class="quiz-stats">
-                <div class="quiz-stat"><div class="quiz-stat-num">50</div><div class="quiz-stat-label">Question Pool</div></div>
+                <div class="quiz-stat"><div class="quiz-stat-num">65</div><div class="quiz-stat-label">Question Pool</div></div>
                 <div class="quiz-stat"><div class="quiz-stat-num" id="stat-total">20</div><div class="quiz-stat-label">Per Session</div></div>
                 <div class="quiz-stat"><div class="quiz-stat-num" id="stat-score">0</div><div class="quiz-stat-label">Score</div></div>
                 <div class="quiz-stat"><div class="quiz-stat-num" id="stat-remaining">20</div><div class="quiz-stat-label">Remaining</div></div>
@@ -1752,6 +2169,7 @@
                 <button class="cat-btn" onclick="setCategory('methods', this)">Data Methods</button>
                 <button class="cat-btn" onclick="setCategory('models', this)">Models</button>
                 <button class="cat-btn" onclick="setCategory('hpt', this)">HPT Model</button>
+                <button class="cat-btn" onclick="setCategory('development', this)">Dev Solutions</button>
                 <button class="cat-btn" onclick="setCategory('outcomes', this)">Outcomes</button>
             </div>
 
@@ -1808,7 +2226,7 @@
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         document.getElementById('page-' + id).classList.add('active');
         const tabs = document.querySelectorAll('.nav-tab');
-        const map = { overview: 0, levels: 1, methods: 2, models: 3, outcomes: 4, quiz: 5 };
+        const map = { overview: 0, levels: 1, methods: 2, models: 3, outcomes: 4, devsolutions: 5, quiz: 6 };
         if (map[id] !== undefined) tabs[map[id]].classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (id === 'quiz') initQuiz();
@@ -2143,6 +2561,64 @@
             exp: 'Stages 1–3 collectively map to TNA. Business Analysis (strategic context), Performance Analysis (identifying the gap), and Cause Analysis (understanding why) together form the equivalent of the TNA/Analyse phase in ADDIE.'
         },
 
+        // ── DEVELOPMENT SOLUTIONS (8 questions) ──
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'Which of the following is an example of On-the-Job Training (OJT)?',
+            opts: ['Attending a 2-day workshop on leadership','Completing an e-learning module on data privacy','Shadowing a senior engineer for 2 weeks to learn a new system','Reading an industry report on best practices'],
+            ans: 2,
+            exp: 'Job Shadowing = OJT. The employee learns by observing and working alongside an experienced colleague in the actual work environment. Workshops = formal training; e-learning = formal/self-directed; reading reports = self-directed learning.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'What is the KEY difference between Coaching and Mentoring?',
+            opts: ['Coaching is always done externally; mentoring is always internal','Coaching targets specific performance gaps over a short term; mentoring is a longer-term relationship focused on overall career growth','Coaching is cheaper than mentoring','Mentoring only works for new employees; coaching is for senior leaders'],
+            ans: 1,
+            exp: 'Coaching = short-term, performance/skill-gap focused, coach does not need domain expertise, uses questioning. Mentoring = longer-term, career/personal development focused, mentor IS a domain expert, shares advice and experience.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'A new customer service hire is paired with an experienced team member for their first month. This is an example of:',
+            opts: ['Job Rotation','Stretch Assignment','Buddy System','Blended Learning'],
+            ans: 2,
+            exp: 'The Buddy System pairs a new employee with an experienced peer for onboarding support. It reduces early performance gaps and helps the new hire integrate into team culture. Job Rotation moves people across departments; stretch assignments are challenging projects.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'Which development solution is BEST suited when an employee needs to build cross-functional understanding across different departments?',
+            opts: ['Microlearning modules','Job Rotation','Reflective Practice journaling','Attending a seminar'],
+            ans: 1,
+            exp: 'Job Rotation = moving an employee through different roles or departments. It builds breadth of skills, cross-functional understanding, and empathy for other teams. It is a classic OJT strategy for developing well-rounded employees.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'Microlearning is BEST described as:',
+            opts: ['A full-day intensive training program','Bite-sized content (3–10 minutes) designed to reduce cognitive overload and support refresher learning','A one-on-one coaching conversation','A structured mentoring program lasting 6–12 months'],
+            ans: 1,
+            exp: 'Microlearning = short, focused content (typically 3–10 minutes per module). It reduces cognitive overload, is ideal for mobile learning, and works well for refresher training. It is a type of formal/structured training, not OJT or coaching.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'An employee is self-enrolling in a Coursera course to improve their data analytics skills in their own time. This is best described as:',
+            opts: ['Formal Training','On-the-Job Training','Self-Directed Learning','Coaching'],
+            ans: 2,
+            exp: 'Self-Directed Learning = the employee takes ownership of their own development independently. Choosing and completing an online course (MOOC) in their own time is a classic example. It is low cost and highly flexible but requires intrinsic motivation.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'Which development solution is most appropriate when an employee needs to change a deeply ingrained behaviour pattern, such as a manager who micromanages their team?',
+            opts: ['Formal classroom training on management theory','Microlearning refresher modules','Coaching — structured 1-on-1 sessions to build self-awareness and new habits','Job Rotation to a different department'],
+            ans: 2,
+            exp: 'Behaviour change (not just knowledge transfer) is best addressed through Coaching. A coach uses powerful questioning to build self-awareness, unpack root causes of the behaviour, and support the individual in practising new approaches with accountability.'
+        },
+        {
+            cat: 'development', catLabel: 'Development Solutions',
+            q: 'A high-potential employee is given temporary responsibility for leading a major project outside their current role. This is called:',
+            opts: ['Job Shadowing','Buddy System','Blended Learning','Stretch Assignment'],
+            ans: 3,
+            exp: 'A Stretch Assignment deliberately places an employee in a challenging situation beyond their current capability. The discomfort accelerates growth. It is a powerful OJT development tool, especially for leadership pipeline and succession planning.'
+        },
+
         // ── OUTCOMES (10 questions) ──
         {
             cat: 'outcomes', catLabel: 'Outcomes',
@@ -2390,6 +2866,20 @@
     </script>
 
 
+    <!-- ══ MODAL OVERLAY ══ -->
+    <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title" id="modal-title"></div>
+                    <div class="modal-subtitle" id="modal-subtitle"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
     <!-- ── FOOTER ── -->
     <footer style="background:var(--navy);border-top:2px solid #1e3a8a;padding:2rem 1.5rem;text-align:center;font-family:'Sora',sans-serif;">
         <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0.6rem;">
@@ -2412,6 +2902,345 @@
 
     <script>
         document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // ══════════════════════════════════════
+    // HPT MODAL DATA & FUNCTIONS
+    // ══════════════════════════════════════
+    const hptModals = {
+        hpt1: {
+            title: '1. Business Analysis',
+            subtitle: 'HPT Stage 1 — Understanding the organisational context before any gap analysis begins',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:1rem">Before any performance gap can be addressed, the analyst must understand the <strong>organisational context</strong> — what the business is trying to achieve, its structure, culture, and what external forces are at play.</p>
+                <div class="modal-section-head">What this stage examines</div>
+                <div class="modal-item">Mission, Vision &amp; strategic goals — what is the organisation trying to accomplish?</div>
+                <div class="modal-item">Organisational structure — hierarchy, reporting lines, departments and how they interact</div>
+                <div class="modal-item">External factors — market changes, regulations, competitor activity, technology trends</div>
+                <div class="modal-item">Current performance baselines and KPIs — what does "good performance" look like?</div>
+                <div class="modal-item">Customer requirements and business demands driving the performance need</div>
+                <div style="margin-top:1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#92400e">
+                    🎯 <strong>Purpose:</strong> Without understanding the business first, any training solution risks being misaligned with strategic priorities — wasting resources and missing the real need.
+                </div>`
+        },
+        hpt2: {
+            title: '2. Performance Analysis',
+            subtitle: 'HPT Stage 2 — Identifying and measuring the performance gap',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:1rem">Performance analysis identifies the <strong>gap between desired performance and actual performance</strong>. This is the core of TNA — quantifying and clarifying exactly what the problem is before jumping to solutions.</p>
+                <div class="modal-section-head">Key questions answered in this stage</div>
+                <div class="modal-item">What <strong>should</strong> employees be doing? (desired/expected performance standard)</div>
+                <div class="modal-item">What are employees <strong>actually</strong> doing? (current/actual performance)</div>
+                <div class="modal-item">How large is the gap? How many people are affected?</div>
+                <div class="modal-item">Is this gap affecting business outcomes — productivity, quality, revenue, safety?</div>
+                <div class="modal-item">Is this gap consistent across a team/department, or is it specific to individuals?</div>
+                <div class="modal-section-head">Formula</div>
+                <div style="background:#eff6ff;border-radius:8px;padding:0.85rem;text-align:center;font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem">
+                    Performance Gap = Desired Performance − Actual Performance
+                </div>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#166534">
+                    ✅ <strong>Output of this stage:</strong> A clear, measurable definition of the performance gap — what it is, who is affected, and how critical it is to the organisation.
+                </div>`
+        },
+        hpt3: {
+            title: '3. Cause Analysis',
+            subtitle: 'HPT Stage 3 — Finding the root cause before selecting any solution',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:1rem">Cause analysis is the process of <strong>examining all possible underlying causes</strong> for a performance gap in order to design a comprehensive intervention that addresses all causes — not just the most visible one.</p>
+                <div class="modal-section-head">Gilbert's 6 Root Cause Categories</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.75rem">
+                    <div style="background:#eff6ff;border-radius:7px;padding:0.65rem;border:1px solid #bfdbfe">
+                        <div style="font-weight:700;font-size:0.75rem;color:var(--blue)">Physical</div>
+                        <p style="font-size:0.7rem;color:#475569;margin:0.2rem 0 0">Tools, equipment, working conditions, facilities, budget, supplies, manpower</p>
+                    </div>
+                    <div style="background:#f0fdfa;border-radius:7px;padding:0.65rem;border:1px solid #99f6e4">
+                        <div style="font-weight:700;font-size:0.75rem;color:var(--teal)">Structure/Process</div>
+                        <p style="font-size:0.7rem;color:#475569;margin:0.2rem 0 0">Reporting lines, management support, quality inputs, policies, procedures, work group design</p>
+                    </div>
+                    <div style="background:#fdf2f8;border-radius:7px;padding:0.65rem;border:1px solid #fbcfe8">
+                        <div style="font-weight:700;font-size:0.75rem;color:#db2777">Information</div>
+                        <p style="font-size:0.7rem;color:#475569;margin:0.2rem 0 0">Feedback on performance, clear standards, reliable data, reference material, job instructions</p>
+                    </div>
+                    <div style="background:#eff6ff;border-radius:7px;padding:0.65rem;border:2px solid #60a5fa">
+                        <div style="font-weight:700;font-size:0.75rem;color:var(--blue)">⭐ Knowledge/Skills</div>
+                        <p style="font-size:0.7rem;color:#1e40af;margin:0.2rem 0 0;font-weight:600">Training, education, job aids, coaching, mentoring — ONLY this box can be addressed by training!</p>
+                    </div>
+                    <div style="background:#fffbeb;border-radius:7px;padding:0.65rem;border:1px solid #fde68a">
+                        <div style="font-weight:700;font-size:0.75rem;color:#d97706">Motivation</div>
+                        <p style="font-size:0.7rem;color:#475569;margin:0.2rem 0 0">Recognition, benefits, bonuses, prestige, advancement in career, performance-based pay</p>
+                    </div>
+                    <div style="background:#f0fdf4;border-radius:7px;padding:0.65rem;border:1px solid #bbf7d0">
+                        <div style="font-weight:700;font-size:0.75rem;color:var(--emerald)">Wellness</div>
+                        <p style="font-size:0.7rem;color:#475569;margin:0.2rem 0 0">More vacation, relaxation time, health care, fitness center, stress management, food quality</p>
+                    </div>
+                </div>
+                <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#9f1239">
+                    🚨 <strong>Critical test:</strong> "If the employee had the right skills, could they perform the task?" → <strong>YES</strong> = training helps | <strong>NO</strong> = fix the non-training issue first
+                </div>`
+        },
+        hpt4: {
+            title: '4. Intervention Selection',
+            subtitle: 'HPT Stage 4 — Choosing the right solution based on root cause',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:0.75rem">Once the root cause is known, the appropriate intervention is selected. Interventions fall into two major categories: <strong>Training Solutions</strong> (when the cause is a knowledge/skill gap) and <strong>Non-Training Solutions</strong> (when the cause is environmental, motivational, or structural).</p>
+                
+                <div class="modal-section-head" style="color:var(--blue)">🎓 Training Solutions — when gap is skill/knowledge-related</div>
+                <div class="modal-item"><strong>Classroom or Online Training</strong> → technical training, product knowledge, compliance</div>
+                <div class="modal-item"><strong>Workshops &amp; Seminars</strong> → build soft skills like communication, leadership</div>
+                <div class="modal-item"><strong>On-the-Job Training (OJT)</strong> → practical, hands-on skill development</div>
+                <div class="modal-item"><strong>Coaching &amp; Mentoring</strong> → one-to-one guidance for performance improvement</div>
+                <div class="modal-item"><strong>E-Learning / Microlearning</strong> → flexible, self-paced knowledge building</div>
+                <div class="modal-item"><strong>Simulations / Role Plays</strong> → practice in a safe environment (e.g. sales negotiation, customer service)</div>
+                
+                <div class="modal-section-head" style="color:var(--teal);margin-top:1rem">🔧 Non-Training Solutions — when gap is due to other factors</div>
+                <div class="modal-item"><strong>Process Improvement</strong> → streamline SOPs, reduce bureaucracy</div>
+                <div class="modal-item"><strong>Job Redesign</strong> → adjust duties to match employee strengths</div>
+                <div class="modal-item"><strong>Clearer Goals &amp; KPIs</strong> → ensure employees understand expectations</div>
+                <div class="modal-item"><strong>Performance Management</strong> → regular feedback, coaching conversations</div>
+                <div class="modal-item"><strong>Motivation &amp; Rewards</strong> → incentives, recognition programs</div>
+                <div class="modal-item"><strong>Resource/Tool Provision</strong> → better systems, updated equipment, software</div>
+                <div class="modal-item"><strong>Policy/Structural Change</strong> → adjust work conditions, shift hours, reduce workload</div>
+                <div class="modal-item"><strong>Leadership/Management Support</strong> → managers actively guiding and supporting staff</div>
+                
+                <div style="margin-top:1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#92400e">
+                    💡 <strong>From the HPT diagram:</strong> The full range of possible interventions includes: Coaching, Compensation, Culture change, Documentation, Environment, Health/Safety, Job aid, Job design, Leadership, Supervision, Performance Management, Staffing, Team building, Training.
+                </div>`
+        },
+        hpt5: {
+            title: '5. Change Management',
+            subtitle: 'HPT Stage 5 — Planning and managing the transition to new performance standards',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:1rem">Implementing a new intervention — whether training or organisational change — requires deliberate change management to ensure people adopt the new behaviours, processes, or systems and that improvements are sustained.</p>
+                <div class="modal-section-head">Key change management activities</div>
+                <div class="modal-item">Communicate the <em>why</em> — explain the reason for the change and what will be different</div>
+                <div class="modal-item">Build stakeholder buy-in — get leadership and managers visibly supporting the change</div>
+                <div class="modal-item">Address resistance — identify concerns early and respond to them proactively</div>
+                <div class="modal-item">Provide support structures — job aids, coaching, help desks during transition</div>
+                <div class="modal-item">Celebrate quick wins — reinforce the benefits of the change as they appear</div>
+                <div class="modal-item">Monitor adoption — track whether new behaviours are being applied on the job</div>
+                <div style="margin-top:1rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#9a3412">
+                    ⚠️ <strong>Why this matters:</strong> Even the best training program fails if the work environment doesn't support applying new skills. Change management ensures the intervention actually "sticks."
+                </div>`
+        },
+        hpt6: {
+            title: '6. Evaluation',
+            subtitle: 'HPT Stage 6 — Measuring whether the intervention closed the performance gap',
+            body: `
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:1rem">Evaluation measures whether the interventions selected actually worked — did the performance gap close? Was there a return on investment? The most widely used framework is <strong>Kirkpatrick's 4-Level Model</strong>.</p>
+                <div class="modal-section-head">Kirkpatrick's 4 Levels of Evaluation</div>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem">
+                    <div style="background:#eff6ff;border-radius:8px;padding:0.65rem 0.9rem;border-left:4px solid var(--blue)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--blue)">Level 1: Reaction</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0.15rem 0 0">Did participants like the training? Measured via end-of-course surveys, smile sheets.</p>
+                    </div>
+                    <div style="background:#f0fdfa;border-radius:8px;padding:0.65rem 0.9rem;border-left:4px solid var(--teal)">
+                        <div style="font-weight:700;font-size:0.78rem;color:var(--teal)">Level 2: Learning</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0.15rem 0 0">Did participants actually learn the knowledge/skills? Measured via pre/post assessments, tests.</p>
+                    </div>
+                    <div style="background:#fffbeb;border-radius:8px;padding:0.65rem 0.9rem;border-left:4px solid #d97706">
+                        <div style="font-weight:700;font-size:0.78rem;color:#d97706">Level 3: Behaviour</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0.15rem 0 0">Are participants applying new skills on the job? Measured via observation, manager feedback, 360-reviews.</p>
+                    </div>
+                    <div style="background:#fff1f2;border-radius:8px;padding:0.65rem 0.9rem;border-left:4px solid #e11d48">
+                        <div style="font-weight:700;font-size:0.78rem;color:#e11d48">Level 4: Results</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0.15rem 0 0">Did the training produce measurable business impact? Measured via KPIs, productivity data, quality metrics, ROI.</p>
+                    </div>
+                </div>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#166534">
+                    ✅ <strong>HPT perspective:</strong> Evaluation feeds back into the system — results inform future business analysis and performance analysis cycles, making the organisation's performance improvement process continuous.
+                </div>`
+        }
+    };
+
+
+    // ══════════════════════════════════════
+    // DATA METHODS MODAL DATA
+    // ══════════════════════════════════════
+    const methodModals = {
+        meth_interview: {
+            title: 'Interview (1-on-1)',
+            subtitle: 'Qualitative · Best for root cause analysis, SMEs, and personal insight',
+            color: '#2563eb',
+            body: `
+                <div class="modal-section-head" style="color:#2563eb">📋 Before the Interview — Preparation Checklist</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin-bottom:0.9rem">
+                    <div class="modal-item">Define your interview objectives clearly</div>
+                    <div class="modal-item">Describe the areas to be covered</div>
+                    <div class="modal-item">Structure and prepare questions in advance</div>
+                    <div class="modal-item">Decide on the location of the interview</div>
+                    <div class="modal-item">Plan how you will introduce yourself</div>
+                    <div class="modal-item">Decide how you will meet the interviewee</div>
+                    <div class="modal-item">Plan how to explain the interview purpose</div>
+                    <div class="modal-item">Decide how you will record information</div>
+                </div>
+                <div class="modal-section-head" style="color:#2563eb">❓ Good Question Starters</div>
+                <div style="background:#eff6ff;border-radius:8px;padding:0.7rem;border:1px solid #bfdbfe;font-size:0.78rem;color:#1e40af;margin-bottom:0.9rem;line-height:1.8">
+                    <em>Who do… · How often… · What do you do about… · Where is this carried out… · When will you… · In which areas… · What sort of… · Who is involved… · Why is… · How much… · In what way… · Such as… · And then… · What is the…</em>
+                </div>
+                <div class="modal-section-head" style="color:#2563eb">🎙️ During the Interview</div>
+                <div class="modal-item">Start with rapport-building / chit-chat before stating the objective</div>
+                <div class="modal-item">Ask short questions to get long answers — the more the interviewee talks, the more you learn</div>
+                <div class="modal-item">Listen actively — concentrate and avoid interrupting</div>
+                <div class="modal-item">Ask follow-up questions to clarify whenever the reply is unclear</div>
+                <div class="modal-item">Confirm information received — let the interviewee do most of the talking</div>
+                <div class="modal-item">Conclude by checking if they have anything else to add</div>
+                <div class="modal-item">Ideally do not write during the interview — record it instead</div>
+                <div class="modal-section-head" style="color:#2563eb">📝 After the Interview</div>
+                <div class="modal-item">Write up a full draft account immediately — before memory fades</div>
+                <div class="modal-item">Do not wait until all interviews are done before writing notes</div>
+                <div style="margin-top:0.9rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#92400e">
+                    📌 <strong>Best use in TNA:</strong> Performance analysis and learner analysis. Most useful when you need to understand the <em>why</em> behind a performance gap — not just the <em>what</em>.
+                </div>`
+        },
+        meth_focus: {
+            title: 'Focus Groups',
+            subtitle: 'Qualitative · Best for shared issues, group perspectives, and hypothesis generation',
+            color: '#7c3aed',
+            body: `
+                <div class="modal-section-head" style="color:#7c3aed">👥 What is a Focus Group?</div>
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:0.9rem">A focus group provides data through <strong>group interviews</strong> regarding job environment, current skill level and performance, and desired future performance of a group that shares a common interest. Selection of members must be <strong>random to represent the whole population</strong>.</p>
+                <div class="modal-section-head" style="color:#7c3aed">🔑 Key Characteristics</div>
+                <div class="modal-item">Carried out with a group of high potential participants selected randomly</div>
+                <div class="modal-item">Focuses on <em>job environment, current skill level, and desired future performance</em></div>
+                <div class="modal-item">Facilitator can make notes of nonverbal behaviours that accompany statements</div>
+                <div class="modal-item">Skilled facilitation ensures all members are heard — not just the most vocal</div>
+                <div class="modal-section-head" style="color:#7c3aed">⚠️ Key Risks to Manage</div>
+                <div class="modal-item"><strong>Dominant members:</strong> Can give a false impression of unanimity — skilled facilitation counters this</div>
+                <div class="modal-item"><strong>Single facilitator:</strong> Hard to run the group AND take notes simultaneously — consider a co-facilitator</div>
+                <div class="modal-item"><strong>Influence effect:</strong> Group members may echo each other's views rather than give independent opinions</div>
+                <div style="margin-top:0.9rem;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:0.75rem;font-size:0.78rem;color:#5b21b6">
+                    📌 <strong>Best use in TNA:</strong> When you want to explore shared challenges across a team. Use focus groups first to develop hypotheses, then verify with a wider survey or observation.
+                </div>`
+        },
+        meth_obs: {
+            title: 'Observation',
+            subtitle: 'Qualitative · Best for physical skills, workflows, and on-the-job behaviour',
+            color: '#059669',
+            body: `
+                <div class="modal-section-head" style="color:#059669">👁️ What is Observation?</div>
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:0.9rem">Observation examines and records the <strong>behaviour of job performers</strong>. Advanced versions include time-and-motion studies and human factors studies. It is most useful for analysing specific types of <em>behaviour, skill, or performance</em>.</p>
+                <div class="modal-section-head" style="color:#059669">📂 Two Types of Observation</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.9rem">
+                    <div style="background:#f0fdf4;border-radius:8px;padding:0.7rem;border:1px solid #bbf7d0">
+                        <div style="font-weight:700;font-size:0.78rem;color:#065f46;margin-bottom:0.25rem">Continuous Observation</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0">Carried out over a prolonged period — every aspect of a group's or individual's performance is recorded and analysed.</p>
+                    </div>
+                    <div style="background:#f0fdf4;border-radius:8px;padding:0.7rem;border:1px solid #bbf7d0">
+                        <div style="font-weight:700;font-size:0.78rem;color:#065f46;margin-bottom:0.25rem">Occasional Observation</div>
+                        <p style="font-size:0.72rem;color:#475569;margin:0">Carried out periodically — often on a random basis or at times when specific tasks are performed.</p>
+                    </div>
+                </div>
+                <div class="modal-section-head" style="color:#059669">⚠️ Hawthorne Effect — Key Exam Point</div>
+                <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:0.75rem;font-size:0.8rem;color:#9f1239;margin-bottom:0.9rem">
+                    🚨 <strong>Hawthorne Effect:</strong> People behave differently when they know they are being observed. Their performance may not reflect their normal behaviour. <strong>Solution:</strong> Interview the performer after observation to get their perspective and cross-check findings.
+                </div>
+                <div class="modal-section-head" style="color:#059669">✅ Best Applications</div>
+                <div class="modal-item">Physical and psychomotor skills (machinery operation, customer service interactions)</div>
+                <div class="modal-item">Creating step-by-step job aids, flowcharts, or standard operating procedures</div>
+                <div class="modal-item">Identifying environmental conditions that help or hinder performance</div>
+                <div style="margin-top:0.75rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:0.7rem;font-size:0.78rem;color:#065f46">
+                    📌 <strong>Best use in TNA:</strong> Departmental / operational level. Ideal when the task involves a clear sequence of observable actions. Combine with interviews to capture the cognitive/decision-making element that observation alone misses.
+                </div>`
+        },
+        meth_extant: {
+            title: 'Extant Data (Existing Records)',
+            subtitle: 'Quantitative · Best for organisational and departmental level baseline analysis',
+            color: '#d97706',
+            body: `
+                <div class="modal-section-head" style="color:#d97706">📁 What counts as Extant Data?</div>
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:0.75rem">Extant data is the <strong>existing records, reports and data</strong> found inside an organisation. It includes anything already collected for other operational purposes.</p>
+                <div style="background:#fffbeb;border-radius:8px;padding:0.75rem;border:1px solid #fde68a;font-size:0.77rem;color:#78350f;margin-bottom:0.9rem;line-height:1.7">
+                    <strong>Examples:</strong> Benchmarking reports · Annual reports · Financial statements · Strategic plans · Mission statements · Staffing statistics · Climate surveys · 360-degree feedback · Performance appraisals · Grievances · Turnover rates · Absenteeism · Suggestion box feedback · Accident statistics · Short-term &amp; long-term leave records · Customer complaints · Quality statistics · Audit results · Production rates · Waste / rework rates · Down time · Late deliveries · Repairs · Training evaluation data · Labour costs
+                </div>
+                <div class="modal-section-head" style="color:#d97706">🏢 Primary Use in TNA</div>
+                <div class="modal-item">Used for <strong>organisational and departmental</strong> training needs assessment — as an indicator of organisational performance</div>
+                <div class="modal-item">Best used as a <strong>first step</strong> before collecting new data — to understand baselines and trends</div>
+                <div class="modal-section-head" style="color:#d97706">🔍 How to Access Extant Data</div>
+                <div class="modal-item">Contact internal departments: HR, quality improvement, legal, finance</div>
+                <div class="modal-item">Proactively scan the external environment — business trends, regulatory issues, current events</div>
+                <div style="margin-top:0.75rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:0.7rem;font-size:0.78rem;color:#92400e">
+                    📌 <strong>Best practice:</strong> Because extant data was collected for purposes other than TNA, always "sift" it carefully — separate relevant from irrelevant data, and treat patterns as hypotheses to be confirmed with other methods (interviews, surveys).
+                </div>`
+        },
+        meth_survey: {
+            title: 'Surveys & Questionnaires',
+            subtitle: 'Both Qualitative & Quantitative · Best for large groups and broad training trends',
+            color: '#db2777',
+            body: `
+                <div class="modal-section-head" style="color:#db2777">📋 Survey vs Questionnaire — Key Distinction</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.9rem">
+                    <div style="background:#fdf2f8;border-radius:8px;padding:0.75rem;border:2px solid #db2777">
+                        <div style="font-weight:700;font-size:0.8rem;color:#db2777;margin-bottom:0.3rem">📊 Survey</div>
+                        <p style="font-size:0.74rem;color:#475569;margin:0;line-height:1.5">A broader <strong>research process</strong> — includes the entire study: purpose, sample selection, methodology, data collection, analysis, and conclusions. A survey may use a questionnaire as one of its tools.</p>
+                    </div>
+                    <div style="background:#fdf2f8;border-radius:8px;padding:0.75rem;border:1px solid #fbcfe8">
+                        <div style="font-weight:700;font-size:0.8rem;color:#9d174d;margin-bottom:0.3rem">📝 Questionnaire</div>
+                        <p style="font-size:0.74rem;color:#475569;margin:0;line-height:1.5">A specific <strong>instrument / tool</strong> — a set of focused questions given to respondents. It can be used within a survey, or administered standalone without the full research process around it.</p>
+                    </div>
+                </div>
+                <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:0.7rem;font-size:0.77rem;color:#5b21b6;margin-bottom:0.9rem">
+                    💡 <strong>Key rule:</strong> All surveys may use questionnaires, but not all questionnaires are surveys. A questionnaire becomes part of a survey when it is <em>systematically administered</em> to a sample for the purpose of analysis.
+                </div>
+                <div class="modal-section-head" style="color:#db2777">✍️ Best Practices for Writing Questions</div>
+                <div class="modal-item"><strong>Concrete, not abstract:</strong> Don't ask "What do you do about training new staff?" — ask "What did you do last time a new person joined your department?"</div>
+                <div class="modal-item"><strong>Neutral questions:</strong> Be interested but neutral — don't take sides or lead the respondent toward a particular answer</div>
+                <div class="modal-item"><strong>Pilot test first:</strong> Test with a small sample to ensure questions are clear and unambiguous before distributing widely</div>
+                <div class="modal-item"><strong>Choose answer scales carefully:</strong> Likert scales, multiple choice, open-ended — pick what matches the data you need</div>
+                <div style="margin-top:0.75rem;background:#fdf2f8;border:1px solid #fbcfe8;border-radius:8px;padding:0.7rem;font-size:0.78rem;color:#9d174d">
+                    📌 <strong>Best use in TNA:</strong> Performance analysis and learner analysis. Especially useful when you need to gather input from a <em>large number of respondents</em> quickly and cost-effectively. Soft data questions yield qualitative insight; answer tallies yield quantitative data.
+                </div>`
+        },
+        meth_tests: {
+            title: 'Tests & Assessments',
+            subtitle: 'Quantitative · Best for objective KSA gap validation',
+            color: '#4f46e5',
+            body: `
+                <div class="modal-section-head" style="color:#4f46e5">📐 What do Tests & Assessments measure?</div>
+                <p style="font-size:0.82rem;color:#475569;line-height:1.6;margin-bottom:0.9rem">These instruments gauge what respondents <strong>know, can do, or believe</strong> regarding the training need being investigated. Most often used at <strong>departmental and individual</strong> level to gauge current learner KSA (Knowledge, Skills, Attitudes).</p>
+                <div class="modal-section-head" style="color:#4f46e5">📂 Types of Assessments</div>
+                <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.9rem">
+                    <div class="modal-item"><strong>Knowledge assessments:</strong> Multiple choice, true/false, fill-in-the-blank, essay questions — verbal or written responses</div>
+                    <div class="modal-item"><strong>Performance assessments:</strong> Actual performance of a job task being directly observed and rated</div>
+                    <div class="modal-item"><strong>Work product analysis:</strong> Analysis of outputs, products, or results against quality criteria</div>
+                </div>
+                <div class="modal-section-head" style="color:#4f46e5">⚠️ Risks and Limitations</div>
+                <div class="modal-item"><strong>Test anxiety:</strong> Some participants "freeze" and perform poorly — not a true reflection of their ability</div>
+                <div class="modal-item"><strong>Cognitive blind spot:</strong> Assessments don't always reveal <em>why</em> a participant answered a certain way — the thought process remains hidden</div>
+                <div class="modal-item"><strong>Time constraints:</strong> Hard to include both knowledge and skill assessments in limited time during a training program</div>
+                <div class="modal-section-head" style="color:#4f46e5">✅ Best Practices</div>
+                <div class="modal-item">Use an expert in test writing to ensure validity beyond pilot testing</div>
+                <div class="modal-item">If content is highly technical, supplement with other methods (observation, interview)</div>
+                <div class="modal-item">Always pilot test with a small sample to confirm face validity and reliability</div>
+                <div style="margin-top:0.75rem;background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:0.7rem;font-size:0.78rem;color:#3730a3">
+                    📌 <strong>Best use in TNA:</strong> When you need objective, measurable evidence of a skill or knowledge gap — especially in technical, compliance, or certification-based roles (IT, accounting, healthcare, engineering).
+                </div>`
+        }
+    };
+
+    function openModal(id) {
+        const hptData = hptModals[id];
+        const methData = methodModals[id];
+        const data = hptData || methData;
+        if (!data) return;
+        document.getElementById('modal-title').textContent = data.title;
+        document.getElementById('modal-subtitle').textContent = data.subtitle;
+        document.getElementById('modal-body').innerHTML = data.body;
+        // update modal header accent colour if method modal
+        const hdr = document.querySelector('.modal-header');
+        if (hdr) hdr.style.borderBottom = data.color ? `3px solid ${data.color}` : '1px solid var(--border)';
+        document.getElementById('modal-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
     </script>
 </body>
 </html>
