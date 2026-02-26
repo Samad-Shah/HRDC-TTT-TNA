@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT1 — Plan Adult Learning</title>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --navy: #0f1e3d;
+            --navy-mid: #1a2f5a;
+            --blue: #2563eb;
+            --accent: #f59e0b;
+            --accent-bright: #fbbf24;
+            --violet: #7c3aed;
+            --violet-light: #8b5cf6;
+            --violet-pale: #f5f3ff;
+            --rose: #e11d48;
+            --emerald: #059669;
+            --slate: #64748b;
+            --slate-light: #f1f5f9;
+            --white: #ffffff;
+            --text: #0f172a;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Sora', sans-serif; background: #f0f4ff; color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+        /* NAV */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--navy); border-bottom: 2px solid var(--violet);
+            padding: 0 1.5rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; min-height: 60px;
+        }
+        .nav-brand { color: var(--white); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-brand span { color: var(--accent); }
+        .nav-home {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.8); padding: 0.3rem 0.75rem; border-radius: 999px;
+            font-size: 0.73rem; font-weight: 600; text-decoration: none;
+            display: flex; align-items: center; gap: 0.3rem; transition: all 0.2s;
+        }
+        .nav-home:hover { background: rgba(255,255,255,0.2); color: var(--white); }
+        .nav-tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; padding: 0.5rem 0; }
+        .nav-tab {
+            background: none; border: 1.5px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7); padding: 0.35rem 0.9rem; border-radius: 999px;
+            font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+        .nav-tab.active { background: var(--violet); border-color: var(--violet); color: var(--white); font-weight: 600; }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
+            100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+        }
+        .quiz-live { animation: pulse-ring 2s infinite; }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #0a1628 0%, #0f2d3d 50%, #1a0a35 100%);
+            color: var(--white); padding: 3.5rem 1.5rem 4rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245,158,11,0.18) 0%, transparent 40%);
+        }
+        .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+        .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; margin-bottom: 0.75rem; }
+        .hero h1 em { color: var(--accent); font-style: italic; }
+        .hero p { font-size: 0.95rem; color: rgba(255,255,255,0.72); max-width: 500px; margin-bottom: 1.5rem; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.5); color: #c4b5fd; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+
+        /* QUIZ HERO */
+        .quiz-hero { background: linear-gradient(135deg, #0a1628 0%, #0f2d3d 60%, #1a0a35 100%); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; }
+        .quiz-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,4vw,2.8rem); margin-bottom: 0.5rem; }
+        .quiz-hero h1 em { color: var(--accent); font-style: italic; }
+        .quiz-hero p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+        .quiz-stats { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+        .quiz-stat { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 0.6rem 1.2rem; text-align: center; }
+        .quiz-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .quiz-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+
+        /* CONTENT */
+        .content { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .section-title { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem; color: var(--navy); display: flex; align-items: center; gap: 0.5rem; }
+        .section-subtitle { font-size: 0.85rem; color: var(--slate); margin-bottom: 1.5rem; }
+        .section { margin-bottom: 3rem; }
+
+        /* CARDS */
+        .card { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+        @media (max-width: 700px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+        .chip { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+        .chip-violet { background: var(--violet-pale); color: var(--violet); }
+        .chip-blue { background: #eff6ff; color: var(--blue); }
+        .chip-amber { background: #fffbeb; color: #b45309; }
+        .chip-emerald { background: #f0fdf4; color: var(--emerald); }
+        .chip-rose { background: #fff1f2; color: var(--rose); }
+
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.83rem; color: #374151; }
+        .feature-list li::before { content: '✓'; color: var(--violet); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+
+        /* CHEAT SHEET */
+        .cheat-sheet { background: var(--navy); border-radius: var(--radius); padding: 1.5rem; color: var(--white); margin-top: 2rem; }
+        .cheat-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .cheat-grid { display: flex; flex-direction: column; }
+        .cheat-row { display: flex; gap: 0.5rem; align-items: flex-start; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.82rem; }
+        .cheat-row:last-child { border-bottom: none; }
+        .cheat-q { color: rgba(255,255,255,0.55); min-width: 180px; font-size: 0.75rem; }
+        .cheat-a { color: var(--white); font-weight: 600; }
+
+        /* DEFINITION BOXES */
+        .def-box { border-left: 4px solid var(--violet); background: #ffffff; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 1rem 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .def-box .def-term { font-weight: 800; font-size: 0.85rem; color: var(--navy); margin-bottom: 0.2rem; }
+        .def-box .def-text { font-size: 0.82rem; color: #374151; }
+
+        /* ADDIE */
+        .addie-flow { display: flex; gap: 0; flex-wrap: nowrap; overflow-x: auto; margin: 1rem 0 1.5rem; }
+        .addie-step {
+            flex: 1; min-width: 110px; padding: 1rem 0.75rem; text-align: center;
+            position: relative; cursor: default;
+        }
+        .addie-step::after {
+            content: '▶'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+            font-size: 1rem; z-index: 1;
+        }
+        .addie-step:last-child::after { display: none; }
+        .addie-step-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .addie-step-title { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .addie-step-desc { font-size: 0.68rem; color: #4b5563; line-height: 1.35; }
+        .addie-a { background: #faf5ff; border: 2px solid #a78bfa; border-radius: 10px; }
+        .addie-a .addie-step-label { color: var(--violet); }
+        .addie-d1 { background: #eff6ff; border: 2px solid #93c5fd; border-radius: 10px; }
+        .addie-d1 .addie-step-label { color: var(--blue); }
+        .addie-dev { background: #f0fdf4; border: 2px solid #6ee7b7; border-radius: 10px; }
+        .addie-dev .addie-step-label { color: var(--emerald); }
+        .addie-i { background: #fffbeb; border: 2px solid #fcd34d; border-radius: 10px; }
+        .addie-i .addie-step-label { color: #b45309; }
+        .addie-e { background: #fff1f2; border: 2px solid #fca5a5; border-radius: 10px; }
+        .addie-e .addie-step-label { color: var(--rose); }
+
+        /* RESULTS */
+        .results-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.75rem; margin: 1rem 0; }
+        @media (max-width: 700px) { .results-grid { grid-template-columns: repeat(2,1fr); } }
+        .result-card { border-radius: 12px; padding: 1rem; text-align: center; }
+        .result-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+        .result-name { font-size: 0.78rem; font-weight: 800; margin-bottom: 0.3rem; }
+        .result-desc { font-size: 0.68rem; color: #4b5563; line-height: 1.35; }
+
+        /* PRINCIPLES */
+        .principles-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+        .principle-row { display: flex; gap: 0.75rem; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; transition: transform 0.2s; }
+        .principle-row:hover { transform: translateX(4px); }
+        .principle-num { width: 30px; height: 30px; border-radius: 50%; background: var(--violet); color: var(--white); font-weight: 800; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .principle-title { font-weight: 700; font-size: 0.83rem; color: var(--navy); }
+        .principle-desc { font-size: 0.75rem; color: var(--slate); margin-top: 0.15rem; }
+        .principle-example { font-size: 0.72rem; font-style: italic; color: var(--violet); margin-top: 0.2rem; }
+
+        /* THEORIST CARDS */
+        .theorist-card { border-radius: var(--radius); border: 2px solid var(--border); overflow: hidden; }
+        .theorist-header { padding: 1rem 1.25rem 0.75rem; }
+        .theorist-name { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+        .theorist-theory { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .theorist-bio { font-size: 0.75rem; color: var(--slate); margin-bottom: 0.5rem; }
+        .theorist-body { padding: 0.75rem 1.25rem 1.25rem; }
+        .key-item { display: flex; gap: 0.6rem; align-items: flex-start; margin-bottom: 0.5rem; }
+        .key-bullet { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+        .key-text { font-size: 0.79rem; color: #374151; }
+        .key-text strong { color: var(--navy); }
+
+        /* KNOWLES ACRONYM BANNER */
+        .knowles-banner {
+            background: linear-gradient(135deg, #0a1628 0%, #0f1e3d 100%);
+            border-radius: var(--radius); padding: 1.4rem 1.75rem; margin-bottom: 1.5rem;
+            border: 1px solid rgba(124,58,237,0.3);
+        }
+        .knowles-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .knowles-phrase { font-family: 'DM Serif Display', serif; font-size: clamp(0.9rem,2.5vw,1.1rem); color: var(--white); margin-bottom: 0.9rem; line-height: 1.5; }
+        .knowles-phrase .hl { color: var(--accent); font-style: italic; }
+        .knowles-letters { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+        .k-chip { display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 0.35rem 0.65rem; min-width: 44px; }
+        .k-chip .bl { font-family: 'DM Serif Display', serif; font-size: 1.2rem; font-weight: 700; line-height: 1; }
+        .k-chip .sw { font-size: 0.52rem; color: rgba(255,255,255,0.45); font-weight: 600; margin-top: 0.2rem; text-align: center; letter-spacing: 0.02em; }
+
+        /* KOLB CYCLE */
+        .kolb-cycle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+        @media (max-width: 600px) { .kolb-cycle { grid-template-columns: 1fr; } }
+        .kolb-stage { border-radius: 12px; padding: 1rem; border: 2px solid; }
+        .kolb-stage-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .kolb-stage-name { font-weight: 800; font-size: 0.88rem; margin-bottom: 0.3rem; }
+        .kolb-stage-desc { font-size: 0.74rem; color: #4b5563; }
+        .k-ce { background: #f8fafc; border-color: #c4b5fd; }
+        .k-ce .kolb-stage-label { color: var(--violet); }
+        .k-ro { background: #eff6ff; border-color: #93c5fd; }
+        .k-ro .kolb-stage-label { color: var(--blue); }
+        .k-ac { background: #f0fdf4; border-color: #6ee7b7; }
+        .k-ac .kolb-stage-label { color: var(--emerald); }
+        .k-ae { background: #fffbeb; border-color: #fcd34d; }
+        .k-ae .kolb-stage-label { color: #b45309; }
+
+        /* LSI STYLE CARDS */
+        .lsi-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.9rem; }
+        @media (max-width: 600px) { .lsi-grid { grid-template-columns: 1fr; } }
+        .lsi-card { border-radius: 14px; border: 2px solid; padding: 1.1rem; }
+        .lsi-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.7rem; }
+        .lsi-icon { font-size: 1.5rem; }
+        .lsi-name { font-weight: 800; font-size: 1rem; }
+        .lsi-tagline { font-size: 0.7rem; font-style: italic; color: var(--slate); }
+        .lsi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.6rem; }
+        .lsi-col-title { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .lsi-item { font-size: 0.72rem; color: #374151; margin-bottom: 0.25rem; display: flex; gap: 0.4rem; }
+        .lsi-item::before { content: '•'; flex-shrink: 0; }
+
+        .lsi-activist { background: #fff7ed; border-color: #fed7aa; }
+        .lsi-activist .lsi-name { color: #c2410c; }
+        .lsi-activist .lsi-col-title { color: #c2410c; }
+        .lsi-reflector { background: #eff6ff; border-color: #93c5fd; }
+        .lsi-reflector .lsi-name { color: var(--blue); }
+        .lsi-reflector .lsi-col-title { color: var(--blue); }
+        .lsi-theorist { background: #ffffff; border-color: #c4b5fd; }
+        .lsi-theorist .lsi-name { color: var(--navy); }
+        .lsi-theorist .lsi-col-title { color: var(--navy); }
+        .lsi-pragmatist { background: #f0fdf4; border-color: #6ee7b7; }
+        .lsi-pragmatist .lsi-name { color: var(--emerald); }
+        .lsi-pragmatist .lsi-col-title { color: var(--emerald); }
+
+        /* TRAINER TSS */
+        .tss-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.9rem; }
+        @media (max-width: 600px) { .tss-grid { grid-template-columns: 1fr; } }
+        .tss-card { border-radius: 14px; border-top: 4px solid; padding: 1.1rem; background: var(--card-bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .tss-name { font-weight: 800; font-size: 1rem; margin-bottom: 0.15rem; }
+        .tss-tagline { font-size: 0.72rem; color: var(--slate); margin-bottom: 0.7rem; }
+        .tss-section-label { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin: 0.5rem 0 0.3rem; }
+        .tss-item { font-size: 0.74rem; color: #374151; margin-bottom: 0.25rem; display: flex; gap: 0.4rem; align-items: flex-start; }
+        .tss-item::before { content: '•'; flex-shrink: 0; }
+        .tss-instructor { border-top-color: var(--violet); }
+        .tss-instructor .tss-name { color: var(--violet); }
+        .tss-instructor .tss-section-label { color: var(--violet); }
+        .tss-explorer { border-top-color: var(--blue); }
+        .tss-explorer .tss-name { color: var(--blue); }
+        .tss-explorer .tss-section-label { color: var(--blue); }
+        .tss-thinker { border-top-color: #d97706; }
+        .tss-thinker .tss-name { color: #d97706; }
+        .tss-thinker .tss-section-label { color: #d97706; }
+        .tss-guide { border-top-color: var(--emerald); }
+        .tss-guide .tss-name { color: var(--emerald); }
+        .tss-guide .tss-section-label { color: var(--emerald); }
+
+        /* ETHICS */
+        .ethics-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .ethics-item { display: flex; gap: 0.75rem; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; }
+        .ethics-num { width: 26px; height: 26px; border-radius: 50%; color: var(--white); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .ethics-title { font-weight: 700; font-size: 0.82rem; color: var(--navy); }
+        .ethics-desc { font-size: 0.73rem; color: var(--slate); margin-top: 0.1rem; }
+
+        /* QUIZ STYLES */
+        .quiz-container { max-width: 720px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .quiz-progress-bar-wrap { background: #e2e8f0; border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 0.5rem; }
+        .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--violet), var(--accent)); border-radius: 999px; transition: width 0.5s ease; }
+        .quiz-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--slate); margin-bottom: 1.5rem; }
+        .question-card { background: var(--card-bg); border-radius: var(--radius); border: 1.5px solid var(--border); padding: 1.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+        .question-category { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 700; color: var(--violet); background: #f5f3ff; padding: 0.25rem 0.65rem; border-radius: 999px; margin-bottom: 0.9rem; letter-spacing: 0.03em; text-transform: uppercase; }
+        .question-text { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 1.25rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .option-btn { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border); background: #f8fafc; cursor: pointer; font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text); text-align: left; transition: all 0.15s; width: 100%; }
+        .option-btn:hover:not(:disabled) { border-color: var(--violet); background: #f5f3ff; color: var(--violet); }
+        .option-letter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); color: var(--slate); font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+        .option-btn.correct { border-color: var(--emerald); background: #f0fdf4; color: #166534; }
+        .option-btn.correct .option-letter { background: var(--emerald); color: var(--white); }
+        .option-btn.wrong { border-color: var(--rose); background: #fff1f2; color: #9f1239; }
+        .option-btn.wrong .option-letter { background: var(--rose); color: var(--white); }
+        .option-btn.disabled-neutral { opacity: 0.5; }
+        .option-btn:disabled { cursor: default; }
+        .feedback-box { padding: 1rem; border-radius: var(--radius-sm); font-size: 0.83rem; margin-top: 1rem; display: none; line-height: 1.55; }
+        .feedback-box.show { display: block; }
+        .feedback-box.correct-fb { background: #f0fdf4; border: 1.5px solid #bbf7d0; color: #166534; }
+        .feedback-box.wrong-fb { background: #fff1f2; border: 1.5px solid #fecdd3; color: #9f1239; }
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-primary { background: var(--violet); color: var(--white); border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: background 0.2s, transform 0.1s; }
+        .btn-primary:hover { background: #6d28d9; transform: translateY(-1px); }
+        .btn-primary:disabled { background: var(--border); color: var(--slate); cursor: default; transform: none; }
+        .btn-secondary { background: var(--white); color: var(--navy); border: 1.5px solid var(--border); padding: 0.7rem 1.2rem; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: var(--violet); color: var(--violet); }
+        .score-card { display: none; background: var(--card-bg); border-radius: var(--radius); border: 2px solid var(--border); padding: 2.5rem; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+        .score-card.show { display: block; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 6px solid; }
+        .score-circle .score-num { font-size: 2rem; font-weight: 800; }
+        .score-circle .score-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .score-pass { border-color: var(--emerald); color: var(--emerald); }
+        .score-fail { border-color: var(--rose); color: var(--rose); }
+        .score-mid { border-color: var(--accent); color: var(--accent); }
+        .score-message { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--navy); }
+        .score-sub { font-size: 0.85rem; color: var(--slate); margin-bottom: 2rem; }
+        .score-breakdown { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .score-breakdown-item { padding: 0.6rem 1.2rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; }
+        .score-correct-item { background: #f0fdf4; color: #166534; }
+        .score-wrong-item { background: #fff1f2; color: #9f1239; }
+        .category-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .cat-btn { padding: 0.4rem 0.9rem; border-radius: 999px; border: 1.5px solid var(--border); background: var(--white); font-family: 'Sora', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--slate); cursor: pointer; transition: all 0.15s; }
+        .cat-btn:hover { border-color: var(--violet); color: var(--violet); }
+        .cat-btn.active { background: var(--violet); border-color: var(--violet); color: var(--white); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;flex:1;">
+        <a href="index.html" class="nav-home"><i class="ph-bold ph-arrow-left"></i> Home</a>
+        <div class="nav-brand"><i class="ph-fill ph-graduation-cap" style="font-size:1.2rem"></i> CT1 <span>Plan Adult Learning</span></div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('fundamentals')">Fundamentals</button>
+            <button class="nav-tab" onclick="showPage('principles')">Adult Learning</button>
+            <button class="nav-tab" onclick="showPage('theories')">Learning Theories</button>
+            <button class="nav-tab" onclick="showPage('trainer')">Trainer Competency</button>
+            <button class="nav-tab" onclick="showPage('ethics')">Ethics Guide</button>
+            <button class="nav-tab quiz-live" onclick="showPage('quiz')">🧠 Quiz</button>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════════ PAGE: FUNDAMENTALS ═══════════════ -->
+<div id="page-fundamentals" class="page active">
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge"><i class="ph-fill ph-book-open"></i> Section 1 of 5</div>
+            <h1>Fundamentals of<br><em>Adult Learning</em></h1>
+            <p>Understand what learning, training, and development mean — and how the ADDIE model links training to business results.</p>
+            <div class="hero-badge"><i class="ph-fill ph-stack"></i> Learning · Training · ADDIE · SDGs · Training Results</div>
+        </div>
+    </div>
+    <div class="content">
+
+        <!-- Learning vs Training vs Development -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-books" style="color:var(--violet)"></i> Learning, Training & Development</div>
+            <div class="section-subtitle">Three related but distinct concepts — know them precisely for the exam</div>
+            <div class="grid-3">
+                <div class="card" style="border-top:4px solid var(--violet)">
+                    <div class="chip chip-violet" style="margin-bottom:0.6rem">Learning</div>
+                    <p style="font-size:0.82rem;color:#374151;line-height:1.5">The <strong>process of acquiring knowledge, skills, attitudes, or behaviours</strong> through study, experience, practice, or teaching. It involves a <em>lasting change</em> in an individual's understanding or ability. Not just memorising facts — it's developing the capacity to <em>apply</em> what is learned in real-life or work situations.</p>
+                </div>
+                <div class="card" style="border-top:4px solid var(--blue)">
+                    <div class="chip chip-blue" style="margin-bottom:0.6rem">Training</div>
+                    <p style="font-size:0.82rem;color:#374151;line-height:1.5">The process of providing <strong>required competency</strong> to the employee for doing the job <em>effectively, skillfully, and efficiently</em>. Training is <strong>not continuous</strong> — it is <strong>periodical</strong>, given at a specified time by an expert trainer or professional. It bridges the <em>performance gap</em> between what the employee has and what the job demands.</p>
+                </div>
+                <div class="card" style="border-top:4px solid var(--emerald)">
+                    <div class="chip chip-emerald" style="margin-bottom:0.6rem">Development</div>
+                    <p style="font-size:0.82rem;color:#374151;line-height:1.5">Supports <strong>broader personal and professional advancement</strong> beyond a specific job. While training focuses on the current role, development prepares individuals for <em>future roles and higher responsibilities</em>. It is long-term, ongoing, and tied to career growth and organisational capability.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADDIE Model -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-circle-dashed" style="color:var(--violet)"></i> The ADDIE Model</div>
+            <div class="section-subtitle">The generic training model used by instructional designers — each step is interactive, not just sequential</div>
+            <p style="font-size:0.83rem;color:#374151;margin-bottom:1rem;">The ADDIE model is <strong>results-oriented</strong>. Interactions occur in two directions: the design process moves from Analysis → Evaluation, and every step must ask whether the work supports the <em>desired business results</em>. Any one step may trigger a rework of previous steps.</p>
+            <div class="addie-flow">
+                <div class="addie-step addie-a">
+                    <div class="addie-step-label">A</div>
+                    <div class="addie-step-title">Analyse</div>
+                    <div class="addie-step-desc">Identify performance gaps, audience, constraints, delivery options & timelines</div>
+                </div>
+                <div class="addie-step addie-d1">
+                    <div class="addie-step-label">D</div>
+                    <div class="addie-step-title">Design</div>
+                    <div class="addie-step-desc">Define objectives, assessment methods, content structure & methodology</div>
+                </div>
+                <div class="addie-step addie-dev">
+                    <div class="addie-step-label">D</div>
+                    <div class="addie-step-title">Develop</div>
+                    <div class="addie-step-desc">Create content assets, integrate technology, test & revise based on feedback</div>
+                </div>
+                <div class="addie-step addie-i">
+                    <div class="addie-step-label">I</div>
+                    <div class="addie-step-title">Implement</div>
+                    <div class="addie-step-desc">Train facilitators, register learners, deliver training using the plan</div>
+                </div>
+                <div class="addie-step addie-e">
+                    <div class="addie-step-label">E</div>
+                    <div class="addie-step-title">Evaluate</div>
+                    <div class="addie-step-desc">Formative (during) + Summative (after) — measure effectiveness & results</div>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left:4px solid var(--violet)">
+                    <div class="chip" style="background:#f5f3ff;color:var(--violet);margin-bottom:0.6rem">Formative Evaluation</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">Internal process <em>during</em> training, initiated by trainers to assess and improve their own work. Focuses on improving the training program and its effectiveness.</p>
+                </div>
+                <div class="card" style="border-left:4px solid var(--rose)">
+                    <div class="chip" style="background:#fff1f2;color:var(--rose);margin-bottom:0.6rem">Summative Evaluation</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">Results-oriented, conducted <em>after</em> completion. Assesses whether training met objectives and whether the program should be continued or ended.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Training Results -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-chart-bar" style="color:var(--violet)"></i> 4 Kinds of Training Results</div>
+            <div class="section-subtitle">Training should link to key performance areas in the organisation — modern training goes beyond just learning</div>
+            <div class="results-grid">
+                <div class="result-card" style="background:#f5f3ff;border:2px solid #c4b5fd">
+                    <div class="result-icon">📚</div>
+                    <div class="result-name" style="color:var(--violet)">Learning Results</div>
+                    <div class="result-desc">Trainee actually gained knowledge, skills, or attitudes from the training</div>
+                </div>
+                <div class="result-card" style="background:#eff6ff;border:2px solid #93c5fd">
+                    <div class="result-icon">⚡</div>
+                    <div class="result-name" style="color:var(--blue)">Performance Results</div>
+                    <div class="result-desc">Application of learning on the job — upskill, efficiency, application, attitude change</div>
+                </div>
+                <div class="result-card" style="background:#fffbeb;border:2px solid #fcd34d">
+                    <div class="result-icon">💰</div>
+                    <div class="result-name" style="color:#b45309">Financial Results</div>
+                    <div class="result-desc">Reduced costs, increased revenue, or better capital utilisation from training</div>
+                </div>
+                <div class="result-card" style="background:#f0fdf4;border:2px solid #6ee7b7">
+                    <div class="result-icon">🎯</div>
+                    <div class="result-name" style="color:var(--emerald)">Strategic Results</div>
+                    <div class="result-desc">Enhances organisation's ability to compete — new markets, new products, future readiness</div>
+                </div>
+            </div>
+            <div style="background:#f8fafc;border-radius:10px;padding:1rem;font-size:0.8rem;color:#374151;margin-top:0.75rem;">
+                💡 <strong>Remember the hierarchy:</strong> Learning → Performance → Financial → Strategic. Each level builds on the previous. Organisations today expect training to go beyond just "learning" and reach <em>performance and beyond</em>.
+            </div>
+        </div>
+
+        <!-- Purpose & Goals -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-target" style="color:var(--violet)"></i> Purpose & Goals of Training</div>
+            <div class="section-subtitle">The purpose of training is to deliver business results — 11 key goals to know</div>
+            <div class="grid-2">
+                <div class="card">
+                    <ul class="feature-list">
+                        <li>Reduce low-quality work by raising competency levels</li>
+                        <li>Reduce real learning time and running time for new staff</li>
+                        <li>Ensure jobs are adequately covered at all times</li>
+                        <li>Standardise methods of operation across the organisation</li>
+                        <li>Improve motivation and morale of staff</li>
+                        <li>Reduce labour turnover</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <ul class="feature-list">
+                        <li>Ensure employees are competent for the job</li>
+                        <li>Improve application of procedures and practices</li>
+                        <li>Improve relationships among staff</li>
+                        <li>Improve performance, financial, business and strategic results</li>
+                        <li>Prepare individuals for <em>future roles</em> with higher responsibilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SDGs -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-globe" style="color:var(--violet)"></i> Sustainable Development Goals (SDGs)</div>
+            <div class="section-subtitle">The UN's 17 global goals (adopted 2015, 2030 Agenda) — Training & Development relates to SDG 4, 5, and 8</div>
+            <div class="grid-3">
+                <div class="card" style="border-top:4px solid #e11d48">
+                    <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;color:var(--rose);text-transform:uppercase;margin-bottom:0.4rem">SDG 4 — Quality Education</div>
+                    <p style="font-size:0.8rem;color:#374151;margin-bottom:0.75rem">"Ensure inclusive and equitable quality education and promote lifelong learning for all."</p>
+                    <ul class="feature-list">
+                        <li style="font-size:0.75rem">Design inclusive programmes for different learning needs & backgrounds</li>
+                        <li style="font-size:0.75rem">Shift toward continuous upskilling, not one-time training</li>
+                        <li style="font-size:0.75rem">Ensure measurable outcomes — knowledge gain, skills, employability</li>
+                        <li style="font-size:0.75rem">Use e-learning, mobile learning, blended approaches</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top:4px solid #7c3aed">
+                    <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;color:var(--violet);text-transform:uppercase;margin-bottom:0.4rem">SDG 5 — Gender Equality</div>
+                    <p style="font-size:0.8rem;color:#374151;margin-bottom:0.75rem">"Achieve gender equality and empower all women and girls."</p>
+                    <ul class="feature-list">
+                        <li style="font-size:0.75rem">Avoid gender bias in training content, examples, and participation</li>
+                        <li style="font-size:0.75rem">Train women in leadership, digital skills, entrepreneurship</li>
+                        <li style="font-size:0.75rem">Ensure equal access for all genders, including STEM, construction, leadership</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top:4px solid var(--emerald)">
+                    <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;color:var(--emerald);text-transform:uppercase;margin-bottom:0.4rem">SDG 8 — Decent Work & Growth</div>
+                    <p style="font-size:0.8rem;color:#374151;margin-bottom:0.75rem">"Promote inclusive and sustainable economic growth, full and productive employment."</p>
+                    <ul class="feature-list">
+                        <li style="font-size:0.75rem">Build technical, soft, and digital skills for evolving job markets</li>
+                        <li style="font-size:0.75rem">Promote employment that is safe, fair, and productive</li>
+                        <li style="font-size:0.75rem">Support green jobs and automation upskilling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="cheat-sheet">
+            <div class="cheat-title"><i class="ph-fill ph-lightning"></i> Quick Reference — Fundamentals</div>
+            <div class="cheat-grid">
+                <div class="cheat-row"><span class="cheat-q">Training vs Learning key difference?</span><span class="cheat-a">Training is periodical; Learning is ongoing</span></div>
+                <div class="cheat-row"><span class="cheat-q">ADDIE full form?</span><span class="cheat-a">Analyse, Design, Develop, Implement, Evaluate</span></div>
+                <div class="cheat-row"><span class="cheat-q">4 training result types?</span><span class="cheat-a">Learning, Performance, Financial, Strategic</span></div>
+                <div class="cheat-row"><span class="cheat-q">Formative vs Summative?</span><span class="cheat-a">During training vs After training</span></div>
+                <div class="cheat-row"><span class="cheat-q">SDGs relevant to training?</span><span class="cheat-a">SDG 4, SDG 5, SDG 8</span></div>
+                <div class="cheat-row"><span class="cheat-q">Purpose of training in one line?</span><span class="cheat-a">To deliver business results by improving performance</span></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════ PAGE: ADULT LEARNING PRINCIPLES ═══════════════ -->
+<div id="page-principles" class="page">
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge"><i class="ph-fill ph-brain"></i> Section 2 of 5</div>
+            <h1>Adult Learning<br><em>Principles</em></h1>
+            <p>7 core principles that explain how adults learn — essential for designing any training programme for mature learners.</p>
+            <div class="hero-badge"><i class="ph-fill ph-stack"></i> 7 Principles · Andragogy · Self-Direction · Relevance</div>
+        </div>
+    </div>
+    <div class="content">
+
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-person" style="color:var(--violet)"></i> How Adults Learn Differently</div>
+            <div class="section-subtitle">Adult learning principles guide trainers to design learning that is relevant, respectful, experiential, problem-focused, and learner-driven</div>
+            <div class="def-box">
+                <div class="def-term">Andragogy vs Pedagogy</div>
+                <div class="def-text"><strong>Andragogy</strong> = the art and science of helping <em>adults</em> learn (Knowles). <strong>Pedagogy</strong> = teaching <em>children</em>. Adults are self-directed, experience-rich, and need to know <em>why</em> before they learn. Children are more dependent on the teacher's direction.</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-list-numbers" style="color:var(--violet)"></i> The 7 Adult Learning Principles</div>
+            <div class="section-subtitle">Apply these when designing and delivering any training for adult learners</div>
+            <div class="principles-grid">
+                <div class="principle-row">
+                    <div class="principle-num">1</div>
+                    <div>
+                        <div class="principle-title">Adults need to know WHY they are learning</div>
+                        <div class="principle-desc">Adults are more motivated when they understand the purpose and benefit of learning.</div>
+                        <div class="principle-example">💡 At the start of training, explain how the topic will help them solve problems or improve results in their role.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">2</div>
+                    <div>
+                        <div class="principle-title">Adults bring life experience and knowledge</div>
+                        <div class="principle-desc">Adults arrive with a wealth of prior knowledge, skills, and opinions that can enrich the learning process.</div>
+                        <div class="principle-example">💡 Encourage sharing of examples, use group discussions, and link new knowledge to what they already know.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">3</div>
+                    <div>
+                        <div class="principle-title">Adults are self-directed</div>
+                        <div class="principle-desc">Adults prefer to take ownership of their learning rather than being told exactly what to do at every step.</div>
+                        <div class="principle-example">💡 Give options in learning activities and allow learners to set some of their own learning goals.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">4</div>
+                    <div>
+                        <div class="principle-title">Adults are problem-centered</div>
+                        <div class="principle-desc">Adults learn best when content is presented in a way that helps them address real-life challenges.</div>
+                        <div class="principle-example">💡 Use workplace case studies, simulations, or role plays that mirror actual problems they face.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">5</div>
+                    <div>
+                        <div class="principle-title">Adults are motivated by internal factors</div>
+                        <div class="principle-desc">While external rewards (certificates, promotions) matter, internal motivators like personal growth, job satisfaction, and achievement are stronger.</div>
+                        <div class="principle-example">💡 Show how the learning connects to personal success, mastery, or making a difference.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">6</div>
+                    <div>
+                        <div class="principle-title">Adults need respect and a safe learning environment</div>
+                        <div class="principle-desc">Adults expect to be treated as equals, and they learn best when they feel psychologically safe.</div>
+                        <div class="principle-example">💡 Acknowledge their experience, listen actively, and create a no-judgment space for questions and mistakes.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-num">7</div>
+                    <div>
+                        <div class="principle-title">Adults benefit from practical, active learning</div>
+                        <div class="principle-desc">Adults retain knowledge better when they apply it immediately through action.</div>
+                        <div class="principle-example">💡 Use hands-on exercises, projects, or real-time problem-solving instead of just lectures.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Participant Objectives vs Outcomes -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-flag" style="color:var(--violet)"></i> Learning Objectives vs Learning Outcomes</div>
+            <div class="section-subtitle">Often confused — understand the difference clearly</div>
+            <div class="grid-2">
+                <div class="card" style="border-left:4px solid var(--violet)">
+                    <div class="chip" style="background:#f5f3ff;color:var(--violet);margin-bottom:0.6rem">Participant's Learning Objective</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">A <em>statement</em> describing what a participant is <strong>expected to learn</strong> from the training. Set at the beginning — the trainer gathers participants' expectations and adjusts content accordingly. Gathered by asking: <em>"What do you expect to learn?"</em> or using note pads and flip charts.</p>
+                </div>
+                <div class="card" style="border-left:4px solid var(--emerald)">
+                    <div class="chip" style="background:#f0fdf4;color:var(--emerald);margin-bottom:0.6rem">Participant's Learning Outcomes</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">What the participant <strong>actually learns or can demonstrate</strong> after the training. It is the <em>results or evidence of learning</em> — measurable and observable. This is what the trainer evaluates at the end of the session.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cheat-sheet">
+            <div class="cheat-title"><i class="ph-fill ph-lightning"></i> Quick Reference — Adult Learning</div>
+            <div class="cheat-grid">
+                <div class="cheat-row"><span class="cheat-q">Number of adult learning principles?</span><span class="cheat-a">7 principles</span></div>
+                <div class="cheat-row"><span class="cheat-q">Andragogy means?</span><span class="cheat-a">The art & science of helping adults learn</span></div>
+                <div class="cheat-row"><span class="cheat-q">Strongest motivators for adults?</span><span class="cheat-a">Internal factors (growth, satisfaction, achievement)</span></div>
+                <div class="cheat-row"><span class="cheat-q">Adults learn best when content is…?</span><span class="cheat-a">Problem-centred & relevant to real work</span></div>
+                <div class="cheat-row"><span class="cheat-q">Objective vs Outcome?</span><span class="cheat-a">Expected to learn vs Actually learned</span></div>
+                <div class="cheat-row"><span class="cheat-q">Key adult learning preference?</span><span class="cheat-a">Self-directed, experience-rich, practical</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ PAGE: LEARNING THEORIES ═══════════════ -->
+<div id="page-theories" class="page">
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge"><i class="ph-fill ph-flask"></i> Section 3 of 5</div>
+            <h1>Learning<br><em>Theories</em> & Styles</h1>
+            <p>Four key theorists who shape adult learning — Knowles, Rogers, Thorndike, and Kolb — plus Honey & Mumford's 4 learning styles.</p>
+            <div class="hero-badge"><i class="ph-fill ph-stack"></i> Knowles · Rogers · Thorndike · Kolb · LSI</div>
+        </div>
+    </div>
+    <div class="content">
+
+        <!-- Knowles Acronym Banner -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-user" style="color:var(--violet)"></i> Malcolm Knowles — Andragogy</div>
+            <div class="section-subtitle">The "father of adult education" — 6 key assumptions about how adults learn</div>
+
+            <div class="knowles-banner">
+                <div class="knowles-label">🧠 Memory Trick — Knowles' 6 Assumptions</div>
+                <div class="knowles-phrase">"<span class="hl">N</span>ever <span class="hl">S</span>top <span class="hl">R</span>unning — <span class="hl">R</span>eady, <span class="hl">O</span>pen, <span class="hl">M</span>otivated"</div>
+                <div class="knowles-letters">
+                    <div class="k-chip"><span class="bl" style="color:#c4b5fd">N</span><span class="sw">Need to Know</span></div>
+                    <div class="k-chip"><span class="bl" style="color:#c4b5fd">S</span><span class="sw">Self-Concept</span></div>
+                    <div class="k-chip"><span class="bl" style="color:#c4b5fd">R</span><span class="sw">Role of Exp.</span></div>
+                    <div class="k-chip"><span class="bl" style="color:#fbbf24">R</span><span class="sw">Readiness</span></div>
+                    <div class="k-chip"><span class="bl" style="color:#fbbf24">O</span><span class="sw">Orientation</span></div>
+                    <div class="k-chip"><span class="bl" style="color:#fbbf24">M</span><span class="sw">Motivation</span></div>
+                </div>
+            </div>
+
+            <div class="theorist-card" style="border-color:#c4b5fd">
+                <div class="theorist-header" style="background:#f8fafc">
+                    <div class="theorist-theory" style="color:var(--violet)">Andragogy / Adult Learning Theory</div>
+                    <div class="theorist-name">Malcolm Knowles (1913–1997)</div>
+                    <div class="theorist-bio">American educator, "father of adult education." Distinguished andragogy (adult learning) from pedagogy (children's learning).</div>
+                </div>
+                <div class="theorist-body">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem">
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">1. Need to Know</div>
+                            <div style="font-size:0.74rem;color:#374151">Adults need to understand <em>why</em> before investing effort. Motivated when they see immediate value.</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">2. Self-Concept</div>
+                            <div style="font-size:0.74rem;color:#374151">Adults see themselves as self-directed and autonomous — not passive recipients.</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">3. Role of Experience</div>
+                            <div style="font-size:0.74rem;color:#374151">Adults bring rich life and work experiences. Training should connect to and use this prior knowledge.</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">4. Readiness to Learn</div>
+                            <div style="font-size:0.74rem;color:#374151">Adults are most ready to learn when they see relevance to their current life or work roles.</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">5. Orientation</div>
+                            <div style="font-size:0.74rem;color:#374151">Problem-centered, not subject-centered. Adults want learning to help handle real-life situations.</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:10px;padding:0.8rem;border:1px solid #e2e8f0">
+                            <div style="font-size:0.62rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">6. Motivation</div>
+                            <div style="font-size:0.74rem;color:#374151">Internal factors (personal growth, satisfaction, self-esteem) are more powerful than external ones.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rogers -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-heart" style="color:var(--blue)"></i> Carl Rogers — Humanistic / Facilitated Learning</div>
+            <div class="section-subtitle">Learning happens best when people feel valued, respected, and engaged — the trainer's role is to guide, not instruct</div>
+            <div class="theorist-card" style="border-color:#93c5fd">
+                <div class="theorist-header" style="background:#eff6ff">
+                    <div class="theorist-theory" style="color:var(--blue)">Humanistic Learning Theory (Facilitated Learning)</div>
+                    <div class="theorist-name">Carl Rogers (1902–1987)</div>
+                    <div class="theorist-bio">Psychologist. Believed learning happens best when learners feel valued, not as "empty vessels" to fill. Trainer = guide and support, not instructor and controller.</div>
+                </div>
+                <div class="theorist-body">
+                    <div class="grid-2">
+                        <div>
+                            <div style="font-size:0.7rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem">6 Key Concepts</div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Learner-Centered Focus</strong> — Learner is at the heart; trainer creates environment, not just delivers content</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Self-Directed Learning</strong> — Learners take responsibility; facilitator supports, not dictates</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Personal Relevance</strong> — Content must be meaningful to personal/professional life</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Psychological Safety & Respect</strong> — Non-judgmental atmosphere for open sharing</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Whole-Person Learning</strong> — Involves feelings, attitudes, and self-concept, not just intellect</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:var(--blue)"></div><div class="key-text"><strong>Experiential Learning</strong> — Direct experiences and reflection are more powerful than rote memorisation</div></div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.7rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem">Application for Trainers</div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Involve learners in setting objectives and adjust content to their interests</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Provide choices in activities, projects, and topics</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Use real-world examples and case studies (Personal Relevance)</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Encourage open discussion, validate contributions, treat all as equals</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Include reflective exercises that tap into values and emotions</div></div>
+                            <div class="key-item"><div class="key-bullet" style="background:#60a5fa"></div><div class="key-text">Incorporate role plays, simulations, projects, and debrief discussions</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thorndike -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-lightning" style="color:#d97706)"></i> Edward Thorndike — Behaviorist Theory</div>
+            <div class="section-subtitle">Connectionism: learning occurs when a bond is made between a stimulus and a response, strengthened or weakened by outcomes</div>
+            <div class="theorist-card" style="border-color:#fcd34d">
+                <div class="theorist-header" style="background:#fffbeb">
+                    <div class="theorist-theory" style="color:#b45309">Behaviorist Theory (Connectionism / Law of Effect)</div>
+                    <div class="theorist-name">Edward L. Thorndike (1874–1949)</div>
+                    <div class="theorist-bio">American psychologist. Studied stimulus-response connections. "Use it or lose it" — one of the most practical laws for trainers.</div>
+                </div>
+                <div class="theorist-body">
+                    <div class="grid-3" style="margin-bottom:1rem">
+                        <div style="background:#fffbeb;border-radius:10px;padding:0.9rem;border:2px solid #fcd34d">
+                            <div style="font-weight:800;font-size:0.82rem;color:#b45309;margin-bottom:0.35rem">⚖️ Law of Effect</div>
+                            <div style="font-size:0.75rem;color:#374151;margin-bottom:0.35rem">Responses followed by satisfying outcomes are strengthened; unpleasant outcomes weaken them.</div>
+                            <div style="font-size:0.71rem;font-style:italic;color:#b45309">People repeat behaviours that bring positive results.</div>
+                        </div>
+                        <div style="background:#fffbeb;border-radius:10px;padding:0.9rem;border:2px solid #fcd34d">
+                            <div style="font-weight:800;font-size:0.82rem;color:#b45309;margin-bottom:0.35rem">🏃 Law of Readiness</div>
+                            <div style="font-size:0.75rem;color:#374151;margin-bottom:0.35rem">Learners must be physically, mentally, and emotionally ready. When ready, learning is more effective.</div>
+                            <div style="font-size:0.71rem;font-style:italic;color:#b45309">Forcing learning when not ready causes frustration.</div>
+                        </div>
+                        <div style="background:#fffbeb;border-radius:10px;padding:0.9rem;border:2px solid #fcd34d">
+                            <div style="font-weight:800;font-size:0.82rem;color:#b45309;margin-bottom:0.35rem">🔄 Law of Exercise</div>
+                            <div style="font-size:0.75rem;color:#374151;margin-bottom:0.35rem">Connections are strengthened with practice and weakened when practice stops.</div>
+                            <div style="font-size:0.71rem;font-style:italic;color:#b45309">"Use it or lose it."</div>
+                        </div>
+                    </div>
+                    <div style="background:#fffbeb;border-radius:10px;padding:0.85rem;border:1px solid #fde68a">
+                        <div style="font-size:0.7rem;font-weight:800;color:#b45309;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem">Application for Trainers</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem">
+                            <div style="font-size:0.73rem;color:#374151"><strong>Law of Effect:</strong> Provide immediate, positive feedback. Use encouragement and rewards. Avoid punitive approaches.</div>
+                            <div style="font-size:0.73rem;color:#374151"><strong>Law of Readiness:</strong> Check prior knowledge & motivation before starting. Use icebreakers and pre-work.</div>
+                            <div style="font-size:0.73rem;color:#374151"><strong>Law of Exercise:</strong> Build in repetition and practice. Use review activities, role plays, on-the-job tasks.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolb -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-arrows-clockwise" style="color:var(--emerald)"></i> David Kolb — Experiential Learning Theory</div>
+            <div class="section-subtitle">Learning is created through transformation of experience — people learn best when they do, reflect, think, and apply</div>
+            <div class="theorist-card" style="border-color:#6ee7b7">
+                <div class="theorist-header" style="background:#f0fdf4">
+                    <div class="theorist-theory" style="color:var(--emerald)">Experiential Learning Theory (Learning Cycle)</div>
+                    <div class="theorist-name">David A. Kolb (born 1939)</div>
+                    <div class="theorist-bio">American educational theorist. Proposed that knowledge is created through transformation of experience. Combines two dimensions: how we perceive and how we process.</div>
+                </div>
+                <div class="theorist-body">
+                    <div class="kolb-cycle">
+                        <div class="kolb-stage k-ce">
+                            <div class="kolb-stage-label">Stage 1 — Feeling</div>
+                            <div class="kolb-stage-name">Concrete Experience (CE)</div>
+                            <div class="kolb-stage-desc">Direct, hands-on involvement in a new situation. Example: role play, fieldwork, team project.</div>
+                        </div>
+                        <div class="kolb-stage k-ro">
+                            <div class="kolb-stage-label">Stage 2 — Watching</div>
+                            <div class="kolb-stage-name">Reflective Observation (RO)</div>
+                            <div class="kolb-stage-desc">Observing and reflecting on the experience from different angles. Example: group debrief, journaling.</div>
+                        </div>
+                        <div class="kolb-stage k-ac">
+                            <div class="kolb-stage-label">Stage 3 — Thinking</div>
+                            <div class="kolb-stage-name">Abstract Conceptualisation (AC)</div>
+                            <div class="kolb-stage-desc">Drawing conclusions, forming theories, connecting experience to models. Example: explaining the framework.</div>
+                        </div>
+                        <div class="kolb-stage k-ae">
+                            <div class="kolb-stage-label">Stage 4 — Doing</div>
+                            <div class="kolb-stage-name">Active Experimentation (AE)</div>
+                            <div class="kolb-stage-desc">Testing new ideas in practice. Example: applying theory to a new project or situation.</div>
+                        </div>
+                    </div>
+                    <div style="background:#f0fdf4;border-radius:10px;padding:0.9rem;border:1px solid #6ee7b7;margin-top:0.75rem">
+                        <div style="font-size:0.7rem;font-weight:800;color:var(--emerald);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem">Kolb's 4 Learning Styles (from combining dimensions)</div>
+                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem">
+                            <div style="font-size:0.72rem;color:#374151"><strong style="color:var(--emerald)">Diverger</strong><br>(CE+RO)<br>Imaginative, sees many perspectives. Give brainstorming activities.</div>
+                            <div style="font-size:0.72rem;color:#374151"><strong style="color:var(--emerald)">Assimilator</strong><br>(RO+AC)<br>Logical, organised, likes theory. Give clear models and frameworks.</div>
+                            <div style="font-size:0.72rem;color:#374151"><strong style="color:var(--emerald)">Converger</strong><br>(AC+AE)<br>Problem-solver, applies ideas. Use technical tasks and case studies.</div>
+                            <div style="font-size:0.72rem;color:#374151"><strong style="color:var(--emerald)">Accommodator</strong><br>(AE+CE)<br>Action-oriented, trial and error. Give hands-on tasks with minimal instruction.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LSI / Honey & Mumford -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-user-list" style="color:var(--violet)"></i> Learning Styles Inventory (Honey & Mumford)</div>
+            <div class="section-subtitle">Peter Honey & Alan Mumford identified 4 learning style preferences — design training to fit ALL 4 styles</div>
+            <div style="background:#f8fafc;border-radius:10px;padding:0.85rem;border:1px solid #e2e8f0;margin-bottom:1rem;font-size:0.8rem;color:#374151">
+                🧠 <strong>Memory trick — ARTP:</strong> "<em><strong>A</strong>re <strong>R</strong>eady <strong>T</strong>o <strong>P</strong>erform</em>" — Activist, Reflector, Theorist, Pragmatist. The best training approach includes a <em>mixture of all 4 styles</em> in the same programme.
+            </div>
+            <div class="lsi-grid">
+                <div class="lsi-card lsi-activist">
+                    <div class="lsi-header">
+                        <div class="lsi-icon">🔥</div>
+                        <div>
+                            <div class="lsi-name">Activist</div>
+                            <div class="lsi-tagline">"Let me try it!" — learns by doing</div>
+                        </div>
+                    </div>
+                    <div class="lsi-row">
+                        <div>
+                            <div class="lsi-col-title">Strengths</div>
+                            <div class="lsi-item">Flexible and open-minded</div>
+                            <div class="lsi-item">Happy to try new things</div>
+                            <div class="lsi-item">Optimistic about anything new</div>
+                        </div>
+                        <div>
+                            <div class="lsi-col-title">Limitations</div>
+                            <div class="lsi-item">Acts without thinking first</div>
+                            <div class="lsi-item">Seeks centre of attention</div>
+                            <div class="lsi-item">Bored by consolidation</div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.71rem;color:#9a3412;margin-top:0.6rem;border-top:1px solid #fed7aa;padding-top:0.5rem">
+                        ✅ <strong>Learns best:</strong> New experiences, business games, role plays, team challenges<br>
+                        ❌ <strong>Learns less:</strong> Lectures, reading alone, following precise instructions
+                    </div>
+                </div>
+                <div class="lsi-card lsi-reflector">
+                    <div class="lsi-header">
+                        <div class="lsi-icon">🔍</div>
+                        <div>
+                            <div class="lsi-name">Reflector</div>
+                            <div class="lsi-tagline">"Let me think about it" — learns by observing</div>
+                        </div>
+                    </div>
+                    <div class="lsi-row">
+                        <div>
+                            <div class="lsi-col-title">Strengths</div>
+                            <div class="lsi-item">Careful and thorough</div>
+                            <div class="lsi-item">Good at listening</div>
+                            <div class="lsi-item">Methodical thinker</div>
+                        </div>
+                        <div>
+                            <div class="lsi-col-title">Limitations</div>
+                            <div class="lsi-item">Holds back from participating</div>
+                            <div class="lsi-item">Slow to make decisions</div>
+                            <div class="lsi-item">Not assertive</div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.71rem;color:#1e40af;margin-top:0.6rem;border-top:1px solid #93c5fd;padding-top:0.5rem">
+                        ✅ <strong>Learns best:</strong> Observation, research, time to reflect, journaling, debrief<br>
+                        ❌ <strong>Learns less:</strong> Role play in front of others, tight deadlines, no time to prepare
+                    </div>
+                </div>
+                <div class="lsi-card lsi-theorist">
+                    <div class="lsi-header">
+                        <div class="lsi-icon">📐</div>
+                        <div>
+                            <div class="lsi-name">Theorist</div>
+                            <div class="lsi-tagline">"How does this fit the model?" — learns by analysing</div>
+                        </div>
+                    </div>
+                    <div class="lsi-row">
+                        <div>
+                            <div class="lsi-col-title">Strengths</div>
+                            <div class="lsi-item">Logical and rational</div>
+                            <div class="lsi-item">Good at probing questions</div>
+                            <div class="lsi-item">Disciplined approach</div>
+                        </div>
+                        <div>
+                            <div class="lsi-col-title">Limitations</div>
+                            <div class="lsi-item">Restricted lateral thinking</div>
+                            <div class="lsi-item">Low tolerance for ambiguity</div>
+                            <div class="lsi-item">Full of "shoulds" and "musts"</div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.71rem;color:#374151;margin-top:0.6rem;border-top:1px solid #e2e8f0;padding-top:0.5rem">
+                        ✅ <strong>Learns best:</strong> Systems, models, logical frameworks, structured discussion<br>
+                        ❌ <strong>Learns less:</strong> Emotion-focused activities, unstructured sessions, ambiguity
+                    </div>
+                </div>
+                <div class="lsi-card lsi-pragmatist">
+                    <div class="lsi-header">
+                        <div class="lsi-icon">⚙️</div>
+                        <div>
+                            <div class="lsi-name">Pragmatist</div>
+                            <div class="lsi-tagline">"Will this work at the job?" — learns by applying</div>
+                        </div>
+                    </div>
+                    <div class="lsi-row">
+                        <div>
+                            <div class="lsi-col-title">Strengths</div>
+                            <div class="lsi-item">Practical and realistic</div>
+                            <div class="lsi-item">Gets straight to the point</div>
+                            <div class="lsi-item">Keen to test things out</div>
+                        </div>
+                        <div>
+                            <div class="lsi-col-title">Limitations</div>
+                            <div class="lsi-item">Rejects ideas without clear use</div>
+                            <div class="lsi-item">Impatient with theory</div>
+                            <div class="lsi-item">Task-oriented, not people</div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.71rem;color:var(--emerald);margin-top:0.6rem;border-top:1px solid #6ee7b7;padding-top:0.5rem">
+                        ✅ <strong>Learns best:</strong> Clear job link, coaching/feedback, real simulations, action plans<br>
+                        ❌ <strong>Learns less:</strong> No obvious benefit, "all theory" sessions, no practice
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:1rem;background:var(--navy);color:var(--white);border-radius:12px;padding:1rem 1.25rem;font-size:0.8rem">
+                <strong style="color:var(--accent)">💡 Training Approach Flow</strong> — The best approach cycles through all 4 styles:<br>
+                <span style="color:#c4b5fd">① Explain theory</span> <span style="color:rgba(255,255,255,0.4)">→</span> <span style="color:#fbbf24">② Show how to do it</span> <span style="color:rgba(255,255,255,0.4)">→</span> <span style="color:#6ee7b7">③ Let them do it</span> <span style="color:rgba(255,255,255,0.4)">→</span> <span style="color:#93c5fd">④ Have them reflect on what they've learned</span>
+            </div>
+        </div>
+
+        <div class="cheat-sheet">
+            <div class="cheat-title"><i class="ph-fill ph-lightning"></i> Quick Reference — Learning Theories</div>
+            <div class="cheat-grid">
+                <div class="cheat-row"><span class="cheat-q">Knowles' theory name?</span><span class="cheat-a">Andragogy (Adult Learning Theory)</span></div>
+                <div class="cheat-row"><span class="cheat-q">Rogers' approach called?</span><span class="cheat-a">Humanistic / Facilitated Learning</span></div>
+                <div class="cheat-row"><span class="cheat-q">Thorndike's 3 laws?</span><span class="cheat-a">Effect, Readiness, Exercise</span></div>
+                <div class="cheat-row"><span class="cheat-q">Kolb's 4 stages in order?</span><span class="cheat-a">CE → RO → AC → AE</span></div>
+                <div class="cheat-row"><span class="cheat-q">Honey & Mumford 4 styles?</span><span class="cheat-a">Activist, Reflector, Theorist, Pragmatist</span></div>
+                <div class="cheat-row"><span class="cheat-q">Knowles' 6 assumptions acronym?</span><span class="cheat-a">NSRROM — Need, Self, Role, Ready, Orient, Motivate</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ PAGE: TRAINER COMPETENCY ═══════════════ -->
+<div id="page-trainer" class="page">
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge"><i class="ph-fill ph-chalkboard-teacher"></i> Section 4 of 5</div>
+            <h1>Characteristics of a<br><em>Competent Trainer</em></h1>
+            <p>What makes a great trainer? Personal characteristics, Trainer Skill Styles (TSS), and the ATD Competency Model.</p>
+            <div class="hero-badge"><i class="ph-fill ph-stack"></i> Trainer Definition · 8 Traits · TSS · ATD Model</div>
+        </div>
+    </div>
+    <div class="content">
+
+        <!-- Trainer Definition -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-user-circle" style="color:var(--violet)"></i> What is a Trainer?</div>
+            <div class="section-subtitle">A trainer facilitates the learning and development of others by designing, delivering, and evaluating training programs</div>
+            <div class="def-box">
+                <div class="def-term">Definition of a Trainer</div>
+                <div class="def-text">A person who <strong>facilitates learning and development of others</strong> by designing, delivering, and evaluating training programs, using appropriate methods to build knowledge, skills, and attitudes that improve individual and organisational performance. A trainer <em>guides, supports, and motivates</em> through structured activities.</div>
+            </div>
+            <div class="def-box" style="border-left-color:var(--emerald)">
+                <div class="def-term">What is Competency?</div>
+                <div class="def-text">The combination of <strong>knowledge, skills, abilities, and behaviours</strong> that enable a person to perform a job or task successfully. A competent trainer must have the right training knowledge, skills, abilities, and behaviours to train effectively.</div>
+            </div>
+            <div class="section-title" style="font-size:1.15rem;margin-top:1.5rem"><i class="ph-fill ph-star" style="color:var(--accent)"></i> 8 Characteristics of an Effective Trainer</div>
+            <div class="grid-2" style="margin-top:0.75rem">
+                <div class="card">
+                    <div class="feature-list">
+                        <li><strong>Empathetic</strong> — Understands learners' needs and perspectives</li>
+                        <li><strong>Patient</strong> — Allows time for learning and practice</li>
+                        <li><strong>Approachable</strong> — Creates a safe and open learning atmosphere</li>
+                        <li><strong>Adaptable</strong> — Adjusts methods based on learners' responses</li>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="feature-list">
+                        <li><strong>Enthusiastic</strong> — Shows passion and energy for the subject</li>
+                        <li><strong>Credible</strong> — Demonstrates subject expertise and professionalism</li>
+                        <li><strong>Good Communicator</strong> — Speaks clearly, listens actively, explains well</li>
+                        <li><strong>Positive Attitude</strong> — Encourages learners and builds confidence</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TSS -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-compass" style="color:var(--violet)"></i> Trainer's Skill Styles (TSS)</div>
+            <div class="section-subtitle">Four distinct approaches trainers take when facilitating learning — describes HOW a trainer teaches, not WHAT they teach</div>
+            <div class="tss-grid">
+                <div class="tss-card tss-instructor">
+                    <div class="tss-name">Instructor</div>
+                    <div class="tss-tagline">Structured, authoritative, content-focused</div>
+                    <div class="tss-section-label">How they teach</div>
+                    <div class="tss-item">Delivers information in a logical sequence</div>
+                    <div class="tss-item">Uses lecture, demonstration, step-by-step explanations</div>
+                    <div class="tss-item">Maintains strong control of class flow</div>
+                    <div class="tss-section-label">Best used when</div>
+                    <div class="tss-item">Teaching technical skills, safety, or compliance training</div>
+                    <div class="tss-item">Working with novice learners who need a strong foundation</div>
+                    <div class="tss-section-label">Watch out for</div>
+                    <div class="tss-item">Can become one-way; risks disengagement if learners aren't active</div>
+                </div>
+                <div class="tss-card tss-explorer">
+                    <div class="tss-name">Explorer</div>
+                    <div class="tss-tagline">Discovery, experimentation, learner autonomy</div>
+                    <div class="tss-section-label">How they teach</div>
+                    <div class="tss-item">Encourages learners to find answers through problem-solving</div>
+                    <div class="tss-item">Uses case studies, group projects, simulations, scenario challenges</div>
+                    <div class="tss-item">Sparks curiosity and builds learner ownership</div>
+                    <div class="tss-section-label">Best used when</div>
+                    <div class="tss-item">Learners already have base knowledge to work independently</div>
+                    <div class="tss-item">Innovation workshops, leadership, strategic thinking training</div>
+                    <div class="tss-section-label">Watch out for</div>
+                    <div class="tss-item">May lack structure — some learners feel lost or frustrated</div>
+                </div>
+                <div class="tss-card tss-thinker">
+                    <div class="tss-name">Thinker</div>
+                    <div class="tss-tagline">Analysis, theory, deep understanding</div>
+                    <div class="tss-section-label">How they teach</div>
+                    <div class="tss-item">Encourages reflection, structured discussion, mental modelling</div>
+                    <div class="tss-item">Uses concept mapping, research, reflection, Socratic questioning</div>
+                    <div class="tss-item">Helps learners connect concepts and see the big picture</div>
+                    <div class="tss-section-label">Best used when</div>
+                    <div class="tss-item">Teaching concept-heavy topics: strategy, policy, ethics, systems</div>
+                    <div class="tss-item">Working with experienced learners who benefit from reflection</div>
+                    <div class="tss-section-label">Watch out for</div>
+                    <div class="tss-item">May move too slowly for action-oriented learners; risk of being overly academic</div>
+                </div>
+                <div class="tss-card tss-guide">
+                    <div class="tss-name">Guide</div>
+                    <div class="tss-tagline">Supportive coach and facilitator</div>
+                    <div class="tss-section-label">How they teach</div>
+                    <div class="tss-item">Draws out learners' experiences and connects to new knowledge</div>
+                    <div class="tss-item">Uses coaching conversations, peer learning, role play, collaborative problem-solving</div>
+                    <div class="tss-item">Builds trust, confidence, and psychological safety</div>
+                    <div class="tss-section-label">Best used when</div>
+                    <div class="tss-item">Working with adult learners who bring valuable prior experience</div>
+                    <div class="tss-item">Mentorship, leadership development, soft skills, team-building</div>
+                    <div class="tss-section-label">Watch out for</div>
+                    <div class="tss-item">Risk of losing direction if too flexible; some learners need more structure</div>
+                </div>
+            </div>
+            <div style="margin-top:0.75rem;background:#f8fafc;border-radius:10px;padding:0.9rem;font-size:0.8rem;color:#374151;border:1px solid #e2e8f0">
+                💡 <strong>Knowing your TSS matters because:</strong> Self-awareness helps trainers identify their natural strengths. Flexibility means blending styles for different learners and topics. TSS guides selection of activities, delivery methods, and helps match trainer approach to learners' preferred ways of learning.
+            </div>
+        </div>
+
+        <!-- ATD Model -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-medal" style="color:var(--violet)"></i> Trainer's Competency Model (ATD)</div>
+            <div class="section-subtitle">ATD's Talent Development Capability Model — a blueprint for what practitioners need to know and do</div>
+            <div class="grid-3">
+                <div class="card" style="border-top:4px solid var(--violet)">
+                    <div style="font-size:0.68rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem">Building Personal Capability</div>
+                    <ul class="feature-list" style="font-size:0.75rem">
+                        <li>Communication</li>
+                        <li>Emotional Intelligence & Decision Making</li>
+                        <li>Collaboration & Leadership</li>
+                        <li>Cultural Awareness & Inclusion</li>
+                        <li>Project Management</li>
+                        <li>Lifelong Learning</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top:4px solid var(--blue)">
+                    <div style="font-size:0.68rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem">Developing Professional Capability</div>
+                    <ul class="feature-list" style="font-size:0.75rem">
+                        <li>Learning Sciences</li>
+                        <li>Instructional Design</li>
+                        <li>Training Delivery & Facilitation</li>
+                        <li>Technology Application</li>
+                        <li>Knowledge Management</li>
+                        <li>Career & Leadership Development</li>
+                        <li>Coaching · Evaluating Impact</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top:4px solid var(--emerald)">
+                    <div style="font-size:0.68rem;font-weight:800;color:var(--emerald);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem">Impacting Organisational Capability</div>
+                    <ul class="feature-list" style="font-size:0.75rem">
+                        <li>Business Insight</li>
+                        <li>Consulting & Business Partnering</li>
+                        <li>Organisation Development & Culture</li>
+                        <li>Talent Strategy & Management</li>
+                        <li>Performance Improvement</li>
+                        <li>Change Management · Data & Analytics</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="margin-top:0.75rem;background:#f8fafc;border-radius:10px;padding:0.9rem;font-size:0.8rem;color:#374151;border:1px solid var(--border)">
+                <strong>Also remember — a competent trainer must master the 4 ADDIE competency areas:</strong><br>
+                ① Identifying TNA & training objectives &nbsp;|&nbsp; ② Designing & developing the training program &nbsp;|&nbsp; ③ Managing the learning process / implementation &nbsp;|&nbsp; ④ Assessing the results of training
+            </div>
+        </div>
+
+        <div class="cheat-sheet">
+            <div class="cheat-title"><i class="ph-fill ph-lightning"></i> Quick Reference — Trainer Competency</div>
+            <div class="cheat-grid">
+                <div class="cheat-row"><span class="cheat-q">4 Trainer Skill Styles?</span><span class="cheat-a">Instructor, Explorer, Thinker, Guide</span></div>
+                <div class="cheat-row"><span class="cheat-q">Number of trainer characteristics?</span><span class="cheat-a">8 characteristics</span></div>
+                <div class="cheat-row"><span class="cheat-q">ATD model is from which org?</span><span class="cheat-a">Association for Talent Development</span></div>
+                <div class="cheat-row"><span class="cheat-q">TSS best for novice learners?</span><span class="cheat-a">Instructor style</span></div>
+                <div class="cheat-row"><span class="cheat-q">Competency definition?</span><span class="cheat-a">Knowledge + Skills + Abilities + Behaviours</span></div>
+                <div class="cheat-row"><span class="cheat-q">TSS that builds trust best?</span><span class="cheat-a">Guide style</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ PAGE: ETHICS ═══════════════ -->
+<div id="page-ethics" class="page">
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge"><i class="ph-fill ph-scales"></i> Section 5 of 5</div>
+            <h1>Ethics Guide<br>for <em>Trainers</em></h1>
+            <p>Code of Ethics (CoE) defines the values and principles behind trainer behaviour. Code of Conduct (CoC) defines the specific rules and actions.</p>
+            <div class="hero-badge"><i class="ph-fill ph-stack"></i> Code of Ethics · Code of Conduct · Professionalism</div>
+        </div>
+    </div>
+    <div class="content">
+
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-info" style="color:var(--violet)"></i> Ethics vs Conduct</div>
+            <div class="section-subtitle">These two are often confused — know the distinction clearly</div>
+            <div class="grid-2">
+                <div class="card" style="border-left:4px solid var(--violet)">
+                    <div class="chip" style="background:#f5f3ff;color:var(--violet);margin-bottom:0.6rem">Code of Ethics (CoE)</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">A set of <strong>values and guiding principles</strong> that shape a trainer's professional behaviour. It's about the <em>"why"</em> and <em>"how"</em> a trainer upholds integrity in their role. Governs the <em>internal compass</em> — what the trainer believes and values.</p>
+                </div>
+                <div class="card" style="border-left:4px solid var(--rose)">
+                    <div class="chip" style="background:#fff1f2;color:var(--rose);margin-bottom:0.6rem">Code of Conduct (CoC)</div>
+                    <p style="font-size:0.85rem;color:var(--slate);line-height:1.6">A set of <strong>specific rules and behaviours</strong> trainers are expected to follow. It's about <em>"what"</em> you do and <em>"what actions"</em> are acceptable or unacceptable. Governs the <em>external behaviour</em> — visible actions during training.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CoE -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-heart" style="color:var(--violet)"></i> 4.1 Trainer's Code of Ethics (CoE)</div>
+            <div class="section-subtitle">7 principles that define a trainer's professional values</div>
+            <div class="ethics-list">
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">1</div>
+                    <div><div class="ethics-title">Integrity & Honesty</div><div class="ethics-desc">Be truthful, transparent, and avoid misleading learners or clients. Never fabricate results or misrepresent training outcomes.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">2</div>
+                    <div><div class="ethics-title">Respect for Learners</div><div class="ethics-desc">Value each participant's perspective, background, and learning pace. Treat all learners with dignity regardless of their level.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">3</div>
+                    <div><div class="ethics-title">Confidentiality</div><div class="ethics-desc">Protect sensitive learner or organisational information shared during training. Never disclose private information to third parties.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">4</div>
+                    <div><div class="ethics-title">Commitment to Excellence</div><div class="ethics-desc">Maintain high standards in training design, delivery, and assessment. Continuously improve your methods and outputs.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">5</div>
+                    <div><div class="ethics-title">Continuous Learning</div><div class="ethics-desc">Keep updating personal knowledge, skills, and professional practices. A trainer who stops learning cannot effectively guide others.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">6</div>
+                    <div><div class="ethics-title">Fairness & Non-Discrimination</div><div class="ethics-desc">Ensure equal opportunities for learning regardless of race, gender, age, or beliefs. Design and deliver inclusive training.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--violet)">7</div>
+                    <div><div class="ethics-title">Social Responsibility</div><div class="ethics-desc">Contribute to the betterment of the community and the training profession. Consider the wider impact of training on society.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CoC -->
+        <div class="section">
+            <div class="section-title"><i class="ph-fill ph-clipboard-text" style="color:var(--rose)"></i> 4.2 Trainer's Code of Conduct (CoC)</div>
+            <div class="section-subtitle">9 specific rules and behaviours expected from every professional trainer</div>
+            <div class="ethics-list">
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">1</div>
+                    <div><div class="ethics-title">Punctuality</div><div class="ethics-desc">Arrive on time and respect agreed training schedules. Starting late disrespects learners' time and sets a poor example.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">2</div>
+                    <div><div class="ethics-title">Professional Appearance</div><div class="ethics-desc">Dress appropriately for the training context. Appearance contributes to credibility and setting the right professional tone.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">3</div>
+                    <div><div class="ethics-title">Preparedness</div><div class="ethics-desc">Come fully ready with training materials, equipment, and content. An unprepared trainer is an ineffective trainer.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">4</div>
+                    <div><div class="ethics-title">Use of Language</div><div class="ethics-desc">Avoid offensive, discriminatory, or inappropriate language in all forms of communication during training.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">5</div>
+                    <div><div class="ethics-title">Proper Use of Materials</div><div class="ethics-desc">Give credit for content and avoid plagiarism. Never use copyrighted materials without permission or attribution.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">6</div>
+                    <div><div class="ethics-title">Learner Engagement</div><div class="ethics-desc">Actively involve all participants without bias or exclusion. Every learner deserves equal opportunity to participate.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">7</div>
+                    <div><div class="ethics-title">Ethical Assessment Practices</div><div class="ethics-desc">Evaluate learners fairly and honestly. Assessment results must reflect actual performance, not personal preferences.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">8</div>
+                    <div><div class="ethics-title">Avoiding Conflicts of Interest</div><div class="ethics-desc">Disclose and manage any potential conflicts. Personal interests must never compromise training quality or fairness.</div></div>
+                </div>
+                <div class="ethics-item">
+                    <div class="ethics-num" style="background:var(--rose)">9</div>
+                    <div><div class="ethics-title">Safety & Well-being</div><div class="ethics-desc">Ensure a safe, comfortable learning environment at all times. Physical and psychological safety are the trainer's responsibility.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cheat-sheet">
+            <div class="cheat-title"><i class="ph-fill ph-lightning"></i> Quick Reference — Ethics</div>
+            <div class="cheat-grid">
+                <div class="cheat-row"><span class="cheat-q">CoE = ?</span><span class="cheat-a">Values & principles ("the why")</span></div>
+                <div class="cheat-row"><span class="cheat-q">CoC = ?</span><span class="cheat-a">Specific rules & behaviours ("the what/how")</span></div>
+                <div class="cheat-row"><span class="cheat-q">Number of CoE principles?</span><span class="cheat-a">7 principles</span></div>
+                <div class="cheat-row"><span class="cheat-q">Number of CoC rules?</span><span class="cheat-a">9 rules</span></div>
+                <div class="cheat-row"><span class="cheat-q">CoC rule about copying content?</span><span class="cheat-a">Proper Use of Materials (no plagiarism)</span></div>
+                <div class="cheat-row"><span class="cheat-q">CoE principle about secrets?</span><span class="cheat-a">Confidentiality</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ PAGE: QUIZ ═══════════════ -->
+<div id="page-quiz" class="page">
+    <div class="quiz-hero">
+        <h1>CT1 <em>Quiz</em></h1>
+        <p>Plan Adult Learning — test your knowledge across all 5 sections</p>
+        <div class="quiz-stats">
+            <div class="quiz-stat"><div class="quiz-stat-num">68</div><div class="quiz-stat-label">Total Questions</div></div>
+            <div class="quiz-stat"><div class="quiz-stat-num" id="stat-score">0</div><div class="quiz-stat-label">Current Score</div></div>
+            <div class="quiz-stat"><div class="quiz-stat-num">80%</div><div class="quiz-stat-label">Pass Mark</div></div>
+        </div>
+    </div>
+    <div class="quiz-container">
+        <div class="category-filter" id="cat-filter">
+            <button class="cat-btn active" onclick="selectCategory('all', this)">All Topics</button>
+            <button class="cat-btn" onclick="selectCategory('fundamentals', this)">Fundamentals</button>
+            <button class="cat-btn" onclick="selectCategory('principles', this)">Adult Learning</button>
+            <button class="cat-btn" onclick="selectCategory('theories', this)">Learning Theories</button>
+            <button class="cat-btn" onclick="selectCategory('trainer', this)">Trainer Competency</button>
+            <button class="cat-btn" onclick="selectCategory('ethics', this)">Ethics Guide</button>
+        </div>
+
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar" id="progress-bar" style="width:0%"></div>
+        </div>
+        <div class="quiz-meta">
+            <span id="question-counter">Question 1 of 20</span>
+            <span id="score-display">Score: 0/0</span>
+        </div>
+
+        <div class="question-card" id="question-card">
+            <div class="question-category" id="question-cat-label">Category</div>
+            <div class="question-text" id="question-text">Loading question...</div>
+            <div class="options" id="options-container"></div>
+            <div class="feedback-box" id="feedback-box"></div>
+        </div>
+
+        <div class="quiz-nav">
+            <button class="btn-secondary" onclick="restartQuiz()">↺ Restart</button>
+            <button class="btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+                Next <i class="ph-bold ph-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="score-card" id="score-card">
+            <div class="score-circle" id="score-circle">
+                <span class="score-num" id="final-score-num">0%</span>
+                <span class="score-label">Score</span>
+            </div>
+            <div class="score-message" id="score-message">Well done!</div>
+            <div class="score-sub" id="score-sub">You answered X out of 20 correctly.</div>
+            <div class="score-breakdown">
+                <div class="score-breakdown-item score-correct-item">✅ Correct: <strong id="bd-correct">0</strong></div>
+                <div class="score-breakdown-item score-wrong-item">❌ Wrong: <strong id="bd-wrong">0</strong></div>
+            </div>
+            <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+                <button class="btn-primary" onclick="restartQuiz()">↺ New Session</button>
+                <button class="btn-secondary" onclick="showPage('fundamentals')">📖 Study Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ─── QUIZ DATA ───
+const QUESTIONS = [
+    // FUNDAMENTALS (13)
+    { cat:'fundamentals', q:'Which of the following BEST describes the difference between Learning and Training?', opts:['Both involve acquiring skills through practice','Training is periodical and structured; Learning is ongoing through experience','Training is self-directed; Learning is trainer-led','Learning is only about facts; Training is only about attitudes'], ans:1, exp:'Training is provided at a specified time by an expert, focused on job competency. Learning is a broader, ongoing process involving lasting changes in understanding.' },
+    { cat:'fundamentals', q:'The ADDIE model stands for:', opts:['Analyse, Design, Deliver, Implement, Evaluate','Analyse, Design, Develop, Implement, Evaluate','Assess, Design, Develop, Integrate, Evaluate','Analyse, Draft, Develop, Implement, Examine'], ans:1, exp:'ADDIE = Analyse, Design, Develop, Implement, Evaluate — the five phases of the Results-Based Training Design Model.' },
+    { cat:'fundamentals', q:'In the ADDIE model, the Analysis phase primarily involves:', opts:['Creating storyboards and prototypes','Identifying performance gaps, audience, constraints, and delivery options','Training the facilitators and registering learners','Measuring whether training objectives were achieved'], ans:1, exp:'The Analysis phase is where the performance gap is identified, instructional goals and objectives are established, and the learning environment is assessed.' },
+    { cat:'fundamentals', q:'Which type of evaluation focuses on improving the training program DURING the training process?', opts:['Summative evaluation','Results evaluation','Formative evaluation','Impact evaluation'], ans:2, exp:'Formative evaluation is an internal process initiated by trainers to assess and improve their own work during the training. Summative is done after.' },
+    { cat:'fundamentals', q:'Summative evaluation is BEST described as:', opts:['Evaluating the trainer\'s performance mid-session','A process to improve training content as it is being delivered','Results-oriented; assesses if training met objectives and should continue','An informal feedback form given at the start of training'], ans:2, exp:'Summative evaluation focuses on assessing the implementation of completed training programs to determine if they met objectives and whether programs should continue or end.' },
+    { cat:'fundamentals', q:'The 4 kinds of training results in order from basic to most advanced are:', opts:['Financial → Learning → Performance → Strategic','Learning → Performance → Financial → Strategic','Performance → Learning → Strategic → Financial','Strategic → Financial → Performance → Learning'], ans:1, exp:'The hierarchy is Learning → Performance → Financial → Strategic. Each builds on the previous, with organisations today seeking results beyond just "learning."' },
+    { cat:'fundamentals', q:'Which SDG focuses specifically on "Decent Work and Economic Growth"?', opts:['SDG 4','SDG 5','SDG 8','SDG 12'], ans:2, exp:'SDG 8 focuses on promoting inclusive and sustainable economic growth, full and productive employment, and decent work for all — directly linked to workforce training.' },
+    { cat:'fundamentals', q:'A trainer notices that job performance improved measurably after the training. This is an example of which type of training result?', opts:['Learning results','Performance results','Financial results','Strategic results'], ans:1, exp:'Performance results are about the application of learning in a work context — employees performing new or existing job skills better as a direct result of training.' },
+    { cat:'fundamentals', q:'The purpose of training is PRIMARILY to:', opts:['Keep employees busy during slow business periods','Deliver business results by improving performance','Comply with government regulations only','Reduce the number of employees needed'], ans:1, exp:'The purpose of training is to deliver business results. We make training available when we want to improve performance to move an organisation from where it is to where it wants to be.' },
+    { cat:'fundamentals', q:'SDG 4 (Quality Education) in a training context means:', opts:['Only providing training for university graduates','Designing inclusive programmes, focusing on lifelong learning, and ensuring measurable outcomes','Limiting training to formal classroom settings','Providing training only in the official national language'], ans:1, exp:'SDG 4 in T&D means accessible, inclusive learning design, a shift to continuous upskilling, measuring real outcomes (knowledge, skills, employability), and using digital/blended approaches.' },
+    { cat:'fundamentals', q:'Training should be required at every stage of work because:', opts:['All employees need to be kept occupied','Technology, concepts, values and the environment are constantly changing','Training is a legal requirement for all organisations','Employees cannot be trusted to learn on their own'], ans:1, exp:'Training is necessary at every stage because employees need to stay updated with fast-changing technology, concepts, values, and environment, and to improve quality of work at all levels.' },
+    { cat:'fundamentals', q:'A "Participant\'s Learning Objective" is best described as:', opts:['What the trainer expects participants to achieve','A statement describing what a participant is expected to learn, gathered at the start','The measurable result that participants demonstrate after training','The trainer\'s assessment rubric for the session'], ans:1, exp:'A Participant\'s Learning Objective is gathered at the beginning, describing what participants expect to learn. It differs from Learning Outcomes, which measure what was actually learned after training.' },
+    { cat:'fundamentals', q:'Which of the following is NOT one of the UN SDGs directly linked to Training and Development?', opts:['SDG 4 — Quality Education','SDG 5 — Gender Equality','SDG 8 — Decent Work','SDG 11 — Sustainable Cities'], ans:3, exp:'SDG 4, 5, and 8 are the three SDGs directly linked to Training and Development. SDG 11 (Sustainable Cities) is not specifically referenced in this module.' },
+
+    // ADULT LEARNING PRINCIPLES (13)
+    { cat:'principles', q:'Andragogy refers to:', opts:['The science of teaching children','The art and science of helping adults learn','A type of classroom arrangement','A method of group discussion'], ans:1, exp:'Andragogy (Knowles) = the art and science of helping adults learn. It distinguishes adult education from pedagogy, which is the method of teaching children.' },
+    { cat:'principles', q:'According to adult learning principles, which is the STRONGEST motivator for adults?', opts:['External rewards like certificates and pay rises','Fear of failure','Internal factors like personal growth, satisfaction, and achievement','Peer pressure and competition'], ans:2, exp:'While external rewards matter, research consistently shows that internal motivators — personal growth, job satisfaction, self-esteem, and achievement — are more powerful drivers for adult learners.' },
+    { cat:'principles', q:'An adult learner prefers to own their learning journey rather than be guided step by step. This describes which adult learning principle?', opts:['Adults are problem-centered','Adults are self-directed','Adults bring life experience','Adults need to know why'], ans:1, exp:'Principle 3: Adults are self-directed — they prefer to take ownership of their learning rather than being told exactly what to do at every step.' },
+    { cat:'principles', q:'Which adult learning principle is BEST applied by using case studies and workplace simulations that mirror real problems?', opts:['Adults need respect','Adults are self-directed','Adults are motivated by internal factors','Adults are problem-centered'], ans:3, exp:'Principle 4: Adults are problem-centered — they learn best when content addresses real-life challenges. Case studies and simulations mirror actual problems, making learning immediately applicable.' },
+    { cat:'principles', q:'At the beginning of a training session, a trainer asks: "What do you expect to learn today?" This is applying which adult learning principle?', opts:['Adults are problem-centered','Adults bring life experience','Adults need to know why they are learning','Adults are self-directed'], ans:2, exp:'This gathers participants\' learning objectives and respects both "Need to Know" (Principle 1) and "Adults are self-directed" (Principle 3) — they come with their own purposes and expectations.' },
+    { cat:'principles', q:'A training room where participants feel free to ask questions, make mistakes, and share opinions is designed around which principle?', opts:['Adults benefit from practical learning','Adults need respect and a safe learning environment','Adults are motivated by internal factors','Adults bring life experience'], ans:1, exp:'Principle 6: Adults need respect and a safe learning environment — they expect to be treated as equals and learn best when they feel psychologically safe with no judgment.' },
+    { cat:'principles', q:'Which best describes "Participant\'s Learning Outcomes"?', opts:['What participants hope to learn at the start','The trainer\'s planned curriculum for the session','What the participant actually learns and can demonstrate after training — measurable','The number of hours spent in training'], ans:2, exp:'Learning Outcomes are what participants actually learn or can demonstrate after training. They are the measurable results or evidence of learning, distinct from objectives (expected) set at the start.' },
+    { cat:'principles', q:'A trainer incorporates a hands-on workshop exercise where learners immediately apply a new skill. This is an example of which principle?', opts:['Adults are problem-centered','Adults need to know why','Adults benefit from practical, active learning','Adults are self-directed'], ans:2, exp:'Principle 7: Adults benefit from practical, active learning — adults retain knowledge better when they apply it immediately through action rather than passive listening.' },
+    { cat:'principles', q:'How should a trainer gather participant learning objectives from shy participants?', opts:['Skip the activity and assume objectives','Ask them to shout out their answers','Have them write expectations on a notepad which the trainer reads, or paste on a whiteboard','Give them a pre-printed list to choose from'], ans:2, exp:'To address shyness, the trainer can ask participants to write their expectations on a notepad and pass it to the trainer, or paste it on a whiteboard — making participation non-threatening.' },
+    { cat:'principles', q:'Which of the following training approaches LEAST respects adult learning principles?', opts:['Problem-based case studies aligned to their job','Long one-way lectures with no interaction or application','Allowing learners to set some of their own learning goals','Using prior experience in group discussions'], ans:1, exp:'Long one-way lectures violate multiple adult learning principles — they don\'t activate prior experience (Principle 2), aren\'t self-directed (Principle 3), and don\'t involve active learning (Principle 7).' },
+    { cat:'principles', q:'The 7 adult learning principles guide trainers to design learning that is described as:', opts:['Standardised, scripted, efficient, and brief','Relevant, respectful, experiential, problem-focused, and learner-driven','Entertaining, visual, competitive, and achievement-based','Linear, theory-heavy, content-focused, and instructor-led'], ans:1, exp:'The principles summarise to: relevant (Know Why), respectful (Respect/Safety), experiential (Prior Experience), problem-focused (Problem-centered), and learner-driven (Self-directed).' },
+    { cat:'principles', q:'Why is it important for a trainer to find out participants\' expectations at the beginning of a program?', opts:['To check if participants have done their pre-reading','To manage expectations and possibly adjust content to meet participant objectives','To decide which participants to call on during the session','To determine the length of the training program'], ans:1, exp:'Gathering participant expectations allows the trainer to modify content slightly, clarify upfront if objectives cannot be met, and align training to what learners actually need — a core adult learning practice.' },
+    { cat:'principles', q:'An adult learner who says "I want to learn this because it will help me get promoted" is primarily driven by:', opts:['External motivation','Internal motivation','Peer pressure','Trainer expectation'], ans:1, exp:'While promotion seems external, the desire for career advancement is rooted in internal motivators — personal growth and achievement. Most adult learning motivation is internal even when framed in external terms.' },
+
+    // LEARNING THEORIES (16)
+    { cat:'theories', q:'Malcolm Knowles is best known for:', opts:['Developing the Behaviorist Theory of Connectionism','Popularising the term "andragogy" and the Adult Learning Theory','Creating the Experiential Learning Cycle','Identifying the 4 Learning Styles Inventory'], ans:1, exp:'Malcolm Knowles (1913–1997) was an American educator known as the "father of adult education" who popularised the term andragogy — the art and science of helping adults learn.' },
+    { cat:'theories', q:'Knowles\' first assumption — "Need to Know" — states that:', opts:['Adults need to know the trainer\'s name before learning','Adults must understand WHY they should learn something before investing effort','Adults need to know their final examination grade in advance','Adults need formal qualifications to participate in training'], ans:1, exp:'Need to Know (Assumption 1): Adults need to understand why they should learn something before investing effort. They are motivated when they see the immediate value or benefit of the learning.' },
+    { cat:'theories', q:'Which of Knowles\' 6 assumptions states that adults see themselves as self-directed and autonomous?', opts:['Need to Know','Role of Learner\'s Experience','Learner\'s Self-Concept','Readiness to Learn'], ans:2, exp:'Assumption 2 — Self-Concept: Adults see themselves as self-directed and autonomous. They prefer to take responsibility for their learning, not be treated like passive recipients.' },
+    { cat:'theories', q:'Carl Rogers\' approach to training is called:', opts:['Andragogy','Connectionism','Facilitated Learning (Humanistic Theory)','Experiential Learning Cycle'], ans:2, exp:'Carl Rogers\' approach is the Humanistic Learning Theory, also called Facilitated Learning, because the trainer\'s role is to guide and support rather than instruct and control.' },
+    { cat:'theories', q:'Which of the following BEST describes Rogers\' concept of "Psychological Safety & Respect"?', opts:['Trainers must always agree with learners to avoid conflict','A non-judgmental atmosphere encourages participation, risk-taking, and open sharing','Learners should work in groups to protect each other','The training room must have physical safety equipment'], ans:1, exp:'Rogers believed that a non-judgmental, respectful atmosphere is essential — it allows learners to take intellectual risks, share freely, and engage fully without fear of being judged or dismissed.' },
+    { cat:'theories', q:'Edward Thorndike\'s Law of Effect states that:', opts:['Learners must be ready before learning can occur effectively','Connections are strengthened with practice and weakened when practice stops','Responses followed by satisfying outcomes are strengthened; unpleasant outcomes weaken them','Learning requires whole-person engagement including feelings'], ans:2, exp:'Law of Effect: If a response to a situation is followed by a satisfying outcome, the connection is strengthened. If followed by an unpleasant outcome, it weakens. People repeat behaviours that bring positive results.' },
+    { cat:'theories', q:'Thorndike\'s "Law of Exercise" is summarised as:', opts:['Exercise before training improves learning retention','Connections are strengthened through practice; weakened when unused — "Use it or lose it"','Learners need physical exercise breaks every 30 minutes','Training requires daily repetition for a minimum of 21 days'], ans:1, exp:'Law of Exercise: Connections are strengthened with practice and weakened when practice stops. This is why trainers build in review activities, role plays, and on-the-job application tasks.' },
+    { cat:'theories', q:'David Kolb proposed that learning is best created through:', opts:['Passive listening and note-taking','Memorising facts and reciting them','Transformation of experience — doing, reflecting, thinking, and applying','Watching video demonstrations before attempting tasks'], ans:2, exp:'Kolb\'s Experiential Learning Theory proposes that knowledge is created through transformation of experience. People learn best when they cycle through doing (CE), reflecting (RO), thinking (AC), and applying (AE).' },
+    { cat:'theories', q:'In Kolb\'s model, "Reflective Observation (RO)" involves:', opts:['Testing new ideas in a real situation','Drawing conclusions and forming theories','Observing and reflecting on the experience from different angles','Direct hands-on involvement in an activity'], ans:2, exp:'RO (Stage 2 — Watching): Learners observe and reflect on the experience from different angles. Activities: group debrief, journaling, reviewing what worked and what didn\'t.' },
+    { cat:'theories', q:'A Kolb "Diverger" learner combines which two dimensions?', opts:['Abstract Conceptualisation + Active Experimentation','Concrete Experience + Reflective Observation','Reflective Observation + Abstract Conceptualisation','Active Experimentation + Concrete Experience'], ans:1, exp:'Diverger = CE + RO (Feeling and Watching). Divergers are imaginative, can view situations from many perspectives. Best approached with brainstorming activities and discussions.' },
+    { cat:'theories', q:'According to Honey & Mumford\'s LSI, which learning style BEST matches someone who prefers "learning by doing" and gets bored by consolidation?', opts:['Reflector','Theorist','Activist','Pragmatist'], ans:2, exp:'Activists learn by doing. They are enthusiastic about new ideas, happy to try new experiences, but tend to act first and think later. They get bored with implementation and consolidation phases.' },
+    { cat:'theories', q:'A Theorist learner would learn LEAST effectively when:', opts:['Given a logical, step-by-step theoretical framework','Working in a structured, rational environment','Placed in an unstructured activity that focuses on emotion and feelings','Reading about concepts and their interrelationships'], ans:2, exp:'Theorists struggle with emotion-focused, unstructured, or ambiguous activities. They have low tolerance for uncertainty and need rational, logical frameworks to feel engaged.' },
+    { cat:'theories', q:'What is the recommended training flow to accommodate ALL 4 Honey & Mumford learning styles?', opts:['Lecture → Test → Debrief → Homework','Explain theory → Show how to do it → Let them do it → Have them reflect','Test first → Theory → Practice → Feedback','Group work → Individual reading → Lecture → Assessment'], ans:1, exp:'The cycle: ① Explain theory (Theorist) → ② Show how to do it (Pragmatist) → ③ Let them do it (Activist) → ④ Have them reflect on what they\'ve learned (Reflector).' },
+    { cat:'theories', q:'A Pragmatist learner learns BEST from:', opts:['Abstract theories with no clear job application','Group brainstorming sessions where ideas are discussed broadly','Activities with a clear job link, coaching with feedback, and real simulations','Long reading assignments and research tasks'], ans:2, exp:'Pragmatists are practical and eager to try things out. They learn best when there is an obvious link to the job, clear benefits are shown, and they get to practice with coaching/feedback.' },
+    { cat:'theories', q:'Thorndike\'s "Law of Readiness" has which practical implication for trainers?', opts:['Training should begin without any icebreakers','Trainers should check learners\' prior knowledge, motivation, and readiness before starting','Learners must pass a fitness test before training','Training content must be simplified for all learners'], ans:1, exp:'Law of Readiness: Learners must be physically, mentally, and emotionally ready. Trainers should use icebreakers, context-setting activities, or pre-work to check and prepare learners before content begins.' },
+    { cat:'theories', q:'Rogers\' concept of "Whole-Person Learning" means:', opts:['Training should cover the entire job specification','Learning should involve feelings, attitudes, and self-concept — not just intellect','All employees in the organisation should attend the same training','Trainers must teach every topic comprehensively'], ans:1, exp:'Whole-Person Learning (Rogers): Learning is not just intellectual — it involves the learner\'s feelings, attitudes, values, and self-concept. Trainers should include reflective and emotionally engaging activities.' },
+
+    // TRAINER COMPETENCY (13)
+    { cat:'trainer', q:'A trainer is BEST defined as someone who:', opts:['Tests employees on their knowledge','Facilitates learning and development by designing, delivering, and evaluating training programs','Manages the HR department and recruiting process','Supervises employees on the production floor'], ans:1, exp:'A trainer facilitates the learning and development of others by designing, delivering, and evaluating training programs, using appropriate methods to build knowledge, skills, and attitudes.' },
+    { cat:'trainer', q:'Competency is defined as the combination of:', opts:['Education level, seniority, and years of experience','Knowledge, skills, abilities, and behaviours that enable successful performance','Personality traits, intelligence, and communication style','Technical knowledge and physical ability only'], ans:1, exp:'Competency = Knowledge + Skills + Abilities + Behaviours. A competent trainer must have all four dimensions to train effectively and professionally.' },
+    { cat:'trainer', q:'Which Trainer Skill Style (TSS) is BEST suited for delivering safety procedures or compliance training to novice learners?', opts:['Explorer','Guide','Thinker','Instructor'], ans:3, exp:'Instructor style is structured, authoritative, and content-focused. It ensures learners receive complete, accurate information in a logical sequence — ideal for technical skills, safety, or compliance training where accuracy is critical.' },
+    { cat:'trainer', q:'An Explorer trainer is most effective when:', opts:['Learners are novices who need foundational knowledge first','Training is focused on compliance and standardised procedures','Learners already have base knowledge and can handle open-ended challenges','The subject matter is purely factual with one correct answer'], ans:2, exp:'Explorer style thrives on discovery and learner autonomy. It works best when learners already have base knowledge, in innovation workshops, leadership programs, or strategic thinking training.' },
+    { cat:'trainer', q:'A Thinker trainer primarily uses:', opts:['Lecture and step-by-step explanations','Coaching conversations and peer learning','Concept mapping, reflection exercises, and Socratic questioning','Business games and competitive teamwork'], ans:2, exp:'The Thinker trainer focuses on analysis, theory, and deep understanding. They use concept mapping, research tasks, reflection exercises, and Socratic questioning to help learners connect concepts and see the big picture.' },
+    { cat:'trainer', q:'Which TSS is BEST described as "a supportive coach and facilitator who draws out learners\' prior experiences"?', opts:['Instructor','Thinker','Explorer','Guide'], ans:3, exp:'The Guide acts as a supportive coach and facilitator. They focus on drawing out learners\' experiences and connecting them to new knowledge through coaching conversations, peer learning, and collaborative problem-solving.' },
+    { cat:'trainer', q:'Why is it important for trainers to know their own Trainer Skill Style (TSS)?', opts:['So they can avoid having to use other styles','For self-awareness, flexibility, better training design, and matching approach to learner needs','So they can specialise in one area and never change','To rank themselves against other trainers'], ans:1, exp:'Knowing your TSS builds self-awareness (natural strengths), encourages flexibility (blending styles for different learners), guides training design (activities and methods), and improves learner engagement.' },
+    { cat:'trainer', q:'Which characteristic of an effective trainer describes "adjusting methods based on learners\' responses"?', opts:['Empathetic','Credible','Adaptable','Patient'], ans:2, exp:'Adaptable: An effective trainer adjusts their methods, pace, and approach based on learners\' responses and needs. Rigidly following a script when learners are struggling is a sign of poor adaptability.' },
+    { cat:'trainer', q:'The ATD Talent Development Capability Model has how many main capability domains?', opts:['Two — Skills and Knowledge','Three — Personal, Professional, and Organisational Capability','Four — Design, Deliver, Assess, and Evaluate','Five — matching the ADDIE model'], ans:1, exp:'The ATD model has 3 domains: Building Personal Capability, Developing Professional Capability, and Impacting Organisational Capability — together forming a blueprint for TD practitioners.' },
+    { cat:'trainer', q:'A trainer who "demonstrates subject expertise and professionalism" is displaying which characteristic?', opts:['Empathetic','Credible','Approachable','Positive attitude'], ans:1, exp:'Credible: Demonstrates subject expertise and professionalism. Learners trust and respect a trainer who clearly knows the material deeply and conducts themselves professionally.' },
+    { cat:'trainer', q:'Which of the following is a potential pitfall of the Guide TSS?', opts:['Can become too one-way and risk disengagement','May move too slowly for action-oriented learners','Risk of losing direction if overly flexible; some learners need more structure','May lack structure — some learners feel lost or frustrated'], ans:2, exp:'The Guide\'s potential pitfall is losing direction if too flexible. Some learners may require more structure and clear instructions. The Guide must balance freedom with appropriate scaffolding.' },
+    { cat:'trainer', q:'According to the module, a competent trainer must at least understand and master which model?', opts:['Kirkpatrick\'s Four Levels of Evaluation','The ADDIE Model','Maslow\'s Hierarchy of Needs','Bloom\'s Taxonomy'], ans:1, exp:'A competent trainer must understand and master the ADDIE Model — including identifying TNA, designing and developing training, managing the learning process, and assessing results.' },
+    { cat:'trainer', q:'Improving participants\' weaknesses is a core trainer responsibility because:', opts:['Trainers are paid to identify problems','Unresolved learning gaps can limit performance, confidence, and long-term development','It is required by HRD Corp regulations','Employees with weaknesses must be reported to HR'], ans:1, exp:'Unresolved learning gaps limit performance, confidence, and long-term development. Trainers apply adult learning principles and learning theories to design learner-centered, relevant, and impactful interventions.' },
+
+    // ETHICS (13)
+    { cat:'ethics', q:'The Code of Ethics (CoE) is BEST described as:', opts:['Specific rules about punctuality and dress code','Values and guiding principles that shape a trainer\'s professional behaviour (the "why")','A list of disciplinary actions for rule violations','A form completed at the end of training sessions'], ans:1, exp:'CoE = values and guiding principles — the "why" behind how a trainer behaves. It governs the internal moral compass, not specific behavioural rules (which is the Code of Conduct).' },
+    { cat:'ethics', q:'The Code of Conduct (CoC) is BEST described as:', opts:['The trainer\'s set of personal values and beliefs','Specific rules and behaviours trainers are expected to follow (the "what" and "how")','A self-assessment tool for trainers','A guide for designing training content'], ans:1, exp:'CoC = specific rules and behaviours — the "what" you do and "what actions" are acceptable or unacceptable. It governs visible external behaviours during training delivery.' },
+    { cat:'ethics', q:'A trainer protects sensitive personal information shared by a learner during a coaching session. This is an example of which CoE principle?', opts:['Fairness & Non-Discrimination','Commitment to Excellence','Confidentiality','Social Responsibility'], ans:2, exp:'Confidentiality (CoE Principle 3): Protect sensitive learner or organisational information. This is a core ethical obligation — never disclose private information without appropriate consent.' },
+    { cat:'ethics', q:'Which Code of Conduct rule states that trainers should "give credit for content and avoid plagiarism"?', opts:['Punctuality','Professional Appearance','Proper Use of Materials','Learner Engagement'], ans:2, exp:'CoC Rule 5 — Proper Use of Materials: Give credit for content and avoid plagiarism. Trainers must use materials ethically, crediting original sources and obtaining permissions when required.' },
+    { cat:'ethics', q:'Which CoE principle requires trainers to "ensure equal opportunities for learning regardless of race, gender, age, or beliefs"?', opts:['Integrity & Honesty','Fairness & Non-Discrimination','Continuous Learning','Social Responsibility'], ans:1, exp:'Fairness & Non-Discrimination (CoE Principle 6): Ensure equal opportunities for learning regardless of race, gender, age, or beliefs. Trainers must design and deliver inclusive, unbiased training.' },
+    { cat:'ethics', q:'How many principles are in the Code of Ethics?', opts:['5','7','9','6'], ans:1, exp:'The Code of Ethics has 7 principles: Integrity & Honesty, Respect for Learners, Confidentiality, Commitment to Excellence, Continuous Learning, Fairness & Non-Discrimination, Social Responsibility.' },
+    { cat:'ethics', q:'How many rules are in the Code of Conduct?', opts:['7','6','9','8'], ans:2, exp:'The Code of Conduct has 9 rules: Punctuality, Professional Appearance, Preparedness, Use of Language, Proper Use of Materials, Learner Engagement, Ethical Assessment, Avoiding Conflicts of Interest, Safety & Well-being.' },
+    { cat:'ethics', q:'A trainer who continuously updates their knowledge, skills, and professional practices is demonstrating which CoE principle?', opts:['Respect for Learners','Commitment to Excellence','Continuous Learning','Social Responsibility'], ans:2, exp:'Continuous Learning (CoE Principle 5): Keep updating personal knowledge, skills, and professional practices. A trainer who stops learning cannot effectively guide others in a fast-changing environment.' },
+    { cat:'ethics', q:'Which Code of Conduct rule most directly protects learners from being treated differently based on personal bias?', opts:['Punctuality','Learner Engagement','Ethical Assessment Practices','Professional Appearance'], ans:2, exp:'Learner Engagement (CoC Rule 6): Actively involve all participants without bias or exclusion. Every learner deserves equal opportunity to participate, regardless of background or relationship with the trainer.' },
+    { cat:'ethics', q:'Practising the Code of Ethics and Code of Conduct builds all of the following EXCEPT:', opts:['Trust with learners','A safe and respectful learning environment','Higher salary for trainers','Reputation of the profession'], ans:2, exp:'Practising CoE and CoC builds trust, ensures a safe/respectful environment, protects confidentiality, enhances learning outcomes, upholds professional reputation, and guides decision-making. Salary is not listed as a benefit.' },
+    { cat:'ethics', q:'A trainer discloses that they have a personal financial relationship with one of the training vendors being evaluated. This demonstrates which CoC rule?', opts:['Proper Use of Materials','Ethical Assessment Practices','Avoiding Conflicts of Interest','Preparedness'], ans:2, exp:'Avoiding Conflicts of Interest (CoC Rule 8): Disclose and manage any potential conflicts. Personal interests must never compromise training quality or fairness — transparency is essential.' },
+    { cat:'ethics', q:'CoE Principle 7 — Social Responsibility — means a trainer should:', opts:['Only train employees from socially disadvantaged backgrounds','Contribute to the betterment of the community and the training profession','Charge lower fees to non-profit organisations','Focus only on the direct needs of the paying client'], ans:1, exp:'Social Responsibility (CoE Principle 7): Contribute to the betterment of the community and the profession. Trainers have a wider social obligation beyond individual clients and organisations.' },
+    { cat:'ethics', q:'Which Code of Conduct rule most directly ensures the physical and psychological safety of all participants?', opts:['Punctuality','Preparedness','Learner Engagement','Safety & Well-being'], ans:3, exp:'Safety & Well-being (CoC Rule 9): Ensure a safe, comfortable learning environment at all times. This covers both physical safety (room setup, equipment) and psychological safety (non-threatening atmosphere).' }
+];
+
+// ─── NAVIGATION ───
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const map = { fundamentals:0, principles:1, theories:2, trainer:3, ethics:4, quiz:5 };
+    if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+    window.scrollTo(0, 0);
+    if (id === 'quiz' && shuffledQuestions.length === 0) startQuiz();
+}
+
+// ─── QUIZ ENGINE ───
+function shuffleArray(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+let selectedCat = 'all';
+let shuffledQuestions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let answeredCount = 0;
+let answered = false;
+
+const catLabels = {
+    fundamentals: 'Fundamentals',
+    principles: 'Adult Learning',
+    theories: 'Learning Theories',
+    trainer: 'Trainer Competency',
+    ethics: 'Ethics Guide'
+};
+
+function selectCategory(cat, btn) {
+    selectedCat = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    restartQuiz();
+}
+
+function startQuiz() {
+    const pool = selectedCat === 'all' ? QUESTIONS : QUESTIONS.filter(q => q.cat === selectedCat);
+    shuffledQuestions = shuffleArray(pool).slice(0, 20);
+    currentIndex = 0; correctCount = 0; answeredCount = 0; answered = false;
+    document.getElementById('stat-score').textContent = 0;
+    document.getElementById('score-card').classList.remove('show');
+    document.getElementById('question-card').style.display = '';
+    document.querySelector('.quiz-nav').style.display = '';
+    renderQuestion();
+}
+
+function restartQuiz() {
+    startQuiz();
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = shuffledQuestions[currentIndex];
+    const total = shuffledQuestions.length;
+    const progress = (currentIndex / total) * 100;
+
+    document.getElementById('progress-bar').style.width = progress + '%';
+    document.getElementById('question-counter').textContent = `Question ${currentIndex + 1} of ${total}`;
+    document.getElementById('question-cat-label').textContent = catLabels[q.cat] || q.cat;
+    document.getElementById('question-text').textContent = q.q;
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const indexed = q.opts.map((text, i) => ({ text, origIdx: i }));
+    const shuffledOpts = shuffleArray(indexed);
+    const newCorrectIdx = shuffledOpts.findIndex(o => o.origIdx === q.ans);
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+    shuffledOpts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+        btn.onclick = () => selectAnswer(i, newCorrectIdx, btn, optContainer, q.exp);
+        optContainer.appendChild(btn);
+    });
+
+    const fb = document.getElementById('feedback-box');
+    fb.className = 'feedback-box';
+    fb.textContent = '';
+    document.getElementById('next-btn').disabled = true;
+    document.getElementById('next-btn').innerHTML = 'Next <i class="ph-bold ph-arrow-right"></i>';
+}
+
+function selectAnswer(selected, correct, clickedBtn, container, explanation) {
+    if (answered) return;
+    answered = true;
+    answeredCount++;
+
+    container.querySelectorAll('.option-btn').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) btn.classList.add('correct');
+        else if (i === selected) btn.classList.add('wrong');
+        else btn.classList.add('disabled-neutral');
+    });
+
+    const fb = document.getElementById('feedback-box');
+    if (selected === correct) {
+        correctCount++;
+        fb.className = 'feedback-box correct-fb show';
+        fb.innerHTML = `<strong>✅ Correct!</strong> ${explanation}`;
+    } else {
+        fb.className = 'feedback-box wrong-fb show';
+        fb.innerHTML = `<strong>❌ Not quite.</strong> ${explanation}`;
+    }
+
+    document.getElementById('stat-score').textContent = correctCount;
+    document.getElementById('score-display').textContent = `Score: ${correctCount}/${answeredCount}`;
+    document.getElementById('next-btn').disabled = false;
+
+    if (currentIndex === shuffledQuestions.length - 1) {
+        document.getElementById('next-btn').innerHTML = 'See Results <i class="ph-bold ph-flag-checkered"></i>';
+    }
+}
+
+function nextQuestion() {
+    currentIndex++;
+    if (currentIndex >= shuffledQuestions.length) showFinalScore();
+    else renderQuestion();
+}
+
+function showFinalScore() {
+    document.getElementById('question-card').style.display = 'none';
+    document.querySelector('.quiz-nav').style.display = 'none';
+
+    const total = shuffledQuestions.length;
+    const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+    document.getElementById('final-score-num').textContent = pct + '%';
+    document.getElementById('bd-correct').textContent = correctCount;
+    document.getElementById('bd-wrong').textContent = total - correctCount;
+    document.getElementById('score-sub').textContent = `You answered ${correctCount} out of ${total} correctly.`;
+
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('score-message');
+    circle.className = 'score-circle';
+
+    if (pct >= 80) {
+        circle.classList.add('score-pass');
+        msg.textContent = '🎉 Excellent! Ready for the exam!';
+    } else if (pct >= 60) {
+        circle.classList.add('score-mid');
+        msg.textContent = '💪 Good effort! Review the weak areas.';
+    } else {
+        circle.classList.add('score-fail');
+        msg.textContent = '📚 Keep studying — you\'ll get there!';
+    }
+
+    document.getElementById('progress-bar').style.width = '100%';
+    document.getElementById('score-card').classList.add('show');
+}
+
+// Auto-start quiz when page loads into quiz tab
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+});
+</script>
+
+<!-- FOOTER -->
+<footer style="background:var(--navy);border-top:2px solid #2a0a4a;padding:2rem 1.5rem;text-align:center;font-family:'Sora',sans-serif;">
+    <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0.6rem;">
+        <div style="width:40px;height:40px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:0.25rem;">🎓</div>
+        <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:500;">Made by</div>
+        <a href="https://www.tiktok.com/@samadsaidwhaaat" target="_blank" rel="noopener noreferrer"
+           style="color:#f59e0b;font-size:1rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:0.4rem;">
+            <i class="ph-fill ph-at"></i>samadsaidwhaaat
+        </a>
+        <div style="width:40px;height:1px;background:rgba(255,255,255,0.1);margin:0.25rem 0;"></div>
+        <p style="color:rgba(255,255,255,0.35);font-size:0.72rem;max-width:380px;line-height:1.6;">
+            CT1 Study Guide — HRD Corp Train The Trainer. Based on CT1: Plan Adult Learning.
+        </p>
+        <div style="color:rgba(255,255,255,0.2);font-size:0.68rem;margin-top:0.25rem;">
+            © <span id="footer-year"></span> · All rights reserved
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
